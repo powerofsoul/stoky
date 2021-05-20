@@ -1,4 +1,5 @@
 import Head from "next/head";
+import StockCard from "../src/components/StockCard";
 
 export default function Home() {
     return (
@@ -12,7 +13,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
-                <div>TEST</div>
+                <StockCard />
             </main>
         </div>
     );
