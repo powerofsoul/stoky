@@ -1,8 +1,11 @@
 import Consts from "../../Consts";
-import styles from "./Header.module.scss";
+import style from "./Header.module.scss";
+
 const Header = () => {
-    return <div className={styles.Header}>
-        {Consts.SiteName}
+    return <div className={style.Header}>
+        <div className={style.Content}>
+            {Consts.SiteName}
+        </div>
     </div>
 }
 
