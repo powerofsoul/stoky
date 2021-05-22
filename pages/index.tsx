@@ -1,5 +1,5 @@
 import Head from "next/head";
-import StockCard from "../src/components/StockCard";
+import Page from "../src/components/Page";
 
 export default function Home() {
     return (
@@ -12,9 +12,7 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main>
-                <StockCard />
-            </main>
+            <Page />
         </div>
     );
 }
