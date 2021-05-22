@@ -1,7 +1,16 @@
 import Head from "next/head";
+import { get } from "../src/Api";
 import Page from "../src/components/Page";
 
 export default function Home() {
+    const demoGet = () => {
+        get<{name: string}>("hello", {
+            name: "Florin Munteanu"
+        }).then((r) => {
+            alert(r.name);
+        })
+    }
+
     return (
         <div>
             <Head>
@@ -12,7 +21,9 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Page />
+            <Page>
+                <button onClick={demoGet}> Demo Test</button>
+            </Page>
         </div>
     );
 }

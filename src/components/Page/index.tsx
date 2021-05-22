@@ -3,7 +3,7 @@ import Header from "../Header"
 import styles from "./Page.module.scss";
 
 interface Props {
-    children?: [];
+    children?: JSX.Element;
 }
 
 const Page = (props: Props) => {
