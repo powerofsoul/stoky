@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { get } from "../src/Api";
 import Page from "../src/components/Page";
+import { useAppContext } from "../src/context/AppContext";
 
 export default function Home() {
     const demoGet = () => {
@@ -10,6 +11,8 @@ export default function Home() {
             alert(r.name);
         })
     }
+
+    const context = useAppContext();
 
     return (
         <div>
@@ -23,6 +26,7 @@ export default function Home() {
             </Head>
             <Page>
                 <button onClick={demoGet}> Demo Test</button>
+                <p>Current user is {context.user}</p>
             </Page>
         </div>
     );
