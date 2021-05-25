@@ -2,17 +2,22 @@ import Head from "next/head";
 import { get } from "../src/Api";
 import Page from "../src/components/Page";
 import { useAppContext } from "../src/context/AppContext";
+import { useUser } from "@auth0/nextjs-auth0";
 
 export default function Home() {
     const demoGet = () => {
-        get<{name: string}>("hello", {
-            name: "Florin Munteanu"
+        get<{ name: string }>("hello", {
+            name: "Florin Munteanu",
         }).then((r) => {
             alert(r.name);
-        })
-    }
+        });
+    };
 
     const context = useAppContext();
+    const { user, error, isLoading } = useUser();
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>{error.message}</div>;
 
     return (
         <div>
@@ -26,7 +31,17 @@ export default function Home() {
             </Head>
             <Page>
                 <button onClick={demoGet}> Demo Test</button>
-                <p>Current user is {context.user}</p>
+                {user ? (
+                    <p>Current user is {user.name}
+                    <br />
+                        <a href="/api/auth/logout">log out
+                    </a>
+                    </p>
+                ) : (
+                    <p>
+                        Login <a href="/api/auth/login">here</a>
+                    </p>
+                )}
             </Page>
         </div>
     );
