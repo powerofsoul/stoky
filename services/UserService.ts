@@ -3,12 +3,21 @@ import DynamoDAO from "./DynamoDAO";
 
 const client = DynamoDAO;
 
-export const getUser = async (id: string) => {
+export const getUser = async (email: string) => {
     const user = new User();
-    user.id = id;
+    user.email = email;
 
     return await client.get(user);
 };
+
+export const ensureUserExists = async (user: User) => {
+    try {
+        const dbUser = await getUser(user.email);
+        return dbUser;
+    } catch (e) {
+        return await createUser(user);
+    }
+}
 
 export const createUser = async (user: User) => {
     return await client.put(user);
