@@ -9,7 +9,7 @@ export class User {
     @hashKey({
         type: "String"
     })
-    email!: string;
+    id!: string;
     
     @attribute({
         type: "Date",
@@ -26,4 +26,14 @@ export class User {
         type: "String"
     })
     picture!: string;
+}
+
+export const auth0UserToUser = (auth0User: any) => {
+    const user = new User();
+    user.createdAt = new Date();
+    user.id = auth0User.sub;
+    user.nickname = auth0User.nickname;
+    user.picture = auth0User.picture;
+
+    return user;
 }

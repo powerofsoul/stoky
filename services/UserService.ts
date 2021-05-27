@@ -1,28 +1,28 @@
-import { User } from "../models/User";
+import { auth0UserToUser, User } from "../models/User";
 import DynamoDAO from "./DynamoDAO";
 
 const client = DynamoDAO;
 
-export const getUser = async (email: string) => {
+export const getUser = async (id: string) => {
     const user = new User();
-    user.email = email;
+    user.id = id;
 
     return await client.get(user);
 };
 
-export const ensureUserExists = async (user: User) => {
+export const ensureAuth0Exists = async (auth0User: any) => {
     try {
-        const dbUser = await getUser(user.email);
+        const dbUser = await getUser(auth0User.sub);
         return dbUser;
     } catch (e) {
-        return await createUser(user);
+        return await createUser(auth0UserToUser(auth0User));
     }
-}
+};
 
 export const createUser = async (user: User) => {
     return await client.put(user);
-}
+};
 
 export const updateUser = async (user: User) => {
     return await client.update(user);
-}
+};

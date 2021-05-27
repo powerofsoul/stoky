@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
+    "initialize-tables": "ts-node ./models/initialization.ts",
     "build": "next build",
     "start": "next start"
   },
@@ -26,6 +27,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@types/react": "17.0.6",
     "cross-env": "^7.0.3",
+    "ts-node": "^10.0.0",
     "typescript": "4.2.4"
   }
 }
