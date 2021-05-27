@@ -1,29 +1,29 @@
 import {
     attribute,
     hashKey,
-    table
-} from '@aws/dynamodb-data-mapper-annotations';
+    table,
+} from "@aws/dynamodb-data-mapper-annotations";
 
-@table('user')
+@table("user")
 export class User {
     @hashKey({
-        type: "String"
+        type: "String",
     })
     id!: string;
-    
+
     @attribute({
         type: "Date",
-        defaultProvider: () => new Date()
+        defaultProvider: () => new Date(),
     })
     createdAt!: Date;
 
     @attribute({
-        type: "String"
+        type: "String",
     })
     nickname!: string;
 
     @attribute({
-        type: "String"
+        type: "String",
     })
     picture!: string;
 }
@@ -36,4 +36,4 @@ export const auth0UserToUser = (auth0User: any) => {
     user.picture = auth0User.picture;
 
     return user;
-}
+};
