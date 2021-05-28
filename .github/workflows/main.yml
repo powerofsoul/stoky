@@ -26,6 +26,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: SampleApp
           environment_name: Sampleapp-env
-          version_label: 12345
+          version_label: ${{env.APP_NAME}}-${{env.PIPELINE_ID}}
           region: us-east-1
           deployment_package: deploy.zip
