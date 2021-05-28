@@ -8,5 +8,11 @@ export default withErrorHandling(withUser(async (
     res: NextApiResponse<any>,
     options?: CallbackOptions | undefined
 ) => {
-    res.status(200).json(req.user);
+    if(req.user) {
+        res.status(200).json(req.user);
+    } else {
+        res.status(401).json({
+            message: "Please authenticate."
+        })
+    }
 }));

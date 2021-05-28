@@ -20,6 +20,11 @@ export class User {
     @attribute({
         type: "String",
     })
+    name!: string;
+
+    @attribute({
+        type: "String",
+    })
     nickname!: string;
 
     @attribute({
