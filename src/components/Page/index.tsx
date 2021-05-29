@@ -1,21 +1,61 @@
-import React from "react";
+// @flow
 
-import { Container, Site } from "tabler-react";
-import Header from "../Header";
-import Footer from "../Footer";
+import { useUser } from "@auth0/nextjs-auth0";
+import * as React from "react";
+import { Site, Nav, Button, Container } from "tabler-react";
+import { User } from "../../../models/User";
 
-interface Props {
-    children: React.ReactNode;
-}
+const accountDropdownProps = (user: User) => ({
+    avatarURL: user.picture,
+    name: user.nickname,
+    description: "User",
+    options: [
+        { icon: "user", value: "Profile", to: "/profile" },
+        { icon: "settings", value: "Settings", to: "/settings" },
+        { isDivider: true },
+        { icon: "help-circle", value: "Need help?", to: "/help" },
+        { icon: "log-out", value: "Sign out", to: "/api/auth/logout" },
+    ],
+});
 
-const Page = function ({ children }: Props) {
+const SiteWrapper = ({ children }: any) => {
+    const {user, error, isLoading } = useUser();
+
     return (
-        <Site.Wrapper header={Header} footer={Footer}>
-            <div className="my-3 my-md-5">
-                <Container>{children}</Container>
-            </div>
+        <Site.Wrapper
+            headerProps={{
+                href: "/",
+                alt: "Stoky",
+                imageURL: "/logo/logo_transparent.png",
+                navItems: (
+                    !user && !isLoading && <Nav.Item link={false} className="d-none d-md-flex">
+                        <Button
+                            href="/api/auth/login"
+                            outline
+                            size="sm"
+                            RootComponent="a"
+                            color="primary"
+                        >
+                            Login
+                        </Button>
+                    </Nav.Item>
+                ),
+                accountDropdown: user && accountDropdownProps(user as any),
+            }}
+            footerProps={{
+                copyright: (
+                    <>
+                        Copyright © 2021
+                        <a href="."> Stoky</a>.
+                        {" "}
+                        All rights reserved.
+                    </>
+                ),
+            }}
+        >
+            <Container>{children}</Container>
         </Site.Wrapper>
     );
 };
 
-export default Page;
+export default SiteWrapper;

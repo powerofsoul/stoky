@@ -13,19 +13,20 @@
     "@aws-sdk/client-dynamodb": "^3.16.0",
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "@tabler/icons": "^1.41.2",
     "aws-sdk": "^2.914.0",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "next": "10.2.2",
+    "next-transpile-modules": "^7.2.0",
     "react": "17.0.2",
     "react-apexcharts": "^1.3.9",
     "react-dom": "17.0.2",
     "react-router-dom": "^5.2.0",
     "sass": "^1.32.13",
-    "tabler-react": "^2.0.0-alpha.1",
+    "tabler-react": "^1.30.1",
     "ticker-symbol-search": "^1.0.1",
-    "yahoo-finance": "^0.3.7",
-    "next-transpile-modules": "^7.2.0"
+    "yahoo-finance": "^0.3.7"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",

@@ -1,11 +1,8 @@
 // import "../styles/style.scss";
-import type { AppProps } from "next/app";
-import "tabler-react/dist/Tabler.css";
-import { AppWrapper } from "../src/context/AppContext";
 import { UserProvider } from "@auth0/nextjs-auth0";
-import { NextPageContext } from "next";
-import { getUserFromRequest } from "../middleware/withUser";
-import { User } from "../models/User";
+import type { AppProps } from "next/app";
+import "../styles/global.scss";
+import { AppWrapper } from "../src/context/AppContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
