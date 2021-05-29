@@ -17,6 +17,7 @@
     "aws-sdk": "^2.914.0",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "next": "10.2.2",
     "next-transpile-modules": "^7.2.0",
     "react": "17.0.2",
