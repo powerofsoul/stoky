@@ -9,6 +9,7 @@ const tables = [
 ]
 
 export default async function initialize() {
+    await Promise.all(tables.map(k => DynamoDAO.deleteTable(k)));
     await Promise.all(tables.map(k => DynamoDAO.ensureTableExists(k, baseTableOptions)));
 }
 

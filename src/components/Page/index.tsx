@@ -1,17 +1,22 @@
-import Footer from "../Footer"
-import Header from "../Header"
-import styles from "./Page.module.scss";
+import React from "react";
+
+import { Site } from "tabler-react";
+import Header from "../Header";
+import Footer from "../Footer";
 
 interface Props {
-    children?: JSX.Element[] | JSX.Element;
+  children: React.ReactNode;
 }
 
-const Page = (props: Props) => {
-    return <div className={styles.Page}>
-        <Header />
-            {props.children}
-        <Footer/>
-    </div>
-}
+const Page = function({ children }: Props) {
+  return (
+    <Site.Wrapper
+      header={Header}
+      footer={Footer}
+    >
+      {children}
+    </Site.Wrapper>
+  );
+};
 
 export default Page;
