@@ -24,7 +24,8 @@
     "sass": "^1.32.13",
     "tabler-react": "^2.0.0-alpha.1",
     "ticker-symbol-search": "^1.0.1",
-    "yahoo-finance": "^0.3.7"
+    "yahoo-finance": "^0.3.7",
+    "next-transpile-modules": "^7.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
