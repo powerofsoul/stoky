@@ -2,6 +2,7 @@ import Page from "../src/components/Page";
 import React from "react";
 import { Avatar, Button, Card, Form, Grid, Media, Profile } from "tabler-react";
 import { useUser } from "@auth0/nextjs-auth0";
+import isLogged from "../src/pageMiddleware/isLogged";
 
 const component = () => {
     const {user, error, isLoading} = useUser() as any;
@@ -150,5 +151,7 @@ const component = () => {
         </Page>
     );
 };
+
+isLogged(component);
 
 export default component;

@@ -8,7 +8,7 @@ declare module "next" {
     }
 }
 
-export const getUserFromRequest = async (req: NextApiRequest, res: NextApiResponse) => {
+export const getUserFromRequest = async (req: NextApiRequest | any, res: NextApiResponse | any) => {
     const auth0User = getSession(req, res)?.user;
 
     if (auth0User) {
