@@ -21,7 +21,7 @@ const TickerSearch = () => {
             position="prepend"
             placeholder="Search"
             value={search}
-            onChange={(e) => setSearch(e.currentTarget.value)}
+            onChange={(e: any) => setSearch(e.currentTarget.value)}
             tabIndex={-1}
             light
         />
