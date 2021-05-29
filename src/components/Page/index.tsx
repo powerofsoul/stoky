@@ -53,7 +53,7 @@ const SiteWrapper = ({ children }: any) => {
                 ),
             }}
         >
-            <Container>{children}</Container>
+            <Container className="mt-5 mb-5">{children}</Container>
         </Site.Wrapper>
     );
 };
