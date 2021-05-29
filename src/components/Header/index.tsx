@@ -12,15 +12,6 @@ const loadingHeader = () => {
             href="/"
             alt="Tabler React"
             imageURL="/logo/logo_transparent.png"
-            searchBar={
-                <Form.Input
-                    icon="search"
-                    position="prepend"
-                    placeholder="Search"
-                    tabIndex={-1}
-                    light
-                />
-            }
         />
     );
 };
@@ -45,15 +36,6 @@ const notLoggedHeader = () => {
                         </Button>
                     </Nav.Item>
                 </>
-            }
-            searchBar={
-                <Form.Input
-                    icon="search"
-                    position="prepend"
-                    placeholder="Search"
-                    tabIndex={-1}
-                    light
-                />
             }
         />
     );
@@ -98,23 +80,24 @@ const loggedHeader = (user: User) => {
                 </>
             }
             accountDropdown={accountDropdownProps(user)}
-            searchBar={
-               <TickerSearch />
-            }
+            // searchBar={
+            //    <TickerSearch />
+            // }
         />
     );
 };
 
 const SiteHeader = function () {
     const { user, error, isLoading } = useUser() as any;
-
+    
+    if (user) {
+        return loggedHeader(user);
+    }
+    
     if (!user && !isLoading) {
         return notLoggedHeader();
     }
 
-    if (user) {
-        return loggedHeader(user);
-    }
 
     return loadingHeader();
 };
