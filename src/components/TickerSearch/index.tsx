@@ -1,29 +1,44 @@
-import { useEffect, useState } from "react";
-import { Form } from "tabler-react";
+import { useState } from "react";
+import Select from "react-select";
 import { useSearchSymbols } from "ticker-symbol-search";
 import { MarketTypes } from "ticker-symbol-search/dist/types/markets";
+import { Badge } from "tabler-react";
 
-const TickerSearch = () => {
+interface Props {
+    onChange?: (symbol: string) => void;
+}
+
+const TickerSearch = ({onChange}: Props) => {
     const [search, setSearch] = useState("");
 
-    const { symbols, isSuccess, isLoading, isError } = useSearchSymbols(
-        search,
-        MarketTypes.ALL
-    );
+    const { symbols, isLoading } = useSearchSymbols(search, MarketTypes.STOCK);
 
-    useEffect(() => {
-        console.log(symbols)
-    }, [symbols])
+    const removeEm = (s: string) => s.replace("<em>", "").replace("</em>", "");
+
+    const CustomOption = (props: any) => {
+        const { innerProps, isDisabled, label, data } = props;
+
+        return !isDisabled ? (
+            <div {...innerProps} key={label}>
+                <span className="mr-1 pointer">
+                    <Badge color="primary" dangerously>
+                        {removeEm(data.symbol)}
+                    </Badge>{" "}
+                    - {removeEm(data.type)} at {removeEm(data.exchange)}
+                </span>
+            </div>
+        ) : null;
+    };
 
     return (
-        <Form.Input
-            icon="search"
-            position="prepend"
-            placeholder="Search"
-            value={search}
-            onChange={(e: any) => setSearch(e.currentTarget.value)}
-            tabIndex={-1}
-            light
+        <Select
+            options={symbols}
+            isLoading={isLoading}
+            onChange={(s)=> onChange?.(removeEm(s?.symbol || ""))}
+            onInputChange={(e) => setSearch(e)}
+            getOptionLabel={(s) => removeEm(s.symbol)}
+            getOptionValue={(s) => removeEm(s.symbol)}
+            components={{ Option: CustomOption }}
         />
     );
 };
