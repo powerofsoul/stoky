@@ -1,9 +1,9 @@
-import Page from "../src/components/Page";
-import React from "react";
-import { Avatar, Button, Card, Form, Grid, Media, Profile } from "tabler-react";
 import { useUser } from "@auth0/nextjs-auth0";
-import ensureUseIsLogged from "../src/pageMiddleware/ensureUseIsLogged";
 import { NextPageContext } from "next";
+import React from "react";
+import { Button, Card, Form, Grid, Profile, Loader } from "tabler-react";
+import Page from "../src/components/Page";
+import ensureUseIsLogged from "../src/pageMiddleware/ensureUseIsLogged";
 
 export async function getServerSideProps(context: NextPageContext) {
     ensureUseIsLogged(context);
@@ -17,7 +17,7 @@ const component = () => {
     const {user, error, isLoading} = useUser() as any;
 
     if(isLoading) {
-        return <div>Loading</div>
+        return <Loader className="m-auto" allowFullScreen={true}/>
     }
 
     return (
