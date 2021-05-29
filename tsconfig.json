@@ -14,8 +14,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "server/index.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "server/index.js", "src/components/Page/index.js", "src/components/Page/index.jsx"],
   "exclude": ["node_modules"]
 }
