@@ -7,6 +7,8 @@ import { XAxis, YAxis } from "react-stockcharts/lib/axes";
 import { last, timeIntervalBarWidth } from "react-stockcharts/lib/utils";
 import { useEffect, useState } from "react";
 import { get } from "../../Api";
+import useDimensions from "react-use-dimensions";
+import { Card } from "tabler-react";
 
 interface Props {
     symbol?: string;
@@ -14,6 +16,7 @@ interface Props {
 
 const CandleStickChart = ({ symbol }: Props) => {
     const [data, setData] = useState<any>();
+    const [ref, { width }] = useDimensions();
 
     const xAccessor = (d: any) => d?.date;
 
@@ -43,24 +46,29 @@ const CandleStickChart = ({ symbol }: Props) => {
     if (!data) return <></>;
 
     return (
-        <ChartCanvas
-            height={400}
-            ratio={1}
-            width={800}
-            margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
-            type="canvas"
-            seriesName="MSFT"
-            data={data}
-            xAccessor={xAccessor}
-            xScale={scaleTime()}
-            xExtents={[xAccessor(data[data.length - 1]), xAccessor(data[0])]}
-        >
-            <Chart id={1} yExtents={(d: any) => [d.high, d.low]}>
-                <XAxis axisAt="bottom" orient="bottom" ticks={6} />
-                <YAxis axisAt="left" orient="left" ticks={5} />
-                <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
-            </Chart>
-        </ChartCanvas>
+        <div ref={ref}>
+            <ChartCanvas
+                height={400}
+                ratio={1}
+                width={width}
+                margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
+                type="canvas"
+                seriesName={symbol}
+                data={data}
+                xAccessor={xAccessor}
+                xScale={scaleTime()}
+                xExtents={[
+                    xAccessor(data[data.length - 1]),
+                    xAccessor(data[0]),
+                ]}
+            >
+                <Chart id={1} yExtents={(d: any) => [d.high, d.low]}>
+                    <XAxis axisAt="bottom" orient="bottom" ticks={6} />
+                    <YAxis axisAt="left" orient="left" ticks={5} />
+                    <CandlestickSeries width={timeIntervalBarWidth(utcDay)} />
+                </Chart>
+            </ChartCanvas>
+        </div>
     );
 };
 
