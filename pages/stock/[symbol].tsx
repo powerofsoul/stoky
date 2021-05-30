@@ -22,7 +22,7 @@ const H = ({ symbol }: any) => (
             content={`${Consts.url}/api/stock/${symbol}/preview`}
         />
         <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:height" content="617" />
         <meta name="twitter:card" content="summary_large_image" />
     </Head>
 );

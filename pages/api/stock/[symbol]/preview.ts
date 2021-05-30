@@ -20,7 +20,7 @@ export default async (
     const data = await getHistoryForSymbol(symbol as string);
     const chartJSNodeCanvas = new ChartJSNodeCanvas({
         width: 1200,
-        height: 630
+        height: 617
     });
 
     const configuration = {
@@ -61,7 +61,8 @@ export default async (
         }
     };
     const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-    
+
     res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Accept', 'image/png');
     res.status(200).write(image);
 };
