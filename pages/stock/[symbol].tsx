@@ -4,15 +4,32 @@ import { Card, Grid, Loader } from "tabler-react";
 import ChartFetcher from "../../src/components/Charts/ChartFetcher";
 import LineChart from "../../src/components/Charts/LineChart";
 import Page from "../../src/components/Page";
+import Head from "next/head";
+import { NextPageContext } from "next";
 
-const StockPage = () => {
-    const router = useRouter();
-    const symbol = router.query.symbol as string;
+const H = ({ symbol }: any) => (
+    <Head>
+        <title>{symbol}</title>
+        <meta property="og:title" content="European Travel Destinations" />
+        <meta property="og:description" content={`Feed for ${symbol}`} />
+        <meta property="og:image" content={`api/stock/${symbol}/preview`} />
+        <meta name="twitter:image" content={`api/stock/${symbol}/preview`} />
+        <meta name="twitter:card" content="summary_large_image" />
+    </Head>
+);
+
+const StockPage = ({symbol} : any) => {
     if (!symbol) {
-        return <Loader />;
+        return (
+            <span>
+                <H symbol={symbol} />
+                <Loader />;
+            </span>
+        );
     }
     return (
         <Page>
+            <H symbol={symbol} />
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
                     <Card>
@@ -33,13 +50,16 @@ const StockPage = () => {
                     <Card>
                         <Card.Body>
                             <Card.Title>Feed</Card.Title>
-                            
                         </Card.Body>
                     </Card>
                 </Grid.Col>
             </Grid.Row>
         </Page>
     );
+};
+
+StockPage.getInitialProps = async (ctx: NextPageContext) => {
+    return { symbol: ctx.query.symbol };
 };
 
 export default StockPage;
