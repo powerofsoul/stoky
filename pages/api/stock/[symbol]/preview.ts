@@ -65,4 +65,5 @@ export default async (
     res.setHeader('Content-Type', 'image/png');
     res.setHeader('Accept', 'image/png');
     res.status(200).write(image);
+    res.end();
 };
