@@ -4,12 +4,6 @@ import { getHistoryForSymbol } from "../historical";
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
 import moment from "moment";
 
-const chartCallback = (ChartJS: any) => {
-    ChartJS.defaults.global.elements.rectangle.borderWidth = 2;
-    ChartJS.plugins.register({});
-    ChartJS.controllers.MyType = ChartJS.DatasetController.extend({});
-};
-
 export default async (
     req: NextApiRequest,
     res: NextApiResponse<any>,
@@ -26,7 +20,7 @@ export default async (
     const data = await getHistoryForSymbol(symbol as string);
     const chartJSNodeCanvas = new ChartJSNodeCanvas({
         width: 1200,
-        height: 600
+        height: 630
     });
 
     const configuration = {

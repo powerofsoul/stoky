@@ -13,13 +13,21 @@ const H = ({ symbol }: any) => (
         <title>{symbol}</title>
         <meta property="og:title" content={symbol.toLocaleUpperCase()} />
         <meta property="og:description" content={`Feed for ${symbol}`} />
-        <meta property="og:image" content={`${Consts.url}/api/stock/${symbol}/preview`} />
-        <meta name="twitter:image" content={`${Consts.url}/api/stock/${symbol}/preview`} />
+        <meta
+            property="og:image"
+            content={`${Consts.url}/api/stock/${symbol}/preview`}
+        />
+        <meta
+            name="twitter:image"
+            content={`${Consts.url}/api/stock/${symbol}/preview`}
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
     </Head>
 );
 
-const StockPage = ({symbol} : any) => {
+const StockPage = ({ symbol }: any) => {
     if (!symbol) {
         return (
             <span>
