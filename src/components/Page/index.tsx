@@ -18,8 +18,17 @@ const accountDropdownProps = (user: User) => ({
     ],
 });
 
+const navItems = [
+    {
+        value: "Home",
+        to: "/",
+        icon: "home",
+        useExact: true,
+    },
+];
+
 const SiteWrapper = ({ children }: any) => {
-    const {user, error, isLoading } = useUser();
+    const { user, error, isLoading } = useUser();
 
     return (
         <Site.Wrapper
@@ -27,8 +36,8 @@ const SiteWrapper = ({ children }: any) => {
                 href: "/",
                 alt: "Stoky",
                 imageURL: "/logo/logo_transparent.png",
-                navItems: (
-                    !user && !isLoading && <Nav.Item link={false} className="d-none d-md-flex">
+                navItems: !user && !isLoading && (
+                    <Nav.Item link={false} className="d-none d-md-flex">
                         <Button
                             href="/api/auth/login"
                             outline
@@ -46,12 +55,11 @@ const SiteWrapper = ({ children }: any) => {
                 copyright: (
                     <>
                         Copyright © 2021
-                        <a href="."> Stoky</a>.
-                        {" "}
-                        All rights reserved.
+                        <a href="."> Stoky</a>. All rights reserved.
                     </>
                 ),
             }}
+            navProps={{ itemsObjects: navItems }}
         >
             <Container className="mt-5 mb-5">{children}</Container>
         </Site.Wrapper>
