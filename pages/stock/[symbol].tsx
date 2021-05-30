@@ -6,14 +6,15 @@ import LineChart from "../../src/components/Charts/LineChart";
 import Page from "../../src/components/Page";
 import Head from "next/head";
 import { NextPageContext } from "next";
+import Consts from "../../src/Consts";
 
 const H = ({ symbol }: any) => (
     <Head>
         <title>{symbol}</title>
-        <meta property="og:title" content="European Travel Destinations" />
+        <meta property="og:title" content={symbol.toLocaleUpperCase()} />
         <meta property="og:description" content={`Feed for ${symbol}`} />
-        <meta property="og:image" content={`api/stock/${symbol}/preview`} />
-        <meta name="twitter:image" content={`api/stock/${symbol}/preview`} />
+        <meta property="og:image" content={`${Consts.url}/api/stock/${symbol}/preview`} />
+        <meta name="twitter:image" content={`${Consts.url}/api/stock/${symbol}/preview`} />
         <meta name="twitter:card" content="summary_large_image" />
     </Head>
 );
