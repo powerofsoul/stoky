@@ -61,5 +61,7 @@ export default async (
         }
     };
     const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+    
+    res.setHeader('Content-Type', 'image/png');
     res.status(200).write(image);
 };
