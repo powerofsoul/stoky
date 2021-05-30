@@ -4,13 +4,27 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const yahooFinance = require("yahoo-finance");
 
-export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
-    const historical = await yahooFinance.historical({
-        symbol: req.query.symbol,
-        from: '2018-01-01',
-        to: moment().format("YYYY-MM-DD"),
-        period: 'd'
-      });
+export default async (
+    req: NextApiRequest,
+    res: NextApiResponse<any>,
+    options?: CallbackOptions | undefined
+) => {
+    const historical = await getHistoryForSymbol(req.query.symbol as string);
 
-      res.status(200).json(historical);
+    res.status(200).json(historical);
+};
+
+export async function getHistoryForSymbol(symbol: string) {
+    return (await yahooFinance
+        .historical({
+            symbol,
+            from: "2018-01-01",
+            to: moment().format("YYYY-MM-DD"),
+            period: "d",
+        }))
+        .sort((a: any, b: any) => a.date.getTime() - b.date.getTime())
+        .map((e: any) => ({
+            ...e,
+            date: e.date.toISOString(),
+        }));
 }

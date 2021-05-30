@@ -6,12 +6,13 @@ import { useUser } from "@auth0/nextjs-auth0";
 import TickerSearch from "../src/components/TickerSearch";
 import { useState } from "react";
 import CandleStickChart from "../src/components/Charts/CandleStickChart";
+import ChartFetcher from "../src/components/Charts/ChartFetcher";
 
 export default function Home() {
     const [symbol, setSymbol] = useState("");
     return (
         <Page>
-            <CandleStickChart symbol={symbol} />
+            <ChartFetcher Chart={CandleStickChart} symbol={symbol} />
             <TickerSearch onChange={setSymbol}/>
         </Page>
     );
