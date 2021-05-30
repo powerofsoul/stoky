@@ -44,12 +44,17 @@ const CandleStickChart = ({ symbol }: Props) => {
     }, [symbol]);
 
     if (!data) return <></>;
+    if(!data.length) {
+      return <span>
+        No data for {symbol}
+      </span>
+    }
 
     return (
         <div ref={ref}>
             <ChartCanvas
                 height={400}
-                ratio={1}
+                ratio={10}
                 width={width}
                 margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
                 type="canvas"

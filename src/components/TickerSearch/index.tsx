@@ -11,7 +11,7 @@ interface Props {
 const TickerSearch = ({onChange}: Props) => {
     const [search, setSearch] = useState("");
 
-    const { symbols, isLoading } = useSearchSymbols(search, MarketTypes.STOCK);
+    const { symbols, isLoading } = useSearchSymbols(search, MarketTypes.ALL);
 
     const removeEm = (s: string) => s.replace("<em>", "").replace("</em>", "");
 
