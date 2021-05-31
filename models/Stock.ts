@@ -4,6 +4,16 @@ import {
     table,
 } from "@aws/dynamodb-data-mapper-annotations";
 
+export interface IStock {
+    exchange:  string;
+    shortname:  string;
+    quoteType:  string;
+    symbol:  string;
+    index:  string;
+    typeDisp:  string;
+    longname: string;
+}
+
 @table("stock")
 export class Stock {
     @hashKey({

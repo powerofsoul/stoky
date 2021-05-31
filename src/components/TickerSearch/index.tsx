@@ -1,43 +1,47 @@
 import { useState } from "react";
-import Select from "react-select";
-import { useSearchSymbols } from "ticker-symbol-search";
-import { MarketTypes } from "ticker-symbol-search/dist/types/markets";
 import { Badge } from "tabler-react";
+import AsyncSelect from 'react-select/async';
+import { get } from "../../Api";
+import { IStock } from "../../../models/Stock";
 
 interface Props {
     onChange?: (symbol: string) => void;
 }
 
-const TickerSearch = ({onChange}: Props) => {
-    const [search, setSearch] = useState("");
+const TickerSearch = ({onChange}: Props) => {    
 
-    const { symbols, isLoading } = useSearchSymbols(search, MarketTypes.ALL);
-
-    const removeEm = (s: string) => s.replace("<em>", "").replace("</em>", "");
-
-    const CustomOption = (props: any) => {
+    const CustomOption = (props: {
+        innerProps: any,
+        isDisabled: boolean,
+        label: string,
+        data: IStock
+    }) => {
         const { innerProps, isDisabled, label, data } = props;
 
         return !isDisabled ? (
             <div {...innerProps} key={label}>
                 <span className="mr-1 pointer">
                     <Badge color="primary" dangerously>
-                        {removeEm(data.symbol)}
+                        {data.symbol} ({data.typeDisp})
                     </Badge>{" "}
-                    - {removeEm(data.type)} at {removeEm(data.exchange)}
+                    - {data.longname} at {data.exchange}
                 </span>
             </div>
         ) : null;
     };
+    const getQuery = async (query: string) => {
+        const result = await get<IStock[]>("stock/query", {query});
+
+        return result;
+    }
 
     return (
-        <Select
-            options={symbols}
-            isLoading={isLoading}
-            onChange={(s)=> onChange?.(removeEm(s?.symbol || ""))}
-            onInputChange={(e) => setSearch(e)}
-            getOptionLabel={(s) => removeEm(s.symbol)}
-            getOptionValue={(s) => removeEm(s.symbol)}
+        <AsyncSelect 
+            cacheOptions
+            loadOptions={getQuery} 
+            onChange={(s)=> onChange?.(s?.symbol || "")}
+            getOptionLabel={(s) => s.symbol}
+            getOptionValue={(s) => s.symbol}
             components={{ Option: CustomOption }}
         />
     );

@@ -1,4 +1,4 @@
 // next.config.js
-const withTM = require("next-transpile-modules")(["ticker-symbol-search", "request"]);
+const withTM = require("next-transpile-modules")(["request"]);
 
 module.exports = withTM();
