@@ -1,10 +1,11 @@
 import { CallbackOptions } from "@auth0/nextjs-auth0";
 import { NextApiRequest, NextApiResponse } from "next";
 import fetch from "node-fetch";
+import withCache from "../../../middleware/withCache";
 
 const yahooQueryUrl = (symbol: string) => `http://query1.finance.yahoo.com/v1/finance/search?q=${symbol}&lang=en-U`;
 
-export default async (
+export default withCache(async (
     req: NextApiRequest,
     res: NextApiResponse<any>,
     options?: CallbackOptions | undefined
@@ -15,8 +16,10 @@ export default async (
         const obj = JSON.parse(await result.text());
 
         res.status(200).json(obj?.quotes);
+    } else {
+        res.status(400).end();
     }
-
-    res.status(400).end();
-};
+}, {
+    cacheDuration: Number.MAX_SAFE_INTEGER
+});
  

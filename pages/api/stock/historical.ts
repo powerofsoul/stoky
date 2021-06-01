@@ -1,10 +1,11 @@
 import { CallbackOptions } from "@auth0/nextjs-auth0";
 import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
+import withCache from "../../../middleware/withCache";
 
 const yahooFinance = require("yahoo-finance");
 
-export default async (
+export default withCache(async (
     req: NextApiRequest,
     res: NextApiResponse<any>,
     options?: CallbackOptions | undefined
@@ -12,7 +13,7 @@ export default async (
     const historical = await getHistoryForSymbol(req.query.symbol as string);
 
     res.status(200).json(historical);
-};
+});
 
 export async function getHistoryForSymbol(symbol: string) {
     return (await yahooFinance
