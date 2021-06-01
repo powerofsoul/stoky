@@ -5,29 +5,38 @@ import { Cache } from "../models/Cache";
 import { CACHE_DURATION } from "../src/Consts";
 
 interface Props {
-    includeUser?: boolean;
-    cacheDuration?: number;
+    includeUser: boolean;
+    cacheDuration: number;
+    caseSensitive:boolean;
 }
 
 const defaultProps = {
     includeUser: false,
     cacheDuration: CACHE_DURATION,
+    caseSensitive: false
 };
 
-const withCache = (handler: NextApiHandler, props?: Props) => {
+const withCache = (handler: NextApiHandler, props?: Partial<Props>) => {
     return async (req: NextApiRequest, res: NextApiResponse) => {
         const propsWithDefault = {
             ...defaultProps,
             ...props,
-        };
+        } as Props;
 
         const body = JSON.stringify(req.body);
         const query = JSON.stringify(req.query);
         const path = req.url;
 
-        const key = propsWithDefault.includeUser
-            ? sha256(body + query + path + req.user?.id)
-            : sha256(body + query + path);
+    
+        let keyString = propsWithDefault.includeUser
+            ? body + query + path + req.user?.id
+            : body + query + path;
+
+        if(!props || !props.caseSensitive) {
+            keyString = keyString.toLowerCase();
+        }
+
+        const key = sha256(keyString);
 
         try {
             const cachedValue = await DynamoDAO.get(
