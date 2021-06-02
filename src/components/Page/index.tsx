@@ -7,7 +7,7 @@ import { User } from "../../../models/User";
 
 const accountDropdownProps = (user: User) => ({
     avatarURL: user.picture,
-    name: user.nickname,
+    name: user.username,
     description: "User",
     options: [
         { icon: "user", value: "Profile", to: "/profile" },

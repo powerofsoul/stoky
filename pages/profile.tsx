@@ -1,7 +1,12 @@
 import { useUser } from "@auth0/nextjs-auth0";
+import { Formik, Field } from "formik";
 import { NextPageContext } from "next";
 import React from "react";
+import { toast } from "react-toastify";
 import { Button, Card, Form, Grid, Profile, Loader } from "tabler-react";
+import { User, userValidatorSchema } from "../models/User";
+import { post } from "../src/Api";
+import { FormInput, FormTextarea } from "../src/components/Form/Form";
 import Page from "../src/components/Page";
 import ensureUseIsLogged from "../src/pageMiddleware/ensureUseIsLogged";
 
@@ -9,16 +14,30 @@ export async function getServerSideProps(context: NextPageContext) {
     ensureUseIsLogged(context);
 
     return {
-        props: {}
+        props: {},
     };
 }
 
 const component = () => {
-    const {user, error, isLoading} = useUser() as any;
+    const { user, error, isLoading } = useUser() as any;
 
-    if(isLoading) {
-        return <Loader className="m-auto" allowFullScreen={true}/>
+    if (isLoading) {
+        return <Loader className="m-auto" allowFullScreen={true} />;
     }
+
+    const onSubmit = async (values: User) => {
+        await post("auth/me", values)
+            .then(() => {
+                toast("Profile updated", {
+                    type: "success"
+                })
+            })
+            .catch((err) => {
+                toast("Something went wrong", {
+                    type: "error"
+                })
+            });
+    };
 
     return (
         <Page>
@@ -32,129 +51,108 @@ const component = () => {
                     </Profile>
                 </Grid.Col>
                 <Grid.Col ignoreCol xl={8}>
-                    <Form className="card">
-                        <Card.Body>
-                            <Card.Title>Edit Profile</Card.Title>
-                            <Grid.Row>
-                                <Grid.Col md={5}>
-                                    <Form.Group>
-                                        <Form.Label>Company</Form.Label>
-                                        <Form.Input
-                                            type="text"
-                                            disabled
-                                            placeholder="Company"
-                                            value="Creative Code Inc."
-                                            onChange={() => null}
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol sm={12} lg={3}>
-                                    <Form.Group>
-                                        <Form.Label>Username</Form.Label>
-                                        <Form.Input
-                                            type="text"
-                                            placeholder="Username"
-                                            value="michael23"
-                                            onChange={() => null}
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol sm={12} lg={4}>
-                                    <Form.Group>
-                                        <Form.Label>Email address</Form.Label>
-                                        <Form.Input
-                                            type="email"
-                                            placeholder="Email"
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol sm={12} lg={6}>
-                                    <Form.Group>
-                                        <Form.Label>First Name</Form.Label>
-                                        <Form.Input
-                                            type="text"
-                                            placeholder="First Name"
-                                            value="Chet"
-                                            onChange={() => null}
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol sm={12} lg={6}>
-                                    <Form.Group>
-                                        <Form.Label>Last Name</Form.Label>
-                                        <Form.Input
-                                            type="text"
-                                            placeholder="Last Name"
-                                            value="Faker"
-                                            onChange={() => null}
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol lg={12}>
-                                    <Form.Group>
-                                        <Form.Label>Address</Form.Label>
-                                        <Form.Input
-                                            type="text"
-                                            placeholder="Home Address"
-                                            value="Melbourne, Australia"
-                                            onChange={() => null}
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol sm={12} lg={4}>
-                                    <Form.Group>
-                                        <Form.Label>City</Form.Label>
-                                        <Form.Input
-                                            type="text"
-                                            placeholder="City"
-                                            value="Melbourne"
-                                            onChange={() => null}
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol sm={6} lg={3}>
-                                    <Form.Group>
-                                        <Form.Label>Postal Code</Form.Label>
-                                        <Form.Input
-                                            type="number"
-                                            placeholder="ZIP Code"
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol lg={5}>
-                                    <Form.Group>
-                                        <Form.Label>Country</Form.Label>
-                                        <Form.Select>
-                                            <option>Germany</option>
-                                        </Form.Select>
-                                    </Form.Group>
-                                </Grid.Col>
-                                <Grid.Col ignoreCol lg={12}>
-                                    <Form.Group
-                                        className="mb=0"
-                                        label="About Me"
+                    <Formik
+                        initialValues={{
+                            username: "",
+                            aboutMe: "",
+                            firstName: "",
+                            lastName: "",
+                            location: "",
+                            ...user,
+                        }}
+                        validateOnChange={false}
+                        validationSchema={userValidatorSchema}
+                        onSubmit={onSubmit}
+                        enableReinitialize
+                    >
+                        {({ errors, isSubmitting, handleSubmit }) => (
+                            <Form className="card" onSubmit={handleSubmit}>
+                                <Card.Body>
+                                    <Card.Title>Edit Profile</Card.Title>
+                                    <Grid.Row>
+                                        <Grid.Col ignoreCol sm={12}>
+                                            <Form.Group>
+                                                <Form.Label>
+                                                    Display Name
+                                                </Form.Label>
+                                                <Field
+                                                    component={FormInput}
+                                                    type="text"
+                                                    error={errors.username}
+                                                    name="username"
+                                                    placeholder="Username"
+                                                />
+                                            </Form.Group>
+                                        </Grid.Col>
+                                        <Grid.Col ignoreCol sm={12} lg={6}>
+                                            <Form.Group>
+                                                <Form.Label>
+                                                    First Name
+                                                </Form.Label>
+                                                <Field
+                                                    component={FormInput}
+                                                    type="text"
+                                                    error={errors.firstName}
+                                                    name="firstName"
+                                                    placeholder="First Name"
+                                                />
+                                            </Form.Group>
+                                        </Grid.Col>
+                                        <Grid.Col ignoreCol sm={12} lg={6}>
+                                            <Form.Group>
+                                                <Form.Label>
+                                                    Last Name
+                                                </Form.Label>
+                                                <Field
+                                                    component={FormInput}
+                                                    type="text"
+                                                    name="lastName"
+                                                    error={errors.lastName}
+                                                    placeholder="Last Name"
+                                                />
+                                            </Form.Group>
+                                        </Grid.Col>
+                                        <Grid.Col ignoreCol lg={12}>
+                                            <Form.Group>
+                                                <Form.Label>
+                                                    Location
+                                                </Form.Label>
+                                                <Field
+                                                    component={FormInput}
+                                                    type="text"
+                                                    name="location"
+                                                    error={errors.location}
+                                                    placeholder="Location"
+                                                />
+                                            </Form.Group>
+                                        </Grid.Col>
+                                        <Grid.Col ignoreCol lg={12}>
+                                            <Form.Group>
+                                                <Field
+                                                    component={FormTextarea}
+                                                    className="mb=0"
+                                                    name="aboutMe"
+                                                    label="About Me"
+                                                    error={errors.aboutMe}
+                                                    rows={5}
+                                                    placeholder="Here can be your description"
+                                                />
+                                            </Form.Group>
+                                        </Grid.Col>
+                                    </Grid.Row>
+                                </Card.Body>
+                                <Card.Footer className="text-right">
+                                    <Button
+                                        type="submit"
+                                        color="primary"
+                                        disabled={isSubmitting}
                                     >
-                                        <Form.Textarea
-                                            rows={5}
-                                            placeholder="Here can be your description"
-                                            onChange={() => null}
-                                        >
-                                            Oh so, your weak rhyme You doubt
-                                            I'll bother, reading into it I'll
-                                            probably won't, left to my own
-                                            devices But that's the difference in
-                                            our opinions.
-                                        </Form.Textarea>
-                                    </Form.Group>
-                                </Grid.Col>
-                            </Grid.Row>
-                        </Card.Body>
-                        <Card.Footer className="text-right">
-                            <Button type="submit" color="primary">
-                                Update Profile
-                            </Button>
-                        </Card.Footer>
-                    </Form>
+                                        Update Profile
+                                    </Button>
+                                </Card.Footer>
+                            </Form>
+                        )}
+                    </Formik>
                 </Grid.Col>
             </Grid.Row>
         </Page>
