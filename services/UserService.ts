@@ -18,10 +18,14 @@ export const getUser = async (props: Partial<User>) => {
 export const ensureAuth0Exists = async (auth0User: any) => {
     try {
         const dbUser = await getUser({id: auth0User.sub});
-        return dbUser;
+        if(dbUser != null) {
+            return dbUser;
+        }
     } catch (e) {
-        return await createUser(auth0UserToUser(auth0User));
+        console.log("[UserService][GetUser] Something went wrong getting the user");
     }
+
+    return await createUser(auth0UserToUser(auth0User));
 };
 
 export const createUser = async (user: User) => {
