@@ -1,9 +1,9 @@
 // @flow
 
 import { useUser } from "@auth0/nextjs-auth0";
+import { User } from "@prisma/client";
 import * as React from "react";
 import { Site, Nav, Button, Container } from "tabler-react";
-import { User } from "../../../models/User";
 
 const accountDropdownProps = (user: User) => ({
     avatarURL: user.picture,

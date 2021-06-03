@@ -1,10 +1,11 @@
 import { useUser } from "@auth0/nextjs-auth0";
+import { User } from "@prisma/client";
 import { Formik, Field } from "formik";
 import { NextPageContext } from "next";
 import React from "react";
 import { toast } from "react-toastify";
 import { Button, Card, Form, Grid, Profile, Loader } from "tabler-react";
-import { User, userValidatorSchema } from "../models/User";
+import { userValidatorSchema } from "../models/User";
 import { post } from "../src/Api";
 import { FormInput, FormTextarea } from "../src/components/Form/Form";
 import Page from "../src/components/Page";

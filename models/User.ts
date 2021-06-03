@@ -1,3 +1,4 @@
+import { User } from ".prisma/client";
 import {
     attribute,
     hashKey,
@@ -5,58 +6,19 @@ import {
 } from "@aws/dynamodb-data-mapper-annotations";
 import { object, string, array, number } from "yup";
 
-@table("user")
-export class User {
-    @hashKey({
-        type: "String",
-    })
-    id!: string;
-
-    @attribute({
-        type: "String",
-    })
-    username!: string;
-
-    @attribute({
-        type: "String",
-    })
-    firstName!: string;
-
-    @attribute({
-        type: "String",
-    })
-    lastName!: string;
-
-    @attribute({
-        type: "String",
-    })
-    picture!: string;
-
-    @attribute({
-        type: "String",
-    })
-    aboutMe!: string;
-
-    @attribute({
-        type: "String",
-    })
-    location!: string;
-
-    @attribute({
-        type: "Date",
-        defaultProvider: () => new Date(),
-    })
-    createdAt!: Date;
-}
 
 export const auth0UserToUser = (auth0User: any) => {
-    const user = new User();
-    user.createdAt = new Date();
-    user.id = auth0User.sub;
-    user.username = auth0User.nickname;
-    user.picture = auth0User.picture;
-    user.firstName = auth0User.firstName;
-    user.lastName = auth0User.lastName;
+    const user: User = {
+        createdAt: new Date(),
+        id: auth0User.sub,
+        email: auth0User.email,
+        username: auth0User.nickname,
+        picture: auth0User.picture,
+        firstName: auth0User.firstName,
+        lastName: auth0User.lastName,
+        aboutMe: "",
+        location: ""
+    }
 
     return user;
 };

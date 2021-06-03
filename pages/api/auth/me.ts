@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withErrorHandling from "../../../middleware/withErrorHandeling";
 import withUser from "../../../middleware/withUser";
 import { updateUser } from "../../../services/UserService";
-import { User, userValidatorSchema } from "../../../models/User";
+import { userValidatorSchema } from "../../../models/User";
 
 export default withErrorHandling(
     withUser(
@@ -16,7 +16,7 @@ export default withErrorHandling(
                 case "POST":
                     await saveUser(req, res);
                 default:
-                    getUser(req, res);
+                    await getUser(req, res);
             }
         }
     )
@@ -38,11 +38,11 @@ async function saveUser(req: NextApiRequest, res: NextApiResponse<any>) {
             stripUnknown: true,
         });
         const savedUser = await updateUser(
-            Object.assign(new User(), {
+            {
                 ...req.user,
                 ...user,
                 id: req.user?.id,
-            })
+            }
         );
 
         res.status(200).json(savedUser);
