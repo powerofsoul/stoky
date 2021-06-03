@@ -1,9 +1,6 @@
 import { auth0UserToUser } from "../models/User";
-import DynamoDAO from "./DynamoDAO";
 import SqlDAO from "../services/SqlDAO";
 import { User } from "@prisma/client";
-
-const client = DynamoDAO;
 
 export const getUser = async (props: Partial<User>) => {
     const user = await SqlDAO.user.findFirst({
