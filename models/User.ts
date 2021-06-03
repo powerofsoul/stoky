@@ -29,10 +29,12 @@ export const userValidatorSchema = object({
         .min(3, "Too Short")
         .max(100, "Too Long"),
     firstName: string()
+        .nullable()
         .required("Required")
         .min(3, "Too Short")
         .max(20, "Too Long"),
     lastName: string()
+        .nullable()
         .required("Required")
         .min(3, "Too Short")
         .max(20, "Too Long"),
