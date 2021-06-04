@@ -19,4 +19,5 @@ ___
 **A:** DATABASE_URL=*%%MYSQL_URL%%* prisma dev
 ___
 **Q:** Should I commit migration?
+
 **A:** Yes, we gonna use the committed migration to apply on prod 
