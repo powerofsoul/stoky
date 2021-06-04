@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "init-tables": "ts-node ./scripts/initializeDynamo.ts",
-    "build": "next build",
+    "build": "npm run lint && next build",
     "start": "next start -p $PORT",
     "lint": "eslint ./**/*.{js,ts,tsx} --fix"
   },
