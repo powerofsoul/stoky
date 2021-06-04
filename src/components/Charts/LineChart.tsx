@@ -1,20 +1,25 @@
-import useDimensions from "react-use-dimensions";
-import { Chart, ChartCanvas } from "react-stockcharts";
-import { XAxis, YAxis } from "react-stockcharts/lib/axes";
-import { AreaSeries } from "react-stockcharts/lib/series";
-import { scaleTime } from "d3-scale";
-import { ChartProps } from "./ChartProps";
+import useDimensions from 'react-use-dimensions'
+import { Chart, ChartCanvas } from 'react-stockcharts'
+import { XAxis, YAxis } from 'react-stockcharts/lib/axes'
+import { AreaSeries } from 'react-stockcharts/lib/series'
+import { scaleTime } from 'd3-scale'
+import { ChartProps } from './ChartProps'
 
 const LineChart = ({ data, height, hideAxis, xTicks, yTicks }: ChartProps) => {
-    const [ref, { width }] = useDimensions();
-    const xAccessor = (d: any) => d?.date;
+    const [ref, { width }] = useDimensions()
+    const xAccessor = (d: any) => d?.date
 
     return (
         <div ref={ref}>
             <ChartCanvas
                 width={width}
                 height={height || 400}
-                margin={{ left: 50, right: 50, top: 10, bottom: 30 }}
+                margin={{
+                    left: 50,
+                    right: 50,
+                    top: 10,
+                    bottom: 30,
+                }}
                 data={data}
                 type="svg"
                 xAccessor={(d: any) => d?.date}
@@ -43,7 +48,7 @@ const LineChart = ({ data, height, hideAxis, xTicks, yTicks }: ChartProps) => {
                 </Chart>
             </ChartCanvas>
         </div>
-    );
-};
+    )
+}
 
-export default LineChart;
+export default LineChart

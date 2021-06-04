@@ -1,12 +1,10 @@
-import { useRouter } from "next/router";
-import React from "react";
-import { Card, Grid, Loader } from "tabler-react";
-import ChartFetcher from "../../src/components/Charts/ChartFetcher";
-import LineChart from "../../src/components/Charts/LineChart";
-import Page from "../../src/components/Page";
-import Head from "next/head";
-import { NextPageContext } from "next";
-import Consts from "../../src/Consts";
+import { Card, Grid, Loader } from 'tabler-react'
+import Head from 'next/head'
+import { NextPageContext } from 'next'
+import ChartFetcher from '../../src/components/Charts/ChartFetcher'
+import LineChart from '../../src/components/Charts/LineChart'
+import Page from '../../src/components/Page'
+import Consts from '../../src/Consts'
 
 const H = ({ symbol }: any) => (
     <Head>
@@ -25,7 +23,7 @@ const H = ({ symbol }: any) => (
         <meta property="og:image:height" content="617" />
         <meta name="twitter:card" content="summary_large_image" />
     </Head>
-);
+)
 
 const StockPage = ({ symbol }: any) => {
     if (!symbol) {
@@ -34,7 +32,7 @@ const StockPage = ({ symbol }: any) => {
                 <H symbol={symbol} />
                 <Loader />;
             </span>
-        );
+        )
     }
     return (
         <Page>
@@ -64,11 +62,11 @@ const StockPage = ({ symbol }: any) => {
                 </Grid.Col>
             </Grid.Row>
         </Page>
-    );
-};
+    )
+}
 
-StockPage.getInitialProps = async (ctx: NextPageContext) => {
-    return { symbol: ctx.query.symbol };
-};
+StockPage.getInitialProps = async (ctx: NextPageContext) => ({
+    symbol: ctx.query.symbol,
+})
 
-export default StockPage;
+export default StockPage

@@ -1,30 +1,25 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { get } from "../Api";
+import { createContext, useContext, useState } from 'react'
 
 interface AppContext {
-  version: string;
+    version: string
 }
 
 const defaultContextValues: AppContext = {
-  version: "0.0.1"
+    version: '0.0.1',
 }
 
-const AppContext = createContext(defaultContextValues);
+const Context = createContext(defaultContextValues)
 
 interface Props {
-  children: JSX.Element[] | JSX.Element;
+    children: JSX.Element[] | JSX.Element
 }
 
 export function AppWrapper({ children }: Props) {
-    const [contextValues, setContextValues] = useState(defaultContextValues);
+    const [contextValues, setContextValues] = useState(defaultContextValues)
 
-    return (
-        <AppContext.Provider value={contextValues}>
-            {children}
-        </AppContext.Provider>
-    );
+    return <Context.Provider value={contextValues}>{children}</Context.Provider>
 }
 
 export function useAppContext() {
-    return useContext(AppContext);
+    return useContext(Context)
 }

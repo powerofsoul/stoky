@@ -1,40 +1,40 @@
-import axios from "axios";
+import axios from 'axios'
 
-const BASE_PATH = "/api/";
+const BASE_PATH = '/api/'
 
-function urlWithQueryParam(path: string, queryParams: { [key: string]: string; } | undefined) {
-    let url = `${BASE_PATH}${path}`;
+function urlWithQueryParam(
+    path: string,
+    queryParams: { [key: string]: string } | undefined
+) {
+    let url = `${BASE_PATH}${path}`
     if (queryParams) {
-        url =
-            url +
-            "?" +
-            Object.entries(queryParams)
-                .map(
-                    ([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
-                )
-                .join("&");
+        url = `${url}?${Object.entries(queryParams)
+            .map(
+                ([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
+            )
+            .join('&')}`
     }
-    return url;
+    return url
 }
 
 export function get<T>(
     path: string,
     queryParams?: {
-        [key: string]: string;
+        [key: string]: string
     }
 ) {
-    let url = urlWithQueryParam(path, queryParams);
-    return axios.get(url).then((r) => r.data as T);
+    const url = urlWithQueryParam(path, queryParams)
+    return axios.get(url).then((r) => r.data as T)
 }
 
 export function post<T, K>(
     path: string,
     body?: K,
     queryParams?: {
-        [key: string]: string;
+        [key: string]: string
     }
 ) {
-    let url = urlWithQueryParam(path, queryParams);
+    const url = urlWithQueryParam(path, queryParams)
 
-    return axios.post(url, body).then((r) => r.data as T);
+    return axios.post(url, body).then((r) => r.data as T)
 }

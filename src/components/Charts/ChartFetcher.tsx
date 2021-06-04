@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import { get } from "../../Api";
-import { ChartProps } from "./ChartProps";
+import { useEffect, useState } from 'react'
+import { get } from '../../Api'
+import { ChartProps } from './ChartProps'
 
 interface Props {
-    Chart: any;
-    chartProps?: ChartProps;
-    symbol: string;
+    Chart: any
+    chartProps?: ChartProps
+    symbol: string
 }
 
 const CardFetcher = ({ Chart, chartProps, symbol }: Props) => {
-    const [data, setData] = useState<any>();
+    const [data, setData] = useState<any>()
     const fetchDate = async (s?: string) => {
-        if (s === undefined) return;
+        if (s === undefined) return
         if (symbol) {
-            const apiData = await get<[]>("stock/historical", { symbol });
+            const apiData = await get<[]>('stock/historical', { symbol })
 
             setData(
                 apiData
@@ -24,24 +24,29 @@ const CardFetcher = ({ Chart, chartProps, symbol }: Props) => {
                     .sort(
                         (a: any, b: any) => a.date.getTime() - b.date.getTime()
                     )
-            );
+            )
         }
-    };
+    }
 
     useEffect(() => {
-        fetchDate(symbol);
-    }, [symbol]);
+        fetchDate(symbol)
+    }, [symbol])
 
-    if (!data) return <></>;
+    if (!data) return <></>
     if (!data.length) {
-        return <span>No data for {symbol}</span>;
+        return (
+            <span>
+                No data for
+                {symbol}
+            </span>
+        )
     }
 
     return (
         <>
             <Chart {...(chartProps || {})} data={data} />
         </>
-    );
-};
+    )
+}
 
-export default CardFetcher;
+export default CardFetcher

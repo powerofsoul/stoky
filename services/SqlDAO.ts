@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 
-const SqlDAO = new PrismaClient();
+const SqlDAO = new PrismaClient()
 
-export default SqlDAO;
+export default SqlDAO

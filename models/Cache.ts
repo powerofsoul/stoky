@@ -2,27 +2,29 @@ import {
     attribute,
     hashKey,
     table,
-} from "@aws/dynamodb-data-mapper-annotations";
+} from '@aws/dynamodb-data-mapper-annotations'
 
-@table("cache")
+@table('cache')
 export class Cache {
     @hashKey({
-        type: "String",
+        type: 'String',
     })
-    key!: string;
+    key!: string
 
     @attribute({
-        type: "Number",
+        type: 'Number',
     })
-    status!: number;
+    status!: number
 
     @attribute({
-        type: "String",
+        type: 'String',
     })
-    data!: any;
+    data!: any
 
     @attribute({
-        type: "Date"
+        type: 'Date',
     })
-    addedOn!: Date;
+    addedOn!: Date
 }
+
+export default Cache

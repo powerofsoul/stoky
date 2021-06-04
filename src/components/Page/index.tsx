@@ -1,41 +1,38 @@
-// @flow
-
-import { useUser } from "@auth0/nextjs-auth0";
-import { User } from "@prisma/client";
-import * as React from "react";
-import { Site, Nav, Button, Container } from "tabler-react";
+import { useUser } from '@auth0/nextjs-auth0'
+import { User } from '@prisma/client'
+import { Site, Nav, Button, Container } from 'tabler-react'
 
 const accountDropdownProps = (user: User) => ({
     avatarURL: user.picture,
     name: user.username,
-    description: "User",
+    description: 'User',
     options: [
-        { icon: "user", value: "Profile", to: "/profile" },
-        { icon: "settings", value: "Settings", to: "/settings" },
+        { icon: 'user', value: 'Profile', to: '/profile' },
+        { icon: 'settings', value: 'Settings', to: '/settings' },
         { isDivider: true },
-        { icon: "help-circle", value: "Need help?", to: "/help" },
-        { icon: "log-out", value: "Sign out", to: "/api/auth/logout" },
+        { icon: 'help-circle', value: 'Need help?', to: '/help' },
+        { icon: 'log-out', value: 'Sign out', to: '/api/auth/logout' },
     ],
-});
+})
 
 const navItems = [
     {
-        value: "Home",
-        to: "/",
-        icon: "home",
+        value: 'Home',
+        to: '/',
+        icon: 'home',
         useExact: true,
     },
-];
+]
 
 const SiteWrapper = ({ children }: any) => {
-    const { user, error, isLoading } = useUser();
+    const { user, error, isLoading } = useUser()
 
     return (
         <Site.Wrapper
             headerProps={{
-                href: "/",
-                alt: "Stoky",
-                imageURL: "/logo/logo_transparent.png",
+                href: '/',
+                alt: 'Stoky',
+                imageURL: '/logo/logo_transparent.png',
                 navItems: !user && !isLoading && (
                     <Nav.Item link={false} className="d-none d-md-flex">
                         <Button
@@ -63,7 +60,7 @@ const SiteWrapper = ({ children }: any) => {
         >
             <Container className="mt-5 mb-5">{children}</Container>
         </Site.Wrapper>
-    );
-};
+    )
+}
 
-export default SiteWrapper;
+export default SiteWrapper

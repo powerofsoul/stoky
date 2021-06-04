@@ -1,52 +1,51 @@
-import { useUser } from "@auth0/nextjs-auth0";
-import { User } from "@prisma/client";
-import { Formik, Field } from "formik";
-import { NextPageContext } from "next";
-import React from "react";
-import { toast } from "react-toastify";
-import { Button, Card, Form, Grid, Profile, Loader } from "tabler-react";
-import { userValidatorSchema } from "../models/User";
-import { post } from "../src/Api";
-import { FormInput, FormTextarea } from "../src/components/Form/Form";
-import Page from "../src/components/Page";
-import ensureUseIsLogged from "../src/pageMiddleware/ensureUseIsLogged";
+import { useUser } from '@auth0/nextjs-auth0'
+import { User } from '@prisma/client'
+import { Formik, Field } from 'formik'
+import { NextPageContext } from 'next'
+import { toast } from 'react-toastify'
+import { Button, Card, Form, Grid, Profile, Loader } from 'tabler-react'
+import { userValidatorSchema } from '../models/User'
+import { post } from '../src/Api'
+import { FormInput, FormTextarea } from '../src/components/Form/Form'
+import Page from '../src/components/Page'
+import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
 
 export async function getServerSideProps(context: NextPageContext) {
-    ensureUseIsLogged(context);
+    ensureUseIsLogged(context)
 
     return {
         props: {},
-    };
+    }
 }
 
 const component = () => {
-    const { user, error, isLoading } = useUser() as any;
+    const { user, error, isLoading } = useUser() as any
 
     if (isLoading) {
-        return <Loader className="m-auto" allowFullScreen={true} />;
+        return <Loader className="m-auto" allowFullScreen />
     }
 
     const onSubmit = async (values: User) => {
-        await post("auth/me", values)
+        await post('auth/me', values)
             .then(() => {
-                toast("Profile updated", {
-                    type: "success"
+                toast('Profile updated', {
+                    type: 'success',
                 })
             })
             .catch((err) => {
-                toast("Something went wrong", {
-                    type: "error"
+                toast('Something went wrong', {
+                    type: 'error',
                 })
-            });
-    };
+            })
+    }
 
     return (
         <Page>
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
                     <Profile
-                        name={user?.name || ""}
-                        avatarURL={user?.picture || ""}
+                        name={user?.name || ''}
+                        avatarURL={user?.picture || ''}
                     >
                         {user.description}
                     </Profile>
@@ -54,11 +53,11 @@ const component = () => {
                 <Grid.Col ignoreCol xl={8}>
                     <Formik
                         initialValues={{
-                            username: "",
-                            aboutMe: "",
-                            firstName: "",
-                            lastName: "",
-                            location: "",
+                            username: '',
+                            aboutMe: '',
+                            firstName: '',
+                            lastName: '',
+                            location: '',
                             ...user,
                         }}
                         validateOnChange={false}
@@ -157,7 +156,7 @@ const component = () => {
                 </Grid.Col>
             </Grid.Row>
         </Page>
-    );
-};
+    )
+}
 
-export default component;
+export default component
