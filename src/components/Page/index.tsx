@@ -22,6 +22,12 @@ const navItems = [
         icon: 'home',
         useExact: true,
     },
+    {
+        value: 'Portfolio',
+        to: '/portfolio',
+        icon: 'clipboard',
+        useExact: true,
+    },
 ]
 
 const SiteWrapper = ({ children }: any) => {

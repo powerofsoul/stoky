@@ -1,5 +1,6 @@
 import { NextPageContext } from 'next'
 import Page from '../src/components/Page'
+import AddToPortfolio from '../src/components/AddToPortfolio'
 import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
 
 export async function getServerSideProps(context: NextPageContext) {
@@ -10,6 +11,10 @@ export async function getServerSideProps(context: NextPageContext) {
     }
 }
 
-const Portfolio = () => <Page>Portfolio</Page>
+const Component = () => (
+    <Page>
+        <AddToPortfolio />
+    </Page>
+)
 
-export default Portfolio
+export default Component
