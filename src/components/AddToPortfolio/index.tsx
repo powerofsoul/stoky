@@ -2,7 +2,7 @@ import { PortfolioEventEnum, PortfolioTicker } from '@prisma/client'
 import { Field, FieldArray, Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { CircleMinus, CirclePlus } from 'tabler-icons-react'
-import { Grid, Form, Button } from 'tabler-react'
+import { Grid, Form, Button, Card } from 'tabler-react'
 import UpdatePortfolioValidator from '../../../validators/UpdatePortfolioValidator'
 import { post } from '../../Api'
 import { useAppContext } from '../../context/AppContext'
@@ -39,119 +39,114 @@ const Portfolio = () => {
         }
     }
     return (
-        <div>
-            <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validationSchema={UpdatePortfolioValidator}
-                validateOnChange={false}
-                validateOnBlur={false}
-                validateOnMount={false}
-            >
-                {({ errors, isSubmitting, handleSubmit, values, setFieldValue }) => (
-                    <Form onSubmit={handleSubmit}>
-                        <FieldArray
-                            name="tickers"
-                            render={(arrayHelpers) =>
-                                values.tickers.map((t, i) => (
-                                    <Grid.Row key={i}>
-                                        <Grid.Col>
-                                            <Form.Group>
-                                                <Form.Label>Ticker</Form.Label>
-                                                <Field
-                                                    error={
-                                                        // @ts-ignore
-                                                        errors.tickers?.[i]?.symbol
-                                                    }
-                                                    name={`tickers.${i}.symbol`}
-                                                    component={FormTickerSearch}
-                                                />
-                                            </Form.Group>
-                                        </Grid.Col>
-                                        <Grid.Col>
-                                            <Form.Group>
-                                                <Form.Label>Price</Form.Label>
-                                                <Field
-                                                    type="number"
-                                                    placeholder="Price"
-                                                    // @ts-ignore
-                                                    error={
-                                                        // @ts-ignore
-                                                        errors.tickers?.[i]?.price
-                                                    }
-                                                    name={`tickers.${i}.price`}
-                                                    component={FormInput}
-                                                />
-                                            </Form.Group>
-                                        </Grid.Col>
-                                        <Grid.Col>
-                                            <Form.Group>
-                                                <Form.Label>Amount</Form.Label>
-                                                <Field
-                                                    type="number"
-                                                    placeholder="Amount"
-                                                    error={
-                                                        // @ts-ignore
-                                                        errors.tickers?.[i]?.amount
-                                                    }
-                                                    name={`tickers.${i}.amount`}
-                                                    component={FormInput}
-                                                />
-                                            </Form.Group>
-                                        </Grid.Col>
-                                        <Grid.Col auto>
-                                            <Form.Group>
-                                                <Form.Label>Actions</Form.Label>
-                                                {values.tickers.length > 1 && (
-                                                    <CircleMinus
-                                                        className="float-right pointer m-auto"
-                                                        size={28}
-                                                        strokeWidth={1}
-                                                        color="#b93939"
-                                                        onClick={() => arrayHelpers.remove(i)}
+        <Card>
+            <Card.Body>
+                <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={UpdatePortfolioValidator}>
+                    {({ errors, isSubmitting, handleSubmit, values, setFieldValue }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <FieldArray
+                                name="tickers"
+                                render={(arrayHelpers) =>
+                                    values.tickers.map((t, i) => (
+                                        <Grid.Row key={i}>
+                                            <Grid.Col>
+                                                <Form.Group>
+                                                    <Form.Label>Ticker</Form.Label>
+                                                    <Field
+                                                        error={
+                                                            // @ts-ignore
+                                                            errors.tickers?.[i]?.symbol
+                                                        }
+                                                        name={`tickers.${i}.symbol`}
+                                                        component={FormTickerSearch}
                                                     />
-                                                )}
-                                            </Form.Group>
-                                        </Grid.Col>
-                                    </Grid.Row>
-                                ))
-                            }
-                        />
-                        <Grid.Row>
-                            <Grid.Col>
-                                <Button
-                                    onClick={() => {
-                                        setFieldValue('tickers', [...values.tickers, {}], false)
-                                    }}
-                                >
-                                    Insert row
-                                </Button>
-                            </Grid.Col>
-                        </Grid.Row>
-                        <Grid.Row className="mt-3">
-                            <Grid.Col>
-                                <Form.Group>
-                                    <Form.Label>Post Message</Form.Label>
-                                    <Field
-                                        placeholder="Message"
-                                        name="message"
-                                        error={errors.message}
-                                        component={FormTextarea}
-                                    />
-                                </Form.Group>
-                            </Grid.Col>
-                        </Grid.Row>
-                        <Grid.Row className="mt-3">
-                            <Grid.Col>
-                                <Button type="submit" color="primary" disabled={isSubmitting}>
-                                    Add
-                                </Button>
-                            </Grid.Col>
-                        </Grid.Row>
-                    </Form>
-                )}
-            </Formik>
-        </div>
+                                                </Form.Group>
+                                            </Grid.Col>
+                                            <Grid.Col>
+                                                <Form.Group>
+                                                    <Form.Label>Price</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        placeholder="Price"
+                                                        // @ts-ignore
+                                                        error={
+                                                            // @ts-ignore
+                                                            errors.tickers?.[i]?.price
+                                                        }
+                                                        name={`tickers.${i}.price`}
+                                                        component={FormInput}
+                                                    />
+                                                </Form.Group>
+                                            </Grid.Col>
+                                            <Grid.Col>
+                                                <Form.Group>
+                                                    <Form.Label>Amount</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        placeholder="Amount"
+                                                        error={
+                                                            // @ts-ignore
+                                                            errors.tickers?.[i]?.amount
+                                                        }
+                                                        name={`tickers.${i}.amount`}
+                                                        component={FormInput}
+                                                    />
+                                                </Form.Group>
+                                            </Grid.Col>
+                                            <Grid.Col auto>
+                                                <Form.Group>
+                                                    <Form.Label>Actions</Form.Label>
+                                                    {values.tickers.length > 1 && (
+                                                        <CircleMinus
+                                                            className="float-right pointer m-auto"
+                                                            size={28}
+                                                            strokeWidth={1}
+                                                            color="#b93939"
+                                                            onClick={() => arrayHelpers.remove(i)}
+                                                        />
+                                                    )}
+                                                </Form.Group>
+                                            </Grid.Col>
+                                        </Grid.Row>
+                                    ))
+                                }
+                            />
+                            <Grid.Row>
+                                <Grid.Col>
+                                    <Button
+                                        onClick={() => {
+                                            setFieldValue('tickers', [...values.tickers, {}], false)
+                                        }}
+                                    >
+                                        Insert row
+                                    </Button>
+                                </Grid.Col>
+                            </Grid.Row>
+                            <Grid.Row className="mt-3">
+                                <Grid.Col>
+                                    <Form.Group>
+                                        <Form.Label>Post Message</Form.Label>
+                                        <Field
+                                            placeholder="Message"
+                                            name="message"
+                                            error={errors.message}
+                                            component={FormTextarea}
+                                        />
+                                    </Form.Group>
+                                </Grid.Col>
+                            </Grid.Row>
+                            <Grid.Row className="mt-3">
+                                <Grid.Col>
+                                    <Button type="submit" color="primary" disabled={isSubmitting}>
+                                        Add
+                                    </Button>
+                                </Grid.Col>
+                            </Grid.Row>
+                        </Form>
+                    )}
+                </Formik>
+            </Card.Body>
+        </Card>
     )
 }
 
