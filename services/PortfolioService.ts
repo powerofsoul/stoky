@@ -1,5 +1,8 @@
 import { PortfolioEvent, PortfolioEventEnum } from '@prisma/client'
+import { YahooStockPrice } from '../models/YahooStock'
 import SqlDAO from './SqlDAO'
+
+const yahooFinance = require('yahoo-finance')
 
 const calculateAverage = (oldAmount: number, oldAverage: number, addingAmount: number, addingPrice: number) =>
     (oldAmount * oldAverage + addingAmount * addingPrice) / (oldAmount + addingAmount)
@@ -45,4 +48,13 @@ export async function addPortfolioEvent(event: PortfolioEvent) {
             id: undefined,
         },
     })
+}
+
+export async function getSymbolQuotePrice(symbol: string) {
+    const response = await yahooFinance.quote({
+        symbol,
+        modules: ['price'],
+    })
+
+    return response?.price as YahooStockPrice
 }
