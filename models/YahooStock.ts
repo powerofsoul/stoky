@@ -1,8 +1,4 @@
-import {
-    attribute,
-    hashKey,
-    table,
-} from '@aws/dynamodb-data-mapper-annotations'
+import { attribute, hashKey, table } from '@aws/dynamodb-data-mapper-annotations'
 
 export interface YahooStock {
     exchange: string

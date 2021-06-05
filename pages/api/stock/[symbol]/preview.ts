@@ -5,11 +5,7 @@ import { getHistoryForSymbol } from '../historical'
 
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas')
 
-export default async (
-    req: NextApiRequest,
-    res: NextApiResponse<any>,
-    options?: CallbackOptions | undefined
-) => {
+export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
     const { symbol } = req.query
     if (symbol === undefined) {
         res.status(400).send({

@@ -41,13 +41,7 @@ const SiteWrapper = ({ children }: any) => {
                 imageURL: '/logo/logo_transparent.png',
                 navItems: !user && !isLoading && (
                     <Nav.Item link={false} className="d-none d-md-flex">
-                        <Button
-                            href="/api/auth/login"
-                            outline
-                            size="sm"
-                            RootComponent="a"
-                            color="primary"
-                        >
+                        <Button href="/api/auth/login" outline size="sm" RootComponent="a" color="primary">
                             Login
                         </Button>
                     </Nav.Item>

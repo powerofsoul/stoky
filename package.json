@@ -6,7 +6,7 @@
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "init-tables": "ts-node ./scripts/initializeDynamo.ts",
     "build": "npm run lint && next build",
-    "start": "next start -p $PORT",
+    "start": "prisma migrate deploy && next start -p $PORT",
     "lint": "eslint ./**/*.{js,ts,tsx} --fix"
   },
   "dependencies": {
@@ -14,7 +14,7 @@
     "@aws-sdk/client-dynamodb": "^3.16.0",
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
-    "@prisma/client": "^2.24.0",
+    "@prisma/client": "^2.24.1",
     "@tabler/icons": "^1.41.2",
     "aws-sdk": "^2.914.0",
     "axios": "^0.21.1",

@@ -3,7 +3,7 @@ import moment from 'moment'
 import { NextApiRequest, NextApiResponse } from 'next'
 import withCache from '../../../middleware/withCache'
 import { SYMBOL_MAX_LENGTH } from '../../../src/Consts'
-import isValidSymbol from '../../../src/Utils'
+import { isValidSymbol } from '../../../src/Utils'
 
 const yahooFinance = require('yahoo-finance')
 
@@ -28,11 +28,7 @@ export async function getHistoryForSymbol(symbol: string) {
 }
 
 export default withCache(
-    async (
-        req: NextApiRequest,
-        res: NextApiResponse<any>,
-        options?: CallbackOptions | undefined
-    ) => {
+    async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
         const historical = await getHistoryForSymbol(req.query.symbol as string)
 
         res.status(200).json(historical)

@@ -24,26 +24,11 @@ const LineChart = ({ data, height, hideAxis, xTicks, yTicks }: ChartProps) => {
                 type="svg"
                 xAccessor={(d: any) => d?.date}
                 xScale={scaleTime()}
-                xExtents={[
-                    xAccessor(data?.[data?.length - 1]),
-                    xAccessor(data?.[0]),
-                ]}
+                xExtents={[xAccessor(data?.[data?.length - 1]), xAccessor(data?.[0])]}
             >
                 <Chart id={0} yExtents={(d: any) => d.close}>
-                    {!hideAxis && (
-                        <XAxis
-                            axisAt="bottom"
-                            orient="bottom"
-                            ticks={xTicks || 6}
-                        />
-                    )}
-                    {!hideAxis && (
-                        <YAxis
-                            axisAt="left"
-                            orient="left"
-                            ticks={yTicks || 6}
-                        />
-                    )}
+                    {!hideAxis && <XAxis axisAt="bottom" orient="bottom" ticks={xTicks || 6} />}
+                    {!hideAxis && <YAxis axisAt="left" orient="left" ticks={yTicks || 6} />}
                     <AreaSeries yAccessor={(d: any) => d.close} />
                 </Chart>
             </ChartCanvas>

@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import withErrorHandling from '../../../middleware/withErrorHandeling'
 import withUser from '../../../middleware/withUser'
 import { updateUser } from '../../../services/UserService'
-import { userValidatorSchema } from '../../../models/User'
+import UserValidator from '../../../validators/UserValidator'
 
 function getUser(req: NextApiRequest, res: NextApiResponse<any>) {
     if (req.user) {
@@ -17,7 +17,7 @@ function getUser(req: NextApiRequest, res: NextApiResponse<any>) {
 
 async function saveUser(req: NextApiRequest, res: NextApiResponse<any>) {
     try {
-        const user = await userValidatorSchema.validate(req.body, {
+        const user = await UserValidator.validate(req.body, {
             stripUnknown: true,
         })
         const savedUser = await updateUser({
@@ -33,20 +33,14 @@ async function saveUser(req: NextApiRequest, res: NextApiResponse<any>) {
 }
 
 export default withErrorHandling(
-    withUser(
-        async (
-            req: NextApiRequest,
-            res: NextApiResponse<any>,
-            options?: CallbackOptions | undefined
-        ) => {
-            switch (req.method) {
-                case 'POST':
-                    await saveUser(req, res)
-                    break
-                default:
-                    await getUser(req, res)
-                    break
-            }
+    withUser(async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
+        switch (req.method) {
+            case 'POST':
+                await saveUser(req, res)
+                break
+            default:
+                await getUser(req, res)
+                break
         }
-    )
+    })
 )

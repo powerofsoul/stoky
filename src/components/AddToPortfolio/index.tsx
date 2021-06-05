@@ -1,17 +1,16 @@
-import { PortfolioEventEnum } from '@prisma/client'
+import { PortfolioEventEnum, PortfolioTicker } from '@prisma/client'
 import { Field, FieldArray, Formik } from 'formik'
+import { toast } from 'react-toastify'
 import { CircleMinus, CirclePlus } from 'tabler-icons-react'
 import { Grid, Form, Button } from 'tabler-react'
-import { FormInput, FormTextarea } from '../Form/Form'
-import TickerSearch from '../TickerSearch'
+import UpdatePortfolioValidator from '../../../validators/UpdatePortfolioValidator'
+import { post } from '../../Api'
+import { useAppContext } from '../../context/AppContext'
+import { FormInput, FormTextarea, FormTickerSearch } from '../Form/Form'
 
 const Portfolio = () => {
-    const actionOptions = Object.entries(PortfolioEventEnum || {}).map((e) => ({
-        label: e[0],
-        value: e[1],
-    }))
+    const { setPortfolioTickers } = useAppContext()
 
-    const onSubmit = () => {}
     const initialValues = {
         tickers: [
             {
@@ -22,22 +21,50 @@ const Portfolio = () => {
         ],
         message: '',
     }
+
+    const onSubmit = async (data: typeof initialValues) => {
+        try {
+            const response = await post<PortfolioTicker[], typeof data>('portfolio', data)
+            if (response !== undefined) {
+                setPortfolioTickers(response)
+            }
+
+            toast('Success', {
+                type: 'success',
+            })
+        } catch {
+            toast('Something went wrong', {
+                type: 'error',
+            })
+        }
+    }
     return (
         <div>
-            <Formik initialValues={initialValues} onSubmit={onSubmit}>
-                {({ errors, isSubmitting, handleSubmit, values }) => (
+            <Formik
+                initialValues={initialValues}
+                onSubmit={onSubmit}
+                validationSchema={UpdatePortfolioValidator}
+                validateOnChange={false}
+                validateOnBlur={false}
+                validateOnMount={false}
+            >
+                {({ errors, isSubmitting, handleSubmit, values, setFieldValue }) => (
                     <Form onSubmit={handleSubmit}>
                         <FieldArray
                             name="tickers"
                             render={(arrayHelpers) =>
                                 values.tickers.map((t, i) => (
-                                    <Grid.Row>
+                                    <Grid.Row key={i}>
                                         <Grid.Col>
                                             <Form.Group>
                                                 <Form.Label>Ticker</Form.Label>
                                                 <Field
+                                                    error={
+                                                        // @ts-ignore
+                                                        errors.tickers?.[i]?.symbol
+                                                    }
                                                     name={`tickers.${i}.symbol`}
-                                                    component={TickerSearch}
+                                                    component={FormTickerSearch}
                                                 />
                                             </Form.Group>
                                         </Grid.Col>
@@ -47,6 +74,11 @@ const Portfolio = () => {
                                                 <Field
                                                     type="number"
                                                     placeholder="Price"
+                                                    // @ts-ignore
+                                                    error={
+                                                        // @ts-ignore
+                                                        errors.tickers?.[i]?.price
+                                                    }
                                                     name={`tickers.${i}.price`}
                                                     component={FormInput}
                                                 />
@@ -58,6 +90,10 @@ const Portfolio = () => {
                                                 <Field
                                                     type="number"
                                                     placeholder="Amount"
+                                                    error={
+                                                        // @ts-ignore
+                                                        errors.tickers?.[i]?.amount
+                                                    }
                                                     name={`tickers.${i}.amount`}
                                                     component={FormInput}
                                                 />
@@ -66,31 +102,13 @@ const Portfolio = () => {
                                         <Grid.Col auto>
                                             <Form.Group>
                                                 <Form.Label>Actions</Form.Label>
-                                                {i > 0 && (
+                                                {values.tickers.length > 1 && (
                                                     <CircleMinus
                                                         className="float-right pointer m-auto"
                                                         size={28}
                                                         strokeWidth={1}
-                                                        color="#862d2d"
-                                                        onClick={() =>
-                                                            arrayHelpers.remove(
-                                                                i
-                                                            )
-                                                        }
-                                                    />
-                                                )}
-                                                {i === 0 && (
-                                                    <CirclePlus
-                                                        className="float-right pointer m-auto"
-                                                        size={28}
-                                                        strokeWidth={1}
-                                                        color="#2d8670"
-                                                        onClick={() =>
-                                                            arrayHelpers.insert(
-                                                                i,
-                                                                {}
-                                                            )
-                                                        }
+                                                        color="#b93939"
+                                                        onClick={() => arrayHelpers.remove(i)}
                                                     />
                                                 )}
                                             </Form.Group>
@@ -99,6 +117,17 @@ const Portfolio = () => {
                                 ))
                             }
                         />
+                        <Grid.Row>
+                            <Grid.Col>
+                                <Button
+                                    onClick={() => {
+                                        setFieldValue('tickers', [...values.tickers, {}], false)
+                                    }}
+                                >
+                                    Insert row
+                                </Button>
+                            </Grid.Col>
+                        </Grid.Row>
                         <Grid.Row className="mt-3">
                             <Grid.Col>
                                 <Form.Group>
@@ -114,7 +143,7 @@ const Portfolio = () => {
                         </Grid.Row>
                         <Grid.Row className="mt-3">
                             <Grid.Col>
-                                <Button type="submit" color="primary">
+                                <Button type="submit" color="primary" disabled={isSubmitting}>
                                     Add
                                 </Button>
                             </Grid.Col>

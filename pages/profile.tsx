@@ -4,11 +4,11 @@ import { Formik, Field } from 'formik'
 import { NextPageContext } from 'next'
 import { toast } from 'react-toastify'
 import { Button, Card, Form, Grid, Profile, Loader } from 'tabler-react'
-import { userValidatorSchema } from '../models/User'
 import { post } from '../src/Api'
 import { FormInput, FormTextarea } from '../src/components/Form/Form'
 import Page from '../src/components/Page'
 import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
+import UserValidator from '../validators/UserValidator'
 
 export async function getServerSideProps(context: NextPageContext) {
     ensureUseIsLogged(context)
@@ -43,10 +43,7 @@ const component = () => {
         <Page>
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
-                    <Profile
-                        name={user?.name || ''}
-                        avatarURL={user?.picture || ''}
-                    >
+                    <Profile name={user?.name || ''} avatarURL={user?.picture || ''}>
                         {user.description}
                     </Profile>
                 </Grid.Col>
@@ -61,7 +58,7 @@ const component = () => {
                             ...user,
                         }}
                         validateOnChange={false}
-                        validationSchema={userValidatorSchema}
+                        validationSchema={UserValidator}
                         onSubmit={onSubmit}
                         enableReinitialize
                     >
@@ -72,9 +69,7 @@ const component = () => {
                                     <Grid.Row>
                                         <Grid.Col ignoreCol sm={12}>
                                             <Form.Group>
-                                                <Form.Label>
-                                                    Display Name
-                                                </Form.Label>
+                                                <Form.Label>Display Name</Form.Label>
                                                 <Field
                                                     component={FormInput}
                                                     type="text"
@@ -86,9 +81,7 @@ const component = () => {
                                         </Grid.Col>
                                         <Grid.Col ignoreCol sm={12} lg={6}>
                                             <Form.Group>
-                                                <Form.Label>
-                                                    First Name
-                                                </Form.Label>
+                                                <Form.Label>First Name</Form.Label>
                                                 <Field
                                                     component={FormInput}
                                                     type="text"
@@ -100,9 +93,7 @@ const component = () => {
                                         </Grid.Col>
                                         <Grid.Col ignoreCol sm={12} lg={6}>
                                             <Form.Group>
-                                                <Form.Label>
-                                                    Last Name
-                                                </Form.Label>
+                                                <Form.Label>Last Name</Form.Label>
                                                 <Field
                                                     component={FormInput}
                                                     type="text"
@@ -114,9 +105,7 @@ const component = () => {
                                         </Grid.Col>
                                         <Grid.Col ignoreCol lg={12}>
                                             <Form.Group>
-                                                <Form.Label>
-                                                    Location
-                                                </Form.Label>
+                                                <Form.Label>Location</Form.Label>
                                                 <Field
                                                     component={FormInput}
                                                     type="text"
@@ -142,11 +131,7 @@ const component = () => {
                                     </Grid.Row>
                                 </Card.Body>
                                 <Card.Footer className="text-right">
-                                    <Button
-                                        type="submit"
-                                        color="primary"
-                                        disabled={isSubmitting}
-                                    >
+                                    <Button type="submit" color="primary" disabled={isSubmitting}>
                                         Update Profile
                                     </Button>
                                 </Card.Footer>

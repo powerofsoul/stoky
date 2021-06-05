@@ -1,11 +1,17 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { PortfolioTicker } from '.prisma/client'
+import { get } from '../Api'
 
 interface AppContext {
-    version: string
+    portfolioTickers: PortfolioTicker[]
+    setPortfolioTickers: (value: PortfolioTicker[]) => void
+    isLoading: boolean
 }
 
 const defaultContextValues: AppContext = {
-    version: '0.0.1',
+    isLoading: true,
+    portfolioTickers: [],
+    setPortfolioTickers: () => {},
 }
 
 const Context = createContext(defaultContextValues)
@@ -17,7 +23,36 @@ interface Props {
 export function AppWrapper({ children }: Props) {
     const [contextValues, setContextValues] = useState(defaultContextValues)
 
-    return <Context.Provider value={contextValues}>{children}</Context.Provider>
+    const setPortfolioTickers = (value: PortfolioTicker[]) => {
+        setContextValues({
+            ...contextValues,
+            portfolioTickers: value,
+        })
+    }
+
+    const getTickers = async () => {
+        const portfolioTickers = await get<PortfolioTicker[]>('portfolio')
+        setContextValues({
+            ...contextValues,
+            portfolioTickers,
+            isLoading: false,
+        })
+    }
+
+    useEffect(() => {
+        getTickers()
+    }, [])
+
+    return (
+        <Context.Provider
+            value={{
+                ...contextValues,
+                setPortfolioTickers,
+            }}
+        >
+            {children}
+        </Context.Provider>
+    )
 }
 
 export function useAppContext() {

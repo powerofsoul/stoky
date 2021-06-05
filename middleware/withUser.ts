@@ -11,21 +11,24 @@ declare module 'next' {
 }
 
 export const getUserFromRequest = async (req: NextApiRequest | any, res: NextApiResponse | any) => {
-  const auth0User = getSession(req, res)?.user;
+    const auth0User = getSession(req, res)?.user
 
-  if (auth0User) {
-    const user = await ensureAuth0Exists(auth0User);
-    return user;
-  }
+    if (auth0User) {
+        const user = await ensureAuth0Exists(auth0User)
+        return user
+    }
 
-  return undefined;
-};
+    return undefined
+}
 
 const withUser = (handler: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
-  const user = await getUserFromRequest(req, res);
+    const user = await getUserFromRequest(req, res)
+    if (!user) {
+        res.status(403)
+    } else {
+        req.user = user
+        return handler(req, res)
+    }
+}
 
-  req.user = user;
-  return handler(req, res);
-};
-
-export default withUser;
+export default withUser

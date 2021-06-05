@@ -17,8 +17,7 @@ const defaultProps = {
 }
 
 const withCache =
-    (handler: NextApiHandler, props?: Partial<Props>) =>
-    async (req: NextApiRequest, res: NextApiResponse) => {
+    (handler: NextApiHandler, props?: Partial<Props>) => async (req: NextApiRequest, res: NextApiResponse) => {
         const propsWithDefault = {
             ...defaultProps,
             ...props,
@@ -28,9 +27,7 @@ const withCache =
         const query = JSON.stringify(req.query)
         const path = req.url
 
-        let keyString = propsWithDefault.includeUser
-            ? body + query + path + req.user?.id
-            : body + query + path
+        let keyString = propsWithDefault.includeUser ? body + query + path + req.user?.id : body + query + path
 
         if (!props || !props.caseSensitive) {
             keyString = keyString.toLowerCase()
@@ -39,19 +36,12 @@ const withCache =
         const key = sha256(keyString)
 
         try {
-            const cachedValue = await DynamoDAO.get(
-                Object.assign(new Cache(), { key })
-            )
+            const cachedValue = await DynamoDAO.get(Object.assign(new Cache(), { key }))
 
             const { addedOn } = cachedValue
 
-            if (
-                new Date().getTime() - addedOn.getTime() <=
-                propsWithDefault.cacheDuration
-            ) {
-                res.status(cachedValue.status).json(
-                    JSON.parse(cachedValue.data)
-                )
+            if (new Date().getTime() - addedOn.getTime() <= propsWithDefault.cacheDuration) {
+                res.status(cachedValue.status).json(JSON.parse(cachedValue.data))
                 return
             }
         } catch {

@@ -2,16 +2,11 @@ import axios from 'axios'
 
 const BASE_PATH = '/api/'
 
-function urlWithQueryParam(
-    path: string,
-    queryParams: { [key: string]: string } | undefined
-) {
+function urlWithQueryParam(path: string, queryParams: { [key: string]: string } | undefined) {
     let url = `${BASE_PATH}${path}`
     if (queryParams) {
         url = `${url}?${Object.entries(queryParams)
-            .map(
-                ([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
-            )
+            .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
             .join('&')}`
     }
     return url

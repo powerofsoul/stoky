@@ -32,9 +32,7 @@ export const ensureAuth0Exists = async (auth0User: any) => {
             return dbUser
         }
     } catch (e) {
-        console.log(
-            '[UserService][GetUser] Something went wrong getting the user'
-        )
+        console.log('[UserService][GetUser] Something went wrong getting the user')
     }
 
     return createUser(auth0UserToUser(auth0User))

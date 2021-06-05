@@ -28,6 +28,8 @@
         "no-use-before-define": "off",
         "import/no-extraneous-dependencies": "off",
         "react/require-default-props": "off",
-        "consistent-return": "off"
+        "consistent-return": "off",
+        "import/prefer-default-export": "off",
+        "react/no-array-index-key": "off"
     }
 }

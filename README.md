@@ -15,10 +15,10 @@ ___
 
 **A** You need to install it globally on your dev machine. Run  ```npm i -g prisma```
 ___
-**Q: How do I deploy my changes to dev db**
+**Q: How do I deploy my changes to dev db? How do I create a migration?**
 
 **A:** DATABASE_URL=*%%MYSQL_URL%%* prisma dev
 ___
 **Q:** Should I commit migration?
 
-**A:** Yes, we gonna use the committed migration to apply on prod 
+**A:** Yes, we gonna use the committed migration to apply on prod. Until the initial release we can overwrite older migrations.

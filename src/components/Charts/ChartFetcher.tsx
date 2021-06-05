@@ -21,9 +21,7 @@ const CardFetcher = ({ Chart, chartProps, symbol }: Props) => {
                         ...m,
                         date: new Date(m.date),
                     }))
-                    .sort(
-                        (a: any, b: any) => a.date.getTime() - b.date.getTime()
-                    )
+                    .sort((a: any, b: any) => a.date.getTime() - b.date.getTime())
             )
         }
     }
