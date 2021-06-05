@@ -7,12 +7,12 @@ import { AppWrapper } from '../src/context/AppContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <AppWrapper>
-            <UserProvider>
+        <UserProvider>
+            <AppWrapper>
                 <ToastContainer />
                 <Component {...pageProps} />
-            </UserProvider>
-        </AppWrapper>
+            </AppWrapper>
+        </UserProvider>
     )
 }
 

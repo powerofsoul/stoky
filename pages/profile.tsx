@@ -1,4 +1,3 @@
-import { useUser } from '@auth0/nextjs-auth0'
 import { User } from '@prisma/client'
 import { Formik, Field } from 'formik'
 import { NextPageContext } from 'next'
@@ -7,6 +6,7 @@ import { Button, Card, Form, Grid, Profile, Loader } from 'tabler-react'
 import { post } from '../src/Api'
 import { FormInput, FormTextarea } from '../src/components/Form/Form'
 import Page from '../src/components/Page'
+import { useAppContext } from '../src/context/AppContext'
 import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
 import UserValidator from '../validators/UserValidator'
 
@@ -19,9 +19,9 @@ export async function getServerSideProps(context: NextPageContext) {
 }
 
 const component = () => {
-    const { user, error, isLoading } = useUser() as any
+    const { user, userIsLoading } = useAppContext()
 
-    if (isLoading) {
+    if (userIsLoading || user === undefined) {
         return <Loader className="m-auto" allowFullScreen />
     }
 
@@ -43,8 +43,8 @@ const component = () => {
         <Page>
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
-                    <Profile name={user?.name || ''} avatarURL={user?.picture || ''}>
-                        {user.description}
+                    <Profile name={user.firstName} avatarURL={user?.picture || ''}>
+                        {user.aboutMe}
                     </Profile>
                 </Grid.Col>
                 <Grid.Col ignoreCol xl={8}>

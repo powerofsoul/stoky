@@ -1,6 +1,6 @@
-import { useUser } from '@auth0/nextjs-auth0'
 import { User } from '@prisma/client'
 import { Site, Nav, Button, Container } from 'tabler-react'
+import { useAppContext } from '../../context/AppContext'
 
 const accountDropdownProps = (user: User) => ({
     avatarURL: user.picture,
@@ -31,7 +31,7 @@ const navItems = [
 ]
 
 const SiteWrapper = ({ children }: any) => {
-    const { user, error, isLoading } = useUser()
+    const { user, userIsLoading } = useAppContext()
 
     return (
         <Site.Wrapper
@@ -39,7 +39,7 @@ const SiteWrapper = ({ children }: any) => {
                 href: '/',
                 alt: 'Stoky',
                 imageURL: '/logo/logo_transparent.png',
-                navItems: !user && (
+                navItems: !user && !userIsLoading && (
                     <Nav.Item link={false} className="d-none d-md-flex">
                         <Button href="/api/auth/login" outline size="sm" RootComponent="a" color="primary">
                             Login

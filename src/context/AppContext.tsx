@@ -1,8 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { User } from '@prisma/client'
 import { PortfolioTicker } from '.prisma/client'
 import { get } from '../Api'
 
 interface AppContext {
+    user?: User
+    userIsLoading: boolean
     portfolioTickers: PortfolioTicker[]
     setPortfolioTickers: (value: PortfolioTicker[]) => void
     isLoading: boolean
@@ -10,6 +13,7 @@ interface AppContext {
 
 const defaultContextValues: AppContext = {
     isLoading: true,
+    userIsLoading: true,
     portfolioTickers: [],
     setPortfolioTickers: () => {},
 }
@@ -21,34 +25,35 @@ interface Props {
 }
 
 export function AppWrapper({ children }: Props) {
-    const [contextValues, setContextValues] = useState(defaultContextValues)
-
-    const setPortfolioTickers = (value: PortfolioTicker[]) => {
-        setContextValues({
-            ...contextValues,
-            portfolioTickers: value,
-        })
-    }
+    const [user, setUser] = useState<User>()
+    const [portfolioTickers, setPortfolioTickers] = useState<PortfolioTicker[]>([])
 
     const getTickers = async () => {
-        const portfolioTickers = await get<PortfolioTicker[]>('portfolio')
-        setContextValues({
-            ...contextValues,
-            portfolioTickers,
-            isLoading: false,
-        })
+        const response = await get<PortfolioTicker[]>('portfolio')
+        setPortfolioTickers(response)
+    }
+
+    const getUser = async () => {
+        const response = await get<User>('auth/me')
+        setUser(response)
+        await getTickers()
     }
 
     useEffect(() => {
-        getTickers()
+        getUser()
     }, [])
 
     return (
         <Context.Provider
-            value={{
-                ...contextValues,
-                setPortfolioTickers,
-            }}
+            value={
+                {
+                    isLoading: !user,
+                    userIsLoading: !user,
+                    setPortfolioTickers,
+                    portfolioTickers,
+                    user,
+                } as AppContext
+            }
         >
             {children}
         </Context.Provider>
