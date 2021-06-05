@@ -37,3 +37,11 @@ export const ensureAuth0Exists = async (auth0User: any) => {
 
     return createUser(auth0UserToUser(auth0User))
 }
+
+export const getUserPortfolioTickers = (user: User) => {
+    return SqlDAO.portfolioTicker.findMany({
+        where: {
+            userId: user?.id,
+        },
+    })
+}

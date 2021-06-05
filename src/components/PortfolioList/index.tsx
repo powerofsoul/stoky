@@ -1,13 +1,14 @@
 import { Card, Grid, Loader, Avatar } from 'tabler-react'
+import { PortfolioTicker } from '.prisma/client'
 import { useAppContext } from '../../context/AppContext'
 import { toPrecision } from '../../Utils'
 
-const PortfolioList = () => {
-    const { isLoading, portfolioTickers } = useAppContext()
+interface Props {
+    portfolioTickers: PortfolioTicker[]
+}
 
-    if (isLoading) {
-        return <Loader />
-    }
+const PortfolioList = (props: Props) => {
+    const { portfolioTickers } = props
 
     return (
         <Card className="mt-2">

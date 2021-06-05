@@ -1,21 +1,36 @@
 import { NextPageContext } from 'next'
 import Page from '../src/components/Page'
 import AddToPortfolio from '../src/components/AddToPortfolio'
-import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
+import ensureUseIsLogged, { redirectToLogin } from '../src/pageMiddleware/ensureUseIsLogged'
 import PortfolioList from '../src/components/PortfolioList'
+import { getUserFromRequest } from '../middleware/withUser'
+import { getUserPortfolioTickers } from '../services/UserService'
+import { PortfolioTicker } from '.prisma/client'
 
-export async function getServerSideProps(context: NextPageContext) {
-    ensureUseIsLogged(context)
-
-    return {
-        props: {},
-    }
+interface Props {
+    portfolioTickers: PortfolioTicker[]
 }
 
-const Component = () => (
+export async function getServerSideProps(context: NextPageContext) {
+    const { req, res } = context
+
+    const user = await getUserFromRequest(req, res)
+    if (user) {
+        const portfolioTickers = await getUserPortfolioTickers(user)
+
+        return {
+            props: {
+                portfolioTickers,
+            },
+        }
+    }
+    redirectToLogin(res)
+}
+
+const Component = ({ portfolioTickers }: Props) => (
     <Page>
         <AddToPortfolio />
-        <PortfolioList />
+        <PortfolioList portfolioTickers={portfolioTickers} />
     </Page>
 )
 
