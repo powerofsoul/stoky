@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react'
-import { Card, Loader, Grid } from 'tabler-react'
-import { PortfolioTicker } from '.prisma/client'
-import { get } from '../../Api'
+import { Card, Grid, Loader, Avatar } from 'tabler-react'
 import { useAppContext } from '../../context/AppContext'
 import { toPrecision } from '../../Utils'
 
@@ -20,12 +17,8 @@ const PortfolioList = () => {
                 {portfolioTickers?.map((t) => (
                     <Card key={t.id} className="p-2">
                         <Grid.Row>
-                            <Grid.Col sm={1}>
-                                <img
-                                    alt="logo"
-                                    style={{ height: '40px', width: '40px' }}
-                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Tesla_T_symbol.svg/1200px-Tesla_T_symbol.svg.png"
-                                />
+                            <Grid.Col xs={1} sm={2}>
+                                <Avatar size="md" imageURL={`https://images.stoky.io/${t.symbol}.png`} />
                             </Grid.Col>
                             <Grid.Col>
                                 <Grid.Row>
