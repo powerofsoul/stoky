@@ -1,6 +1,5 @@
-import { Card, Grid, Loader, Avatar } from 'tabler-react'
+import { Avatar, Card, Grid, Table } from 'tabler-react'
 import { PortfolioTicker } from '.prisma/client'
-import { useAppContext } from '../../context/AppContext'
 import { toPrecision } from '../../Utils'
 
 interface Props {
@@ -15,24 +14,30 @@ const PortfolioList = (props: Props) => {
             <Card.Body>
                 <Card.Title>My Holdings</Card.Title>
                 {portfolioTickers?.length === 0 && <div>No Holdings</div>}
-                {portfolioTickers?.map((t) => (
-                    <Card key={t.id} className="p-2">
-                        <Grid.Row>
-                            <Grid.Col xs={1} sm={2}>
-                                <Avatar size="md" imageURL={`https://images.stoky.io/${t.symbol}.png`} />
-                            </Grid.Col>
-                            <Grid.Col>
-                                <Grid.Row>
-                                    ${t.symbol} x {t.amount}
-                                </Grid.Row>
-                                <Grid.Row>
-                                    Value: {toPrecision(t.amount * t.averagePrice, 2)} USD at{' '}
-                                    {toPrecision(t.averagePrice, 2)}
-                                </Grid.Row>
-                            </Grid.Col>
-                        </Grid.Row>
-                    </Card>
-                ))}
+                <Table>
+                    <Table.Header>
+                        <Table.ColHeader />
+                        <Table.ColHeader>Ticker</Table.ColHeader>
+                        <Table.ColHeader>Amount</Table.ColHeader>
+                        <Table.ColHeader>Average Price</Table.ColHeader>
+                        <Table.ColHeader>Change</Table.ColHeader>
+                        <Table.ColHeader>Current Value</Table.ColHeader>
+                    </Table.Header>
+                    <Table.Body>
+                        {portfolioTickers?.map((t) => (
+                            <Table.Row>
+                                <Table.Col>
+                                    <Avatar size="md" imageURL={`https://images.stoky.io/${t.symbol}.png`} />
+                                </Table.Col>
+                                <Table.Col>${t.symbol} </Table.Col>
+                                <Table.Col>${t.amount} </Table.Col>
+                                <Table.Col>${toPrecision(t.averagePrice, 2)} </Table.Col>
+                                <Table.Col> --- </Table.Col>
+                                <Table.Col>${t.profit} </Table.Col>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
             </Card.Body>
         </Card>
     )
