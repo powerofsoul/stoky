@@ -24,7 +24,7 @@ export const getUserFromRequest = async (req: NextApiRequest | any, res: NextApi
 const withUser = (handler: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await getUserFromRequest(req, res)
     if (!user) {
-        res.status(403)
+        res.send(undefined);
     } else {
         req.user = user
         return handler(req, res)

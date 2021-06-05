@@ -26,16 +26,20 @@ interface Props {
 
 export function AppWrapper({ children }: Props) {
     const [user, setUser] = useState<User>()
+    const [userIsLoading, setUserLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     const [portfolioTickers, setPortfolioTickers] = useState<PortfolioTicker[]>([])
 
     const getTickers = async () => {
         const response = await get<PortfolioTicker[]>('portfolio')
         setPortfolioTickers(response)
+        setIsLoading(false)
     }
 
     const getUser = async () => {
         const response = await get<User>('auth/me')
         setUser(response)
+        setUserLoading(false)
         await getTickers()
     }
 
@@ -47,8 +51,8 @@ export function AppWrapper({ children }: Props) {
         <Context.Provider
             value={
                 {
-                    isLoading: !user,
-                    userIsLoading: !user,
+                    isLoading,
+                    userIsLoading,
                     setPortfolioTickers,
                     portfolioTickers,
                     user,
