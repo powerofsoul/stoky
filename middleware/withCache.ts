@@ -16,6 +16,49 @@ const defaultProps = {
     caseSensitive: false,
 }
 
+export const getCachedValue = async (inputKey: string, props?: Partial<Props>) => {
+    const propsWithDefault = {
+        ...defaultProps,
+        ...props,
+    } as Props
+
+    const keyString = propsWithDefault.caseSensitive ? inputKey.toLowerCase() : inputKey
+    const key = sha256(keyString)
+
+    try {
+        const cachedValue = await DynamoDAO.get(Object.assign(new Cache(), { key }))
+
+        const { addedOn } = cachedValue
+
+        if (new Date().getTime() - addedOn.getTime() <= propsWithDefault.cacheDuration) {
+            return cachedValue
+        }
+    } catch {
+        /* Cache not found */
+    }
+
+    return undefined
+}
+
+export const setCacheValue = async (inputKey: string, status: any, data: any, props?: Partial<Props>) => {
+    const propsWithDefault = {
+        ...defaultProps,
+        ...props,
+    } as Props
+
+    const keyString = propsWithDefault.caseSensitive ? inputKey.toLowerCase() : inputKey
+    const key = sha256(keyString)
+
+    await DynamoDAO.put(
+        Object.assign(new Cache(), {
+            key,
+            data: JSON.stringify(data),
+            status,
+            addedOn: new Date(),
+        })
+    )
+}
+
 const withCache =
     (handler: NextApiHandler, props?: Partial<Props>) => async (req: NextApiRequest, res: NextApiResponse) => {
         const propsWithDefault = {
@@ -27,25 +70,13 @@ const withCache =
         const query = JSON.stringify(req.query)
         const path = req.url
 
-        let keyString = propsWithDefault.includeUser ? body + query + path + req.user?.id : body + query + path
+        const keyString = propsWithDefault.includeUser ? body + query + path + req.user?.id : body + query + path
 
-        if (!props || !props.caseSensitive) {
-            keyString = keyString.toLowerCase()
-        }
+        const cachedValue = await getCachedValue(keyString, props)
 
-        const key = sha256(keyString)
-
-        try {
-            const cachedValue = await DynamoDAO.get(Object.assign(new Cache(), { key }))
-
-            const { addedOn } = cachedValue
-
-            if (new Date().getTime() - addedOn.getTime() <= propsWithDefault.cacheDuration) {
-                res.status(cachedValue.status).json(JSON.parse(cachedValue.data))
-                return
-            }
-        } catch {
-            /* Cache not found */
+        if (cachedValue) {
+            res.status(cachedValue.status).json(JSON.parse(cachedValue.data))
+            return
         }
 
         const oldSend = res.send
@@ -61,14 +92,7 @@ const withCache =
 
         res.send = function (data: any) {
             if (validData(data)) {
-                DynamoDAO.put(
-                    Object.assign(new Cache(), {
-                        key,
-                        data: JSON.stringify(data),
-                        status: this.statusCode,
-                        addedOn: new Date(),
-                    })
-                )
+                setCacheValue(keyString, this.status, data)
             }
 
             return oldSend.apply(res, [data])

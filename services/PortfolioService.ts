@@ -1,5 +1,7 @@
 import { PortfolioEvent, PortfolioEventEnum } from '@prisma/client'
+import { getCachedValue, setCacheValue } from '../middleware/withCache'
 import { YahooStockPrice } from '../models/YahooStock'
+import { CACHE_DURATION } from '../src/Consts'
 import SqlDAO from './SqlDAO'
 
 const yahooFinance = require('yahoo-finance')
@@ -51,10 +53,25 @@ export async function addPortfolioEvent(event: PortfolioEvent) {
 }
 
 export async function getSymbolQuotePrice(symbol: string) {
+    const key = `getSymbolQuotePrice_${symbol}`
+    const cacheProps = {
+        cacheDuration: CACHE_DURATION,
+        caseSensitive: true,
+    }
+
+    const cachedValue = await getCachedValue(key, cacheProps)
+
+    if (cachedValue) {
+        return JSON.parse(cachedValue.data)
+    }
+
     const response = await yahooFinance.quote({
         symbol,
         modules: ['price'],
     })
+
+    const price = response?.price
+    await setCacheValue(key, 200, price, cacheProps)
 
     return response?.price as YahooStockPrice
 }

@@ -1,5 +1,5 @@
 export const SYMBOL_MAX_LENGTH = 7
-export const CACHE_DURATION = 600000 // ms
+export const CACHE_DURATION = 600000 // ms -> 10 mins
 
 export default {
     siteName: 'Stocky',
