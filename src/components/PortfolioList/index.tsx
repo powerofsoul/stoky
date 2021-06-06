@@ -39,7 +39,7 @@ const PortfolioList = (props: Props) => {
                                             <Avatar size="md" imageURL={`https://images.stoky.io/${t.symbol}.png`} /> $
                                             {t.symbol}{' '}
                                         </Table.Col>
-                                        <Table.Col>${t.amount} </Table.Col>
+                                        <Table.Col>{t.amount} </Table.Col>
                                         <Table.Col>${toPrecision(t.averagePrice, 2)} </Table.Col>
                                         <Table.Col>${toPrecision(currentPrice.regularMarketPrice, 2)}</Table.Col>
                                         <Table.Col>
@@ -52,6 +52,7 @@ const PortfolioList = (props: Props) => {
                                         <Table.Col>
                                             <ValueBadge
                                                 precision={2}
+                                                baseValue={t.averagePrice * t.amount}
                                                 value={currentPrice.regularMarketPrice * t.amount}
                                                 prefix={currentPrice.currencySymbol}
                                             />
