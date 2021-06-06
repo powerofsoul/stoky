@@ -28,6 +28,7 @@ const CandleStickChart = ({ data, xTicks, yTicks, height }: ChartProps) => {
                     top: 20,
                     bottom: 30,
                 }}
+                seriesName=""
                 type="canvas"
                 data={data}
                 xAccessor={xAccessor}

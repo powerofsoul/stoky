@@ -12,7 +12,7 @@ const LineChart = ({ data, height, hideAxis, xTicks, yTicks }: ChartProps) => {
     return (
         <div ref={ref}>
             <ChartCanvas
-                width={width}
+                width={width || 800}
                 height={height || 400}
                 margin={{
                     left: 50,
@@ -22,6 +22,8 @@ const LineChart = ({ data, height, hideAxis, xTicks, yTicks }: ChartProps) => {
                 }}
                 data={data}
                 type="svg"
+                ratio={10}
+                seriesName=""
                 xAccessor={(d: any) => d?.date}
                 xScale={scaleTime()}
                 xExtents={[xAccessor(data?.[data?.length - 1]), xAccessor(data?.[0])]}
