@@ -10,3 +10,7 @@ export function isValidSymbol(symbol: string) {
 export function toPrecision(value: number, precision: number) {
     return value.toFixed(precision)
 }
+
+export function randomColor() {
+    return `#${Math.floor(Math.random() * 16777215).toString(16)}`
+}

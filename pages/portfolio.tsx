@@ -11,6 +11,7 @@ import EventFeed from '../src/components/EventFeed'
 import Page from '../src/components/Page'
 import PortfolioList from '../src/components/PortfolioList'
 import { redirectToLogin } from '../src/pageMiddleware/ensureUseIsLogged'
+import PortfolioProgressBar from '../src/components/PortfolioProgressBar'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context

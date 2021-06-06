@@ -1,8 +1,10 @@
 import { Avatar, Card, Grid, Table } from 'tabler-react'
+import React from 'react'
 import { PortfolioTicker } from '.prisma/client'
 import { toPrecision } from '../../Utils'
 import { YahooStockPrice } from '../../../models/YahooStock'
 import ValueBadge from '../ValueBadge'
+import PortfolioProgressBar from '../PortfolioProgressBar'
 
 interface Props {
     portfolioTickers: PortfolioTicker[]
@@ -14,6 +16,7 @@ const PortfolioList = (props: Props) => {
     return (
         <Card>
             <Card.Body>
+                <PortfolioProgressBar portfolioTickers={portfolioTickers || []} />
                 <Card.Title>My Holdings</Card.Title>
                 {portfolioTickers?.length === 0 && <div>No Holdings</div>}
                 <div className="table-responsive OverflowCard">
