@@ -3,9 +3,9 @@ import type { AppProps } from 'next/app'
 import 'react-toastify/scss/main.scss'
 import '../styles/global.scss'
 import { ToastContainer } from 'react-toastify'
-import { AppWrapper } from '../src/context/AppContext'
 import React from 'react'
 import Head from 'next/head'
+import { AppWrapper } from '../src/context/AppContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (

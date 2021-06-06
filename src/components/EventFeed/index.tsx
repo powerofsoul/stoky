@@ -2,7 +2,6 @@ import { User } from '@prisma/client'
 import moment from 'moment'
 import { Card, Grid, Avatar } from 'tabler-react'
 import { PortfolioEvent, PortfolioEventEnum } from '.prisma/client'
-import styles from './EventFeed.module.scss'
 
 interface Props {
     feedName: string
@@ -21,7 +20,7 @@ const EventFeed = ({ portfolioEvents, feedName }: Props) => {
             <Card.Body>
                 <Card.Title>{feedName}</Card.Title>
                 {portfolioEvents.length === 0 && <div>Lonely place here. Start Mentioning this</div>}
-                <div className={`divide-y ${styles.EventFeed}`}>
+                <div className="divide-y OverflowCard">
                     {portfolioEvents.map((e) => (
                         <Grid.Row key={e.id}>
                             <Grid.Col auto>

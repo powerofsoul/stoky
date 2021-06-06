@@ -1,15 +1,16 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType, NextPageContext } from 'next'
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import React from 'react'
-import Page from '../src/components/Page'
-import AddToPortfolio from '../src/components/AddToPortfolio'
-import ensureUseIsLogged, { redirectToLogin } from '../src/pageMiddleware/ensureUseIsLogged'
-import PortfolioList from '../src/components/PortfolioList'
+import { Grid } from 'tabler-react'
+import { PortfolioTicker } from '.prisma/client'
 import { getUserFromRequest } from '../middleware/withUser'
-import { getUserPortfolioTickers } from '../services/UserService'
-import { PortfolioEventEnum, PortfolioTicker } from '.prisma/client'
-import { getSymbolQuotePrice } from '../services/PortfolioService'
-import EventFeed from '../src/components/EventFeed'
 import { getUserFeed } from '../services/FeedService'
+import { getSymbolQuotePrice } from '../services/PortfolioService'
+import { getUserPortfolioTickers } from '../services/UserService'
+import AddToPortfolio from '../src/components/AddToPortfolio'
+import EventFeed from '../src/components/EventFeed'
+import Page from '../src/components/Page'
+import PortfolioList from '../src/components/PortfolioList'
+import { redirectToLogin } from '../src/pageMiddleware/ensureUseIsLogged'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context
@@ -43,9 +44,19 @@ const Component = ({
     userFeed,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
     <Page>
-        <AddToPortfolio />
-        <PortfolioList portfolioTickers={portfolioTickers || []} tickerQuotes={tickerQuotes || []} />
-        <EventFeed portfolioEvents={userFeed || []} feedName="My Feed" />
+        <Grid.Row>
+            <Grid.Col>
+                <AddToPortfolio />
+            </Grid.Col>
+        </Grid.Row>
+        <Grid.Row>
+            <Grid.Col>
+                <PortfolioList portfolioTickers={portfolioTickers || []} tickerQuotes={tickerQuotes || []} />
+            </Grid.Col>
+            <Grid.Col>
+                <EventFeed portfolioEvents={userFeed || []} feedName="My Feed" />
+            </Grid.Col>
+        </Grid.Row>
     </Page>
 )
 

@@ -12,11 +12,11 @@ interface Props {
 const PortfolioList = (props: Props) => {
     const { portfolioTickers, tickerQuotes } = props
     return (
-        <Card className="mt-2">
+        <Card>
             <Card.Body>
                 <Card.Title>My Holdings</Card.Title>
                 {portfolioTickers?.length === 0 && <div>No Holdings</div>}
-                <div className="table-responsive">
+                <div className="table-responsive OverflowCard">
                     <Table className="table-vcenter">
                         <Table.Header>
                             <Table.ColHeader>Ticker</Table.ColHeader>
