@@ -1,11 +1,11 @@
 import React from 'react'
-import Feed from '../src/components/Feed'
+import MentionTicker from '../src/components/MentionTicker'
 import Page from '../src/components/Page'
 
 export default function Home() {
     return (
         <Page>
-            <Feed />
+            <MentionTicker />
         </Page>
     )
 }

@@ -1,4 +1,4 @@
-import { PortfolioEvent, PortfolioEventEnum } from '@prisma/client'
+import { PortfolioEvent, PortfolioEventEnum, User } from '@prisma/client'
 import { getCachedValue, setCacheValue } from '../middleware/withCache'
 import { YahooStockPrice } from '../models/YahooStock'
 import { CACHE_DURATION } from '../src/Consts'
@@ -52,7 +52,7 @@ export async function addPortfolioEvent(event: PortfolioEvent) {
     })
 }
 
-export async function getSymbolQuotePrice(symbol: string) {
+export async function getSymbolQuotePrice(symbol: string): Promise<YahooStockPrice> {
     const key = `getSymbolQuotePrice_${symbol}`
     const cacheProps = {
         cacheDuration: CACHE_DURATION,
@@ -74,4 +74,19 @@ export async function getSymbolQuotePrice(symbol: string) {
     await setCacheValue(key, 200, price, cacheProps)
 
     return response?.price as YahooStockPrice
+}
+
+export async function mentionStock(symbol: string, message: string, user: User) {
+    const currentPrice = await getSymbolQuotePrice(symbol)
+
+    return SqlDAO.portfolioEvent.create({
+        data: {
+            action: PortfolioEventEnum.MENTION,
+            symbol,
+            message,
+            amount: 0,
+            price: currentPrice.regularMarketPrice,
+            userId: user.id,
+        },
+    })
 }

@@ -8,6 +8,7 @@ import Page from '../../src/components/Page'
 import Consts from '../../src/Consts'
 import EventFeed from '../../src/components/EventFeed'
 import { getSymbolFeed } from '../../services/FeedService'
+import MentionTicker from '../../src/components/MentionTicker'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { query } = context
@@ -64,7 +65,16 @@ const StockPage = ({ symbol, feed }: InferGetServerSidePropsType<typeof getServe
                     </Card>
                 </Grid.Col>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={8}>
-                    <EventFeed portfolioEvents={feed || []} feedName={`${symbol} feed`} />
+                    <Grid.Row>
+                        <Grid.Col>
+                            <MentionTicker symbol={symbol} />
+                        </Grid.Col>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Col>
+                            <EventFeed portfolioEvents={feed || []} feedName={`${symbol} feed`} />
+                        </Grid.Col>
+                    </Grid.Row>
                 </Grid.Col>
             </Grid.Row>
         </Page>

@@ -11,7 +11,7 @@ interface Props {
 const actionToVerb = {
     [PortfolioEventEnum.BUY]: 'bought',
     [PortfolioEventEnum.SELL]: 'sold',
-    [PortfolioEventEnum.MENTION]: 'bought',
+    [PortfolioEventEnum.MENTION]: 'mentioned',
 }
 
 const EventFeed = ({ portfolioEvents, feedName }: Props) => {
