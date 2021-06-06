@@ -1,0 +1,5 @@
+# Specifies the image of your engine
+FROM node:14
+
+WORKDIR /app
+CMD ["npm", "run", "dev-docker"]

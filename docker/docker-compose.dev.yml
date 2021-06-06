@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    web:
+        build:
+            context: ../
+            dockerfile: ./docker/Dockerfile-dev
+        environment:
+            DATABASE_URL: mysql://local:local@mariadb/local
+        volumes:
+            - ../:/app
+            - /app/node_modules # making sure node modules are not copied
+        ports:
+            - '3000:3000'
+        depends_on: 
+            - mariadb
+    mariadb:
+        image: 'mariadb:10.6.1-focal'
+        restart: 'always'
+        volumes:
+            - /var/lib/mysql/data
+            - /var/lib/mysql/logs
+            - /var/docker/mariadb/conf:/etc/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: local
+            SQL_DATABASE: local
+            MYSQL_USER: local
+            MYSQL_PASSWORD: local
+        ports:
+            - '3306:3306'
