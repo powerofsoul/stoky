@@ -34,7 +34,7 @@ const PortfolioList = (props: Props) => {
                                 }
 
                                 return (
-                                    <Table.Row>
+                                    <Table.Row key={t.symbol}>
                                         <Table.Col>
                                             <Avatar size="md" imageURL={`https://images.stoky.io/${t.symbol}.png`} /> $
                                             {t.symbol}{' '}
