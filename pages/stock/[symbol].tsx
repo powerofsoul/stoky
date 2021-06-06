@@ -1,10 +1,26 @@
 import { Card, Grid, Loader } from 'tabler-react'
 import Head from 'next/head'
-import { NextPageContext } from 'next'
+import { GetServerSidePropsContext, InferGetServerSidePropsType, NextPageContext } from 'next'
+import React from 'react'
 import ChartFetcher from '../../src/components/Charts/ChartFetcher'
 import LineChart from '../../src/components/Charts/LineChart'
 import Page from '../../src/components/Page'
 import Consts from '../../src/Consts'
+import EventFeed from '../../src/components/EventFeed'
+import { getSymbolFeed } from '../../services/FeedService'
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+    const { query } = context
+    const symbol = (query.symbol as string)?.toUpperCase()
+    const feed = await getSymbolFeed(symbol)
+
+    return {
+        props: {
+            feed,
+            symbol,
+        },
+    }
+}
 
 const H = ({ symbol }: any) => (
     <Head>
@@ -19,7 +35,7 @@ const H = ({ symbol }: any) => (
     </Head>
 )
 
-const StockPage = ({ symbol }: any) => {
+const StockPage = ({ symbol, feed }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     if (!symbol) {
         return (
             <span>
@@ -35,7 +51,7 @@ const StockPage = ({ symbol }: any) => {
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
                     <Card>
                         <Card.Body>
-                            <Card.Title>{symbol?.toUpperCase()}</Card.Title>
+                            <Card.Title>{symbol}</Card.Title>
                             <ChartFetcher
                                 symbol={symbol}
                                 chartProps={{
@@ -48,19 +64,11 @@ const StockPage = ({ symbol }: any) => {
                     </Card>
                 </Grid.Col>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={8}>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Feed</Card.Title>
-                        </Card.Body>
-                    </Card>
+                    <EventFeed portfolioEvents={feed || []} feedName={`${symbol} feed`} />
                 </Grid.Col>
             </Grid.Row>
         </Page>
     )
 }
-
-StockPage.getInitialProps = async (ctx: NextPageContext) => ({
-    symbol: ctx.query.symbol,
-})
 
 export default StockPage

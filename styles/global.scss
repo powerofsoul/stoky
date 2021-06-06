@@ -10,3 +10,15 @@ body {
 .pointer {
     cursor: pointer;
 }
+
+.divide-y>:not(template)~:not(template) {
+    border-top: 1px solid rgba(101,109,119,.16)!important
+}
+
+.divide-y>:not(template):not(:first-child) {
+    padding-top: 1rem!important
+}
+
+.divide-y>:not(template):not(:last-child) {
+    padding-bottom: 1rem!important
+}
