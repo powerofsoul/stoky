@@ -40,8 +40,14 @@ const PortfolioList = (props: Props) => {
                                             {t.symbol}{' '}
                                         </Table.Col>
                                         <Table.Col>{t.amount} </Table.Col>
-                                        <Table.Col>${toPrecision(t.averagePrice, 2)} </Table.Col>
-                                        <Table.Col>${toPrecision(currentPrice.regularMarketPrice, 2)}</Table.Col>
+                                        <Table.Col>
+                                            {currentPrice.currencySymbol}
+                                            {toPrecision(t.averagePrice, 2)}{' '}
+                                        </Table.Col>
+                                        <Table.Col>
+                                            {currentPrice.currencySymbol}
+                                            {toPrecision(currentPrice.regularMarketPrice, 2)}
+                                        </Table.Col>
                                         <Table.Col>
                                             <ValueBadge
                                                 value={currentPrice.regularMarketChangePercent}
