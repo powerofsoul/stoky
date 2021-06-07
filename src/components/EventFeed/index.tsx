@@ -52,11 +52,11 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
         const response = await get<PortfolioEventWithUser[]>('feed', {
             ...fetchOptions,
             size,
-            index,
+            index: 0,
         })
 
         setEvents(response)
-        setIndex(index + size)
+        setIndex(0)
         setHasMore(true)
     }
 
