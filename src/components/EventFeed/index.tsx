@@ -40,12 +40,9 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
             index,
         })
 
-        if (response.length > 0) {
-            setEvents([...events, ...response])
-            setIndex(index + size)
-        } else {
-            setHasMore(false)
-        }
+        setEvents([...events, ...response])
+        setIndex(index + size)
+        setHasMore(response.length < size)
     }
 
     const refresh = async () => {
