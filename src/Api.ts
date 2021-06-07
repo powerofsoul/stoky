@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const BASE_PATH = '/api/'
 
-function urlWithQueryParam(path: string, queryParams: { [key: string]: string } | undefined) {
+function urlWithQueryParam(path: string, queryParams: { [key: string]: string | number | any } | undefined) {
     let url = `${BASE_PATH}${path}`
     if (queryParams) {
         url = `${url}?${Object.entries(queryParams)
@@ -15,7 +15,7 @@ function urlWithQueryParam(path: string, queryParams: { [key: string]: string } 
 export function get<T>(
     path: string,
     queryParams?: {
-        [key: string]: string
+        [key: string]: string | number | any
     }
 ) {
     const url = urlWithQueryParam(path, queryParams)

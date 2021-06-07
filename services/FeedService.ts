@@ -1,7 +1,8 @@
 import { User } from '@prisma/client'
+import { DEFAULT_FEED_SIZE } from '../src/Consts'
 import SqlDAO from './SqlDAO'
 
-export const getUserFeed = (user: User) => {
+export const getUserFeed = (user: User, size: number = DEFAULT_FEED_SIZE) => {
     return SqlDAO.portfolioEvent.findMany({
         where: {
             userId: user.id,
@@ -10,10 +11,11 @@ export const getUserFeed = (user: User) => {
         orderBy: {
             createdOn: 'desc',
         },
+        take: size,
     })
 }
 
-export const getSymbolFeed = (symbol: string) => {
+export const getSymbolFeed = (symbol: string, size: number = DEFAULT_FEED_SIZE) => {
     return SqlDAO.portfolioEvent.findMany({
         where: {
             symbol,
@@ -22,14 +24,16 @@ export const getSymbolFeed = (symbol: string) => {
         orderBy: {
             createdOn: 'desc',
         },
+        take: size,
     })
 }
 
-export const getGlobalFeed = () => {
+export const getGlobalFeed = (size: number = DEFAULT_FEED_SIZE) => {
     return SqlDAO.portfolioEvent.findMany({
         include: { user: {} },
         orderBy: {
             createdOn: 'desc',
         },
+        take: size,
     })
 }

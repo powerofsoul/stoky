@@ -9,7 +9,7 @@ import { getGlobalFeed } from '../services/FeedService'
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context
 
-    const feed = await getGlobalFeed()
+    const feed = await getGlobalFeed(10)
 
     return {
         props: {

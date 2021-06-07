@@ -35,6 +35,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             portfolioTickers,
             tickerQuotes,
             userFeed,
+            userId: user.id,
         },
     }
 }
@@ -43,6 +44,7 @@ const Component = ({
     portfolioTickers,
     tickerQuotes,
     userFeed,
+    userId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
     <Page>
         <Grid.Row>
@@ -55,7 +57,7 @@ const Component = ({
                 <PortfolioList portfolioTickers={portfolioTickers || []} tickerQuotes={tickerQuotes || []} />
             </Grid.Col>
             <Grid.Col>
-                <EventFeed portfolioEvents={userFeed || []} feedName="My Feed" />
+                <EventFeed portfolioEvents={userFeed || []} feedName="My Feed" fetchOptions={{ userId }} />
             </Grid.Col>
         </Grid.Row>
     </Page>

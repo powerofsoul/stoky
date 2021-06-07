@@ -72,7 +72,11 @@ const StockPage = ({ symbol, feed }: InferGetServerSidePropsType<typeof getServe
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Col>
-                            <EventFeed portfolioEvents={feed || []} feedName={`${symbol} feed`} />
+                            <EventFeed
+                                portfolioEvents={feed || []}
+                                feedName={`${symbol} feed`}
+                                fetchOptions={{ symbol }}
+                            />
                         </Grid.Col>
                     </Grid.Row>
                 </Grid.Col>
