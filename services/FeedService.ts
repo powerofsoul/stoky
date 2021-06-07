@@ -24,3 +24,12 @@ export const getSymbolFeed = (symbol: string) => {
         },
     })
 }
+
+export const getGlobalFeed = () => {
+    return SqlDAO.portfolioEvent.findMany({
+        include: { user: {} },
+        orderBy: {
+            createdOn: 'desc',
+        },
+    })
+}
