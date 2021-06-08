@@ -38,10 +38,7 @@ const PortfolioList = (props: Props) => {
 
                                 return (
                                     <Table.Row key={t.symbol}>
-                                        <Table.Col>
-                                            <Avatar size="md" imageURL={`https://images.stoky.io/${t.symbol}.png`} /> $
-                                            {t.symbol}{' '}
-                                        </Table.Col>
+                                        <Table.Col>{t.symbol}</Table.Col>
                                         <Table.Col>{t.amount} </Table.Col>
                                         <Table.Col>
                                             {currentPrice.currencySymbol}
