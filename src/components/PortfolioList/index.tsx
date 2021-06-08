@@ -1,7 +1,7 @@
 import { Avatar, Card, Grid, Table } from 'tabler-react'
 import React from 'react'
 import { PortfolioTicker } from '.prisma/client'
-import { toPrecision } from '../../Utils'
+import { calculateStockChange, toPrecision } from '../../Utils'
 import { YahooStockPrice } from '../../../models/YahooStock'
 import ValueBadge from '../ValueBadge'
 import PortfolioProgressBar from '../PortfolioProgressBar'
@@ -36,6 +36,11 @@ const PortfolioList = (props: Props) => {
                                 if (currentPrice === undefined) {
                                     return <></>
                                 }
+                                const currentValuePercentage = calculateStockChange(
+                                    t.amount,
+                                    t.averagePrice,
+                                    currentPrice.regularMarketPrice
+                                )
 
                                 return (
                                     <Table.Row key={t.symbol}>
@@ -64,6 +69,7 @@ const PortfolioList = (props: Props) => {
                                                 baseValue={t.averagePrice * t.amount}
                                                 value={currentPrice.regularMarketPrice * t.amount}
                                                 prefix={currentPrice.currencySymbol}
+                                                suffix={` (${toPrecision(currentValuePercentage, 2)}%) `}
                                             />
                                         </Table.Col>
                                     </Table.Row>

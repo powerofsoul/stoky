@@ -14,3 +14,10 @@ export function toPrecision(value: number, precision: number) {
 export function randomColor() {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
+
+export function calculateStockChange(amount: number, averagePrice: number, currentPrice: number) {
+    const currentValue = amount * currentPrice
+    const averageValue = amount * averagePrice
+
+    return ((currentValue - averageValue) / averageValue) * 100
+}
