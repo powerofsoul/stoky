@@ -5,6 +5,7 @@ import { toPrecision } from '../../Utils'
 import { YahooStockPrice } from '../../../models/YahooStock'
 import ValueBadge from '../ValueBadge'
 import PortfolioProgressBar from '../PortfolioProgressBar'
+import { symbolLink } from '../../Links'
 
 interface Props {
     portfolioTickers: PortfolioTicker[]
@@ -38,7 +39,9 @@ const PortfolioList = (props: Props) => {
 
                                 return (
                                     <Table.Row key={t.symbol}>
-                                        <Table.Col>{t.symbol}</Table.Col>
+                                        <Table.Col>
+                                            <a href={symbolLink(t.symbol)}>{t.symbol}</a>
+                                        </Table.Col>
                                         <Table.Col>{t.amount} </Table.Col>
                                         <Table.Col>
                                             {currentPrice.currencySymbol}
