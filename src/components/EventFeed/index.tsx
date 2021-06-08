@@ -42,7 +42,7 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
 
         setEvents([...events, ...response])
         setIndex(index + size)
-        setHasMore(response.length < size)
+        setHasMore(response.length === size)
     }
 
     const refresh = async () => {
@@ -54,7 +54,7 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
 
         setEvents(response)
         setIndex(0)
-        setHasMore(true)
+        setHasMore(response.length === size)
     }
 
     return (
