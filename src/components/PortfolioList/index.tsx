@@ -20,7 +20,7 @@ const PortfolioList = (props: Props) => {
                 <PortfolioProgressBar portfolioTickers={portfolioTickers || []} />
                 <Card.Title>My Holdings</Card.Title>
                 {portfolioTickers?.length === 0 && <div>No Holdings</div>}
-                <div className="table-responsive OverflowCard">
+                <div className="table-responsive">
                     <Table className="table-vcenter">
                         <Table.Header>
                             <Table.ColHeader>Ticker</Table.ColHeader>
