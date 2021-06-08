@@ -29,7 +29,7 @@ const actionToVerb = {
 const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
     const [hasMore, setHasMore] = useState(portfolioEvents.length > 0)
     const [events, setEvents] = useState(portfolioEvents)
-    const [index, setIndex] = useState(fetchOptions?.index || 0)
+    const [index, setIndex] = useState(fetchOptions?.index || portfolioEvents.length)
 
     const size = fetchOptions?.size || DEFAULT_FEED_SIZE
 
