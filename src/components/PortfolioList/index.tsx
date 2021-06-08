@@ -53,9 +53,9 @@ const PortfolioList = (props: Props) => {
                                         </Table.Col>
                                         <Table.Col>
                                             <ValueBadge
-                                                value={currentPrice.regularMarketChangePercent}
+                                                value={currentPrice.regularMarketChangePercent * 100}
                                                 suffix="%"
-                                                precision={4}
+                                                precision={2}
                                             />
                                         </Table.Col>
                                         <Table.Col>
