@@ -1,6 +1,7 @@
 export const SYMBOL_MAX_LENGTH = 7
 export const CACHE_DURATION = 600000 // ms -> 10 mins
 export const DEFAULT_FEED_SIZE = 10
+export const GIPHY_API_KEY = 'NYRbjS3QaGEntJVQWWAVuDHUPTCvZvDh'
 
 export default {
     siteName: 'Stocky',
@@ -8,4 +9,5 @@ export default {
     QUERY_MAX_LENGTH: SYMBOL_MAX_LENGTH,
     CACHE_DURATION,
     DEFAULT_FEED_SIZE,
+    GIPHY_API_KEY,
 }

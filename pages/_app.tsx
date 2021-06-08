@@ -1,6 +1,7 @@
 import { UserProvider } from '@auth0/nextjs-auth0'
 import type { AppProps } from 'next/app'
 import 'react-toastify/scss/main.scss'
+import 'tippy.js/dist/tippy.css' // optional
 import '../styles/global.scss'
 import { ToastContainer } from 'react-toastify'
 import React from 'react'

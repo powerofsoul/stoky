@@ -40,6 +40,7 @@ const POST = async (req: NextApiRequest, res: NextApiResponse<any>, options?: Ca
                 message: updatePortfolioRequest.message ?? '',
                 userId: req.user?.id ?? '',
                 id: 0,
+                giphyId: null,
             })
         })
 

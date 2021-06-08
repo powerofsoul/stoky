@@ -6,6 +6,7 @@ import { PortfolioEvent, PortfolioEventEnum } from '.prisma/client'
 import AsyncScroll from '../AsyncScroll'
 import { get } from '../../Api'
 import { DEFAULT_FEED_SIZE } from '../../Consts'
+import GifBox from '../GifBox'
 
 type PortfolioEventWithUser = PortfolioEvent & { user: User }
 
@@ -85,6 +86,9 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
                                 <div className="text-muted">{moment(e.createdOn).fromNow()}</div>
 
                                 <div>{e.message}</div>
+                                <div>
+                                    <GifBox id={e.giphyId} />
+                                </div>
                             </Grid.Col>
                         </Grid.Row>
                     ))}

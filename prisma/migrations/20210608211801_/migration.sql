@@ -35,6 +35,7 @@ CREATE TABLE `PortfolioEvent` (
     `createdOn` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `action` ENUM('BUY', 'SELL', 'MENTION') NOT NULL,
     `message` VARCHAR(191) NOT NULL,
+    `giphyId` VARCHAR(191),
     `userId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)

@@ -1,5 +1,5 @@
 ## Documentations
-- [Tabler](https://tabler-react.com/documentation/)
+- [Tabler](https://tabler-react.com/documentation/) http://oldtablerdocs.yeapguy.gq/
 - [TablerIcons](https://tabler-icons-react.vercel.app/)
 - [Yahoo Finance Stock Api](https://www.npmjs.com/package/yahoo-finance)
 - [React StockCharts](http://rrag.github.io/react-stockcharts/)

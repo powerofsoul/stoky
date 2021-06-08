@@ -37,7 +37,7 @@ model PortfolioTicker {
 }
 
 model PortfolioEvent {
-  id        Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   symbol    String
   amount    Float
@@ -45,9 +45,10 @@ model PortfolioEvent {
   createdOn DateTime           @default(now())
   action    PortfolioEventEnum
   message   String
+  giphyId   String?
 
-  user      User   @relation(fields: [userId], references: [id])
-  userId    String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
 }
 

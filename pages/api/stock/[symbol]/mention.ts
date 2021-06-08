@@ -10,7 +10,7 @@ export default withUser(
         const body = await MentionTickerValidator.validate(req.body)
 
         if (body && req.user) {
-            await mentionStock(symbol, body.message, req.user)
+            await mentionStock(req.user, symbol, body.message, body.giphyId)
             res.status(200).json({
                 success: true,
             })

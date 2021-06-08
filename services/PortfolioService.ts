@@ -76,7 +76,7 @@ export async function getSymbolQuotePrice(symbol: string): Promise<YahooStockPri
     return response?.price as YahooStockPrice
 }
 
-export async function mentionStock(symbol: string, message: string, user: User) {
+export async function mentionStock(user: User, symbol: string, message: string, giphyId?: string) {
     const currentPrice = await getSymbolQuotePrice(symbol)
 
     return SqlDAO.portfolioEvent.create({
@@ -87,6 +87,7 @@ export async function mentionStock(symbol: string, message: string, user: User) 
             amount: 0,
             price: currentPrice.regularMarketPrice,
             userId: user.id,
+            giphyId,
         },
     })
 }
