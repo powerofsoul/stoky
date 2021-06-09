@@ -14,7 +14,10 @@ export const getUser = async (props: Partial<User>) => {
 
 export const createUser = async (user: User) =>
     SqlDAO.user.create({
-        data: user,
+        data: {
+            ...user,
+            id: undefined,
+        },
     })
 
 export const updateUser = async (user: Partial<User>) =>
@@ -27,7 +30,7 @@ export const updateUser = async (user: Partial<User>) =>
 
 export const ensureAuth0Exists = async (auth0User: any) => {
     try {
-        const dbUser = await getUser({ id: auth0User.sub })
+        const dbUser = await getUser({ auth0Id: auth0User.sub })
         if (dbUser != null) {
             return dbUser
         }

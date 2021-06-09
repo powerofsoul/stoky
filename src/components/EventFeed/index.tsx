@@ -16,7 +16,7 @@ interface Props {
     fetchOptions?: {
         size?: number
         index?: number
-        userId?: string
+        userId?: number
         symbol?: string
     }
 }
@@ -62,37 +62,38 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
         <Card>
             <Card.Body>
                 <Card.Title>{feedName}</Card.Title>
-                {events.length === 0 && <div>Lonely place here. Start Mentioning this</div>}
+                {events.length === 0 && <div>Lonely place here.</div>}
+                {events.length > 0 && (
+                    <AsyncScroll
+                        className="divide-y overflow-x-hidden"
+                        fetchData={fetchData}
+                        refresh={refresh}
+                        hasMore={hasMore}
+                    >
+                        {events.map((e, i) => (
+                            <Grid.Row key={i}>
+                                <Grid.Col auto>
+                                    <Avatar imageURL={e.user.picture} size="md" />
+                                </Grid.Col>
+                                <Grid.Col auto>
+                                    <div className="text-truncate">
+                                        <strong>{e.user.username}</strong> {actionToVerb[e.action]}{' '}
+                                        <strong>
+                                            <a href={`/stock/${e.symbol}`}>${e.symbol}</a>
+                                        </strong>{' '}
+                                        at ${e.price}
+                                    </div>
+                                    <div className="text-muted">{moment(e.createdOn).fromNow()}</div>
 
-                <AsyncScroll
-                    className="divide-y overflow-x-hidden"
-                    fetchData={fetchData}
-                    refresh={refresh}
-                    hasMore={hasMore}
-                >
-                    {events.map((e, i) => (
-                        <Grid.Row key={i}>
-                            <Grid.Col auto>
-                                <Avatar imageURL={e.user.picture} size="md" />
-                            </Grid.Col>
-                            <Grid.Col auto>
-                                <div className="text-truncate">
-                                    <strong>{e.user.username}</strong> {actionToVerb[e.action]}{' '}
-                                    <strong>
-                                        <a href={`/stock/${e.symbol}`}>${e.symbol}</a>
-                                    </strong>{' '}
-                                    at ${e.price}
-                                </div>
-                                <div className="text-muted">{moment(e.createdOn).fromNow()}</div>
-
-                                <div>{e.message}</div>
-                                <div>
-                                    <GifBox id={e.giphyId} />
-                                </div>
-                            </Grid.Col>
-                        </Grid.Row>
-                    ))}
-                </AsyncScroll>
+                                    <div>{e.message}</div>
+                                    <div>
+                                        <GifBox id={e.giphyId} />
+                                    </div>
+                                </Grid.Col>
+                            </Grid.Row>
+                        ))}
+                    </AsyncScroll>
+                )}
             </Card.Body>
         </Card>
     )

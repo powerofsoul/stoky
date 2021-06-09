@@ -3,8 +3,9 @@ import { User } from '.prisma/client'
 
 export const auth0UserToUser = (auth0User: any) => {
     const user: User = {
+        id: 0,
         createdAt: new Date(),
-        id: auth0User.sub,
+        auth0Id: auth0User.sub,
         email: auth0User.email,
         username: auth0User.nickname,
         picture: auth0User.picture,

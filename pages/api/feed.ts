@@ -10,10 +10,11 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: 
 
     const currentIndex = Number.parseInt(index, 10) ?? 0
     const currentSize = Number.parseInt(size, 10) ?? 10
+    const parsedUserId = userId ? Number.parseInt(userId, 10) : undefined
 
     const feed = await SqlDAO.portfolioEvent.findMany({
         where: {
-            userId,
+            userId: parsedUserId,
             symbol,
         },
         orderBy: {

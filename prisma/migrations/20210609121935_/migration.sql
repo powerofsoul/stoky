@@ -1,7 +1,8 @@
 -- CreateTable
 CREATE TABLE `User` (
-    `id` VARCHAR(191) NOT NULL,
-    `email` VARCHAR(191),
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `auth0Id` VARCHAR(191),
+    `email` VARCHAR(191) NOT NULL,
     `username` VARCHAR(191),
     `firstName` VARCHAR(191),
     `lastName` VARCHAR(191),
@@ -21,7 +22,7 @@ CREATE TABLE `PortfolioTicker` (
     `amount` DOUBLE NOT NULL DEFAULT 0,
     `averagePrice` DOUBLE NOT NULL DEFAULT 0,
     `profit` DOUBLE NOT NULL DEFAULT 0,
-    `userId` VARCHAR(191) NOT NULL,
+    `userId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -36,7 +37,7 @@ CREATE TABLE `PortfolioEvent` (
     `action` ENUM('BUY', 'SELL', 'MENTION') NOT NULL,
     `message` VARCHAR(191) NOT NULL,
     `giphyId` VARCHAR(191),
-    `userId` VARCHAR(191) NOT NULL,
+    `userId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

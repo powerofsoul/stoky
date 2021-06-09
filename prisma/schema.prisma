@@ -11,8 +11,9 @@ generator client {
 }
 
 model User {
-  id        String    @id
-  email     String?   @unique
+  id        Int      @id @default(autoincrement())
+  auth0Id   String?
+  email     String   @unique
   username  String?
   firstName String?
   lastName  String?
@@ -33,7 +34,7 @@ model PortfolioTicker {
   profit       Float  @default(0)
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String
+  userId Int
 }
 
 model PortfolioEvent {
@@ -48,8 +49,7 @@ model PortfolioEvent {
   giphyId   String?
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String
-
+  userId Int
 }
 
 enum PortfolioEventEnum {
