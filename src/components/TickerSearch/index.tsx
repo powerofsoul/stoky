@@ -27,6 +27,7 @@ const TickerSearch = ({ onChange, value, error, form, name }: Props) => {
         <>
             <AsyncSelect
                 cacheOptions
+                placeholder="Search for a ticker"
                 loadOptions={debounce((inputValue, callback) => {
                     getQuery(inputValue).then((res) => callback(res))
                 }, 500)}

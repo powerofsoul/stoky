@@ -9,6 +9,7 @@ import { getWatchlistApi } from '../../../pages/api/watchlist'
 import { del, get, post } from '../../Api'
 import { symbolLink } from '../../Links'
 import { ReturnOfPromise, ThenArg } from '../../TypingUtils'
+import { toPrecision } from '../../Utils'
 import ChartFetcher from '../Charts/ChartFetcher'
 import LineChart from '../Charts/LineChart'
 import TickerSearch from '../TickerSearch'
@@ -138,7 +139,10 @@ const WatchList = () => {
                                                                     <Grid.Row>
                                                                         <Grid.Col>
                                                                             <ValueBadge
-                                                                                prefix={`${item.price.regularMarketPrice} (`}
+                                                                                prefix={`${toPrecision(
+                                                                                    item.price.regularMarketPrice,
+                                                                                    2
+                                                                                )} (`}
                                                                                 value={
                                                                                     item.price
                                                                                         .regularMarketChangePercent *
