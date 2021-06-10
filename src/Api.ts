@@ -33,3 +33,13 @@ export function post<T, K>(
 
     return axios.post(url, body).then((r) => r.data as T)
 }
+
+export function del<T>(
+    path: string,
+    queryParams?: {
+        [key: string]: string | number | any
+    }
+) {
+    const url = urlWithQueryParam(path, queryParams)
+    return axios.delete(url).then((r) => r.data as T)
+}

@@ -5,6 +5,7 @@ import MentionTicker from '../src/components/MentionTicker'
 import Page from '../src/components/Page'
 import EventFeed from '../src/components/EventFeed'
 import { getGlobalFeed } from '../services/FeedService'
+import WatchList from '../src/components/WatchList'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context
@@ -23,13 +24,20 @@ export default function Home({ feed }: InferGetServerSidePropsType<typeof getSer
         <Page>
             <Grid.Row>
                 <Grid.Col>
-                    <MentionTicker />
+                    <WatchList />
                 </Grid.Col>
-            </Grid.Row>
-
-            <Grid.Row>
                 <Grid.Col>
-                    <EventFeed feedName="Feed" portfolioEvents={feed} />
+                    <Grid.Row>
+                        <Grid.Col>
+                            <MentionTicker />
+                        </Grid.Col>
+                    </Grid.Row>
+
+                    <Grid.Row>
+                        <Grid.Col>
+                            <EventFeed feedName="Feed" portfolioEvents={feed} />
+                        </Grid.Col>
+                    </Grid.Row>
                 </Grid.Col>
             </Grid.Row>
         </Page>

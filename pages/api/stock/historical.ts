@@ -7,7 +7,7 @@ import { isValidSymbol } from '../../../src/Utils'
 
 const yahooFinance = require('yahoo-finance')
 
-export async function getHistoryForSymbol(symbol: string) {
+export async function getHistoryForSymbol(symbol: string, startDate?: string, period?: string) {
     if (!isValidSymbol(symbol)) {
         return null
     }
@@ -15,7 +15,7 @@ export async function getHistoryForSymbol(symbol: string) {
     return (
         await yahooFinance.historical({
             symbol,
-            from: '2018-01-01',
+            from: startDate ? moment(startDate).format('YYYY-MM-DD') : '2018-01-01',
             to: moment().format('YYYY-MM-DD'),
             period: 'd',
         })
@@ -29,7 +29,7 @@ export async function getHistoryForSymbol(symbol: string) {
 
 export default withCache(
     async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
-        const historical = await getHistoryForSymbol(req.query.symbol as string)
+        const historical = await getHistoryForSymbol(req.query.symbol as string, req.query.startDate as string)
 
         res.status(200).json(historical)
     }

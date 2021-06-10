@@ -6,14 +6,19 @@ interface Props {
     Chart: any
     chartProps?: ChartProps
     symbol: string
+    startDate?: Date
 }
 
-const CardFetcher = ({ Chart, chartProps, symbol }: Props) => {
+const ChartFetcher = ({ Chart, chartProps, symbol, startDate }: Props) => {
     const [data, setData] = useState<any>()
     const fetchDate = async (s?: string) => {
         if (s === undefined) return
         if (symbol) {
-            const apiData = await get<[]>('stock/historical', { symbol })
+            const apiData = await get<[]>('stock/historical', {
+                symbol,
+                startDate: startDate?.toISOString(),
+                period: 'v',
+            })
 
             setData(
                 apiData
@@ -47,4 +52,4 @@ const CardFetcher = ({ Chart, chartProps, symbol }: Props) => {
     )
 }
 
-export default CardFetcher
+export default ChartFetcher

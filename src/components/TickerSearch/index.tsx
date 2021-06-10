@@ -4,11 +4,11 @@ import { get } from '../../Api'
 import { YahooStock } from '../../../models/YahooStock'
 
 interface Props {
-    onChange?: (symbol: string) => string
+    onChange?: (symbol: string) => void
     value?: YahooStock
     error?: string
-    form: any
-    name: string
+    form?: any
+    name?: string
 }
 
 const TickerSearch = ({ onChange, value, error, form, name }: Props) => {

@@ -5,14 +5,14 @@ import { AreaSeries } from 'react-stockcharts/lib/series'
 import { scaleTime } from 'd3-scale'
 import { ChartProps } from './ChartProps'
 
-const LineChart = ({ data, height, hideAxis, xTicks, yTicks }: ChartProps) => {
+const LineChart = ({ data, height, hideAxis, xTicks, yTicks, width: w }: ChartProps) => {
     const [ref, { width }] = useDimensions()
     const xAccessor = (d: any) => d?.date
 
     return (
         <div ref={ref}>
             <ChartCanvas
-                width={width || 800}
+                width={w || width || 800}
                 height={height || 400}
                 margin={{
                     left: 50,

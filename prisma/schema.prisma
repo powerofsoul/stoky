@@ -52,6 +52,14 @@ model PortfolioEvent {
   userId Int
 }
 
+model WatchList {
+  id Int @id @default(autoincrement())
+  symbol String
+  userId Int
+
+  @@unique([userId, symbol])
+}
+
 enum PortfolioEventEnum {
   BUY
   SELL
