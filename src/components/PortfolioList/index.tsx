@@ -10,15 +10,16 @@ import { symbolLink } from '../../Links'
 interface Props {
     portfolioTickers: PortfolioTicker[]
     tickerQuotes: YahooStockPrice[]
+    title?: string
 }
 
 const PortfolioList = (props: Props) => {
-    const { portfolioTickers, tickerQuotes } = props
+    const { portfolioTickers, tickerQuotes, title } = props
     return (
         <Card>
             <Card.Body>
                 <PortfolioProgressBar portfolioTickers={portfolioTickers || []} />
-                <Card.Title>My Holdings</Card.Title>
+                <Card.Title>{title || 'My Holdings'}</Card.Title>
                 {portfolioTickers?.length === 0 && <div>No Holdings</div>}
                 <div className="table-responsive">
                     <Table className="table-vcenter">
