@@ -121,12 +121,14 @@ const WatchList = () => {
                                     {symbols?.map((item, index) => (
                                         <Draggable key={item.symbol} draggableId={item.symbol} index={index}>
                                             {(p2) => (
-                                                <div ref={p2.innerRef} {...p2.draggableProps} {...p2.dragHandleProps}>
+                                                <div ref={p2.innerRef} {...p2.draggableProps}>
                                                     <Card>
                                                         <Card.Body>
                                                             <Grid.Row>
                                                                 <Grid.Col ignoreCol className="col-xs-1">
-                                                                    <DragDrop />
+                                                                    <div {...p2.dragHandleProps}>
+                                                                        <DragDrop />
+                                                                    </div>
                                                                 </Grid.Col>
                                                                 <Grid.Col className="float-left">
                                                                     <Grid.Row>
