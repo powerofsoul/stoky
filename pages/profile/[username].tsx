@@ -83,7 +83,7 @@ const Component = ({
                     />
                 </Grid.Col>
                 <Grid.Col>
-                    <EventFeed portfolioEvents={userFeed || []} feedName="My Feed" fetchOptions={{ userId: user.id }} />
+                    <EventFeed portfolioEvents={userFeed || []} feedName="Feed" fetchOptions={{ userId: user.id }} />
                 </Grid.Col>
             </Grid.Row>
         </Page>
