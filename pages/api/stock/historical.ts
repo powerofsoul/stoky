@@ -15,7 +15,7 @@ export async function getHistoryForSymbol(symbol: string, startDate?: string, pe
     return (
         await yahooFinance.historical({
             symbol,
-            from: startDate ? moment(startDate).format('YYYY-MM-DD') : '2018-01-01',
+            from: moment.isDate(startDate) ? moment(startDate).format('YYYY-MM-DD') : '2018-01-01',
             to: moment().format('YYYY-MM-DD'),
             period: 'd',
         })
