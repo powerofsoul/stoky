@@ -22,11 +22,10 @@ const Context = createContext(defaultContextValues)
 
 interface Props {
     children: JSX.Element[] | JSX.Element
+    user?: User
 }
 
-export function AppWrapper({ children }: Props) {
-    const [user, setUser] = useState<User>()
-    const [userIsLoading, setUserLoading] = useState(true)
+export function AppWrapper({ children, user }: Props) {
     const [isLoading, setIsLoading] = useState(true)
     const [portfolioTickers, setPortfolioTickers] = useState<PortfolioTicker[]>([])
 
@@ -36,15 +35,8 @@ export function AppWrapper({ children }: Props) {
         setIsLoading(false)
     }
 
-    const getUser = async () => {
-        const response = await get<User>('auth/me')
-        setUser(response)
-        setUserLoading(false)
-        await getTickers()
-    }
-
     useEffect(() => {
-        getUser()
+        getTickers()
     }, [])
 
     return (
@@ -52,7 +44,6 @@ export function AppWrapper({ children }: Props) {
             value={
                 {
                     isLoading,
-                    userIsLoading,
                     setPortfolioTickers,
                     portfolioTickers,
                     user,

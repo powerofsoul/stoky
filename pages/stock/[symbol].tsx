@@ -9,16 +9,19 @@ import Consts from '../../src/Consts'
 import EventFeed from '../../src/components/EventFeed'
 import { getSymbolFeed } from '../../services/FeedService'
 import MentionTicker from '../../src/components/MentionTicker'
+import { getUserFromRequest } from '../../middleware/withUser'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-    const { query } = context
+    const { query, req, res } = context
     const symbol = (query.symbol as string)?.toUpperCase()
     const feed = await getSymbolFeed(symbol)
+    const user = await getUserFromRequest(req, res)
 
     return {
         props: {
             feed,
             symbol,
+            user,
         },
     }
 }
@@ -36,7 +39,7 @@ const H = ({ symbol }: any) => (
     </Head>
 )
 
-const StockPage = ({ symbol, feed }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const StockPage = ({ symbol, feed, user }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     if (!symbol) {
         return (
             <span>
@@ -46,7 +49,7 @@ const StockPage = ({ symbol, feed }: InferGetServerSidePropsType<typeof getServe
         )
     }
     return (
-        <Page>
+        <Page user={user}>
             <H symbol={symbol} />
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>

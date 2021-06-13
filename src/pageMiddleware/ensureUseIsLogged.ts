@@ -1,4 +1,4 @@
-import { NextPageContext, NextApiResponse } from 'next'
+import { NextPageContext, NextApiResponse, GetServerSidePropsContext } from 'next'
 import { getUserFromRequest } from '../../middleware/withUser'
 
 export const redirectToLogin = (res: any) => {
@@ -8,7 +8,7 @@ export const redirectToLogin = (res: any) => {
     res?.end()
 }
 
-const ensureUseIsLogged = async (ctx: NextPageContext) => {
+const ensureUseIsLogged = async (ctx: GetServerSidePropsContext) => {
     const { req, res } = ctx
 
     const user = await getUserFromRequest(req, res)

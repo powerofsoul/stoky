@@ -1,6 +1,7 @@
 import { User } from '@prisma/client'
+import React from 'react'
 import { Site, Nav, Button, Container } from 'tabler-react'
-import { useAppContext } from '../../context/AppContext'
+import { AppWrapper } from '../../context/AppContext'
 
 const accountDropdownProps = (user: User) => ({
     avatarURL: user.picture,
@@ -15,51 +16,58 @@ const accountDropdownProps = (user: User) => ({
     ],
 })
 
-const navItems = [
-    {
-        value: 'Home',
-        to: '/',
-        icon: 'home',
-        useExact: true,
-    },
-    {
-        value: 'Portfolio',
-        to: '/portfolio',
-        icon: 'clipboard',
-        useExact: true,
-    },
-]
+interface Props {
+    children: any
+    user: User | undefined
+}
 
-const SiteWrapper = ({ children }: any) => {
-    const { user, userIsLoading } = useAppContext()
+const SiteWrapper = ({ children, user }: Props) => {
+    const navItems = user
+        ? [
+              {
+                  value: 'Home',
+                  to: '/',
+                  icon: 'home',
+                  useExact: true,
+              },
+              {
+                  value: 'Portfolio',
+                  to: '/portfolio',
+                  icon: 'clipboard',
+                  useExact: true,
+              },
+          ]
+        : []
 
     return (
-        <Site.Wrapper
-            headerProps={{
-                href: '/',
-                alt: 'Stoky',
-                imageURL: '/logo/logo_transparent.png',
-                navItems: !user && !userIsLoading && (
-                    <Nav.Item link={false} className="d-none d-md-flex">
-                        <Button href="/api/auth/login" outline size="sm" RootComponent="a" color="primary">
-                            Login
-                        </Button>
-                    </Nav.Item>
-                ),
-                accountDropdown: user && accountDropdownProps(user as any),
-            }}
-            footerProps={{
-                copyright: (
-                    <>
-                        Copyright © 2021
-                        <a href="."> Stoky</a>. All rights reserved.
-                    </>
-                ),
-            }}
-            navProps={{ itemsObjects: navItems }}
-        >
-            <Container className="mt-5 mb-5">{children}</Container>
-        </Site.Wrapper>
+        <AppWrapper user={user}>
+            <Site.Wrapper
+                headerProps={{
+                    href: '/',
+                    alt: 'Stoky',
+                    imageURL: '/logo/logo_transparent.png',
+                    navItems: !user && (
+                        <Nav.Item link={false} className="d-none d-md-flex">
+                            <Button href="/api/auth/login" outline size="sm" RootComponent="a" color="primary">
+                                Login
+                            </Button>
+                        </Nav.Item>
+                    ),
+                    accountDropdown: user && accountDropdownProps(user as any),
+                }}
+                footerProps={{
+                    copyright: (
+                        <>
+                            Copyright © 2021
+                            <a href="."> Stoky</a>. All rights reserved.
+                        </>
+                    ),
+                }}
+                navProps={{ itemsObjects: navItems }}
+            >
+                <Container className="mt-5 mb-5">{children}</Container>
+            </Site.Wrapper>
+        </AppWrapper>
     )
 }
 

@@ -1,30 +1,28 @@
 import { User } from '@prisma/client'
-import { Formik, Field } from 'formik'
-import { NextPageContext } from 'next'
+import { Field, Formik } from 'formik'
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { toast } from 'react-toastify'
-import { Button, Card, Form, Grid, Profile, Loader } from 'tabler-react'
+import { Button, Card, Form, Grid, Profile } from 'tabler-react'
+import { getUserFromRequest } from '../middleware/withUser'
 import { post } from '../src/Api'
 import { FormInput, FormTextarea } from '../src/components/Form/Form'
 import Page from '../src/components/Page'
-import { useAppContext } from '../src/context/AppContext'
 import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
 import UserValidator from '../validators/UserValidator'
 
-export async function getServerSideProps(context: NextPageContext) {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     ensureUseIsLogged(context)
 
+    const user = await getUserFromRequest(context.req, context.res)
+
     return {
-        props: {},
+        props: {
+            user,
+        },
     }
 }
 
-const component = () => {
-    const { user, userIsLoading } = useAppContext()
-
-    if (userIsLoading || user === undefined) {
-        return <Loader className="m-auto" allowFullScreen />
-    }
-
+const component = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const onSubmit = async (values: User) => {
         await post('auth/me', values)
             .then(() => {
@@ -39,8 +37,13 @@ const component = () => {
             })
     }
 
+    if (!user) {
+        window.location.href = '/'
+        return
+    }
+
     return (
-        <Page>
+        <Page user={user}>
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
                     <Profile name={user.firstName} avatarURL={user?.picture || ''}>

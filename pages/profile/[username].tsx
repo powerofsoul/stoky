@@ -65,7 +65,7 @@ const Component = ({
     user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return user ? (
-        <Page>
+        <Page user={user}>
             <H username={user?.username} />
             <Grid.Row>
                 <Grid.Col className="d-flex justify-content-center">
