@@ -1,7 +1,9 @@
 import { CallbackOptions } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import moment from 'moment'
+import { ChartConfiguration } from 'chart.js'
 import { getHistoryForSymbol } from '../historical'
+import DefaultChartJsNodeCanvas from '../../../../src/chartJs/DefaultChartJsNodeCanvas'
 
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas')
 
@@ -15,12 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: 
     }
 
     const data = await getHistoryForSymbol(symbol as string)
-    const chartJSNodeCanvas = new ChartJSNodeCanvas({
-        width: 1200,
-        height: 617,
-    })
-
-    const configuration = {
+    const configuration: any = {
         type: 'line',
         data: {
             labels: data.map((d: any) => moment(d.date).format('YYYY/MM/DD')),
@@ -61,7 +58,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: 
             },
         },
     }
-    const image = await chartJSNodeCanvas.renderToBuffer(configuration)
+    const image = await DefaultChartJsNodeCanvas.renderToBuffer(configuration)
 
     res.setHeader('Content-Type', 'image/png')
     res.setHeader('Accept', 'image/png')

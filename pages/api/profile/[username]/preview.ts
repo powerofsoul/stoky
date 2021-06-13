@@ -1,11 +1,11 @@
 import { CallbackOptions } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import moment from 'moment'
+import { ChartConfiguration } from 'chart.js'
 import withUser from '../../../../middleware/withUser'
 import SqlDAO from '../../../../services/SqlDAO'
 import { randomColor } from '../../../../src/Utils'
-
-const { ChartJSNodeCanvas } = require('chartjs-node-canvas')
+import DefaultChartJsNodeCanvas from '../../../../src/chartJs/DefaultChartJsNodeCanvas'
 
 export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
     const { username } = req.query as { [key: string]: string }
@@ -21,18 +21,13 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: 
         return
     }
 
-    const chartJSNodeCanvas = new ChartJSNodeCanvas({
-        width: 1200,
-        height: 617,
-    })
-
     const portfolioEvents = await SqlDAO.portfolioTicker.findMany({
         where: {
             userId: user.id,
         },
     })
 
-    const configuration = {
+    const configuration: ChartConfiguration = {
         type: 'doughnut',
         data: {
             labels: portfolioEvents.map((p) => p.symbol),
@@ -54,7 +49,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: 
         },
     }
 
-    const image = await chartJSNodeCanvas.renderToBuffer(configuration)
+    const image = await DefaultChartJsNodeCanvas.renderToBuffer(configuration)
     res.setHeader('Content-Type', 'image/png')
     res.setHeader('Accept', 'image/png')
     res.status(200).write(image)
