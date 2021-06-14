@@ -1,7 +1,7 @@
 import { User } from '@prisma/client'
 import moment from 'moment'
 import { Card, Grid, Avatar } from 'tabler-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PortfolioEvent, PortfolioEventEnum } from '.prisma/client'
 import AsyncScroll from '../AsyncScroll'
 import { get } from '../../Api'
@@ -31,6 +31,7 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
     const [hasMore, setHasMore] = useState(portfolioEvents.length > 0)
     const [events, setEvents] = useState(portfolioEvents)
     const [index, setIndex] = useState(fetchOptions?.index || portfolioEvents.length)
+    const [timer, setTimer] = useState(0)
 
     const size = fetchOptions?.size || DEFAULT_FEED_SIZE
 
@@ -57,6 +58,20 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
         setIndex(0)
         setHasMore(response.length === size)
     }
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            setTimer(new Date().getTime())
+        }, 2000)
+
+        return () => {
+            clearInterval(id)
+        }
+    }, [])
+
+    useEffect(() => {
+        refresh()
+    }, [timer])
 
     return (
         <Card>
