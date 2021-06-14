@@ -14,6 +14,17 @@ function MyApp({ Component, pageProps }: AppProps) {
                     name="viewport"
                     content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"
                 />
+
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                                window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                gtag('config', 'G-N7XCNVZ9M7', { page_path: window.location.pathname });
+                                `,
+                    }}
+                />
             </Head>
             <ToastContainer />
             <Component {...pageProps} />
