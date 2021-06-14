@@ -50,11 +50,12 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
     const refresh = async () => {
         const response = await get<PortfolioEventWithUser[]>('feed', {
             ...fetchOptions,
-            size,
             index: 0,
+            size,
+            since: events?.[0]?.createdOn,
         })
 
-        setEvents(response)
+        setEvents([...response, ...events])
         setIndex(0)
         setHasMore(response.length === size)
     }
