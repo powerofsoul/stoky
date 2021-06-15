@@ -1,17 +1,18 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import React from 'react'
-import { Grid, Profile, Loader } from 'tabler-react'
+import { Grid, Profile, Loader, Card } from 'tabler-react'
 import { PortfolioTicker } from '.prisma/client'
 import { getUserFeed } from '../../services/FeedService'
 import { getSymbolQuotePrice } from '../../services/PortfolioService'
 import SqlDAO from '../../services/SqlDAO'
-import { getUserPortfolioTickers } from '../../services/UserService'
+import { getUserPortfolioTickers, getUserTimeline } from '../../services/UserService'
 import EventFeed from '../../src/components/EventFeed'
 import Page from '../../src/components/Page'
 import PortfolioList from '../../src/components/PortfolioList'
 import Consts from '../../src/Consts'
 import { redirectToLogin } from '../../src/pageMiddleware/ensureUseIsLogged'
+import LineChart from '../../src/components/Charts/LineChart'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { res } = context
@@ -35,11 +36,14 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     const tickerQuotes = await Promise.all(tickerPricesPromises)
 
     const userFeed = await getUserFeed(user)
+    const userTimeline = await getUserTimeline(user)
+
     return {
         props: {
             portfolioTickers,
             tickerQuotes,
             userFeed,
+            userTimeline,
             user,
         },
     }
@@ -62,6 +66,7 @@ const Component = ({
     portfolioTickers,
     tickerQuotes,
     userFeed,
+    userTimeline,
     user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return user ? (
@@ -72,6 +77,16 @@ const Component = ({
                     <Profile name={`${user.firstName ?? ''} ${user.lastName ?? ''}`} avatarURL={user.picture || ''}>
                         {user?.aboutMe}
                     </Profile>
+                </Grid.Col>
+            </Grid.Row>
+            <Grid.Row>
+                <Grid.Col>
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>$me</Card.Title>
+                            <LineChart data={userTimeline} />
+                        </Card.Body>
+                    </Card>
                 </Grid.Col>
             </Grid.Row>
             <Grid.Row>

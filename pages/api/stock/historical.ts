@@ -12,14 +12,14 @@ export async function getHistoryForSymbol(symbol: string, startDate?: string, pe
         return null
     }
 
-    return (
-        await yahooFinance.historical({
-            symbol,
-            from: moment.isDate(startDate) ? moment(startDate).format('YYYY-MM-DD') : '2018-01-01',
-            to: moment().format('YYYY-MM-DD'),
-            period: 'd',
-        })
-    )
+    const searchQuery = {
+        symbol,
+        from: startDate ? moment(startDate).format('YYYY-MM-DD') : '2018-01-01',
+        to: moment().format('YYYY-MM-DD'),
+        period: 'd',
+    }
+
+    return (await yahooFinance.historical(searchQuery))
         .sort((a: any, b: any) => a.date.getTime() - b.date.getTime())
         .map((e: any) => ({
             ...e,
