@@ -79,16 +79,18 @@ const Component = ({
                     </Profile>
                 </Grid.Col>
             </Grid.Row>
-            <Grid.Row>
-                <Grid.Col>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>$me</Card.Title>
-                            <LineChart data={userTimeline} />
-                        </Card.Body>
-                    </Card>
-                </Grid.Col>
-            </Grid.Row>
+            {userTimeline && userTimeline.length > 2 && (
+                <Grid.Row>
+                    <Grid.Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title>${user.username}</Card.Title>
+                                <LineChart data={userTimeline} />
+                            </Card.Body>
+                        </Card>
+                    </Grid.Col>
+                </Grid.Row>
+            )}
             <Grid.Row>
                 <Grid.Col>
                     <PortfolioList
