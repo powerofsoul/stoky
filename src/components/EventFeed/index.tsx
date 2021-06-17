@@ -93,7 +93,10 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
                                 </Grid.Col>
                                 <Grid.Col auto>
                                     <div className="text-truncate">
-                                        <strong>{e.user.username}</strong> {actionToVerb[e.action]}{' '}
+                                        <a href={`/profile/${e.user.username}`}>
+                                            <strong>{e.user.username}</strong>
+                                        </a>{' '}
+                                        {actionToVerb[e.action]}{' '}
                                         <strong>
                                             <a href={`/stock/${e.symbol}`}>${e.symbol}</a>
                                         </strong>{' '}
