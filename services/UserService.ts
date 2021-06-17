@@ -70,7 +70,12 @@ export const getUserTimeline = async (user: User) => {
     const tickers = uniq(events.map((e) => e.symbol))
     const startDate = events[0].createdOn
 
-    const tickerHistory = await Promise.all(tickers.map((t) => getHistoryForSymbol(t, startDate.toISOString())))
+    let tickerHistory = await Promise.all(tickers.map((t) => getHistoryForSymbol(t, startDate.toISOString())))
+    tickerHistory = tickerHistory.filter((t) => t !== null)
+
+    if (tickerHistory.length === 0) {
+        return []
+    }
 
     const maxArrayLength = Math.max(...tickerHistory.map((t) => t.length))
     const timeArray = tickerHistory.find((t) => t.length === maxArrayLength).map((t: any) => t.date as string)

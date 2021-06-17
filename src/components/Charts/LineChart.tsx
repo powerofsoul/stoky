@@ -30,7 +30,7 @@ const LineChart = ({ data, height, hideAxis, xTicks, yTicks, width: w }: ChartPr
             >
                 <Chart id={0} yExtents={(d: any) => d.close}>
                     {!hideAxis && <XAxis axisAt="bottom" orient="bottom" ticks={xTicks || 6} />}
-                    {!hideAxis && <YAxis axisAt="left" orient="left" ticks={yTicks || 6} />}
+                    {!hideAxis && <YAxis axisAt="left" orient="right" ticks={yTicks || 6} />}
                     <AreaSeries yAccessor={(d: any) => d.close} />
                 </Chart>
             </ChartCanvas>
