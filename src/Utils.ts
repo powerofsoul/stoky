@@ -8,7 +8,7 @@ export function isValidSymbol(symbol: string) {
 }
 
 export function toPrecision(value: number, precision: number) {
-    return value.toFixed(precision)
+    return value?.toFixed(precision)
 }
 
 export function randomColor() {

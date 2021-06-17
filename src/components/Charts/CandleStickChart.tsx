@@ -11,7 +11,7 @@ import { timeFormat } from 'd3-time-format'
 import useDimensions from 'react-use-dimensions'
 import { ChartProps } from './ChartProps'
 
-const CandleStickChart = ({ data, xTicks, yTicks, height }: ChartProps) => {
+const CandleStickChart = ({ data, xTicks, yTicks, height, width: w }: ChartProps) => {
     const [ref, { width }] = useDimensions()
 
     const xAccessor = (d: any) => d?.date
@@ -21,7 +21,7 @@ const CandleStickChart = ({ data, xTicks, yTicks, height }: ChartProps) => {
             <ChartCanvas
                 height={height || 400}
                 ratio={10}
-                width={width}
+                width={w || width || 200}
                 margin={{
                     left: 50,
                     right: 50,
@@ -29,7 +29,7 @@ const CandleStickChart = ({ data, xTicks, yTicks, height }: ChartProps) => {
                     bottom: 30,
                 }}
                 seriesName=""
-                type="canvas"
+                type="svg"
                 data={data}
                 xAccessor={xAccessor}
                 xScale={scaleTime()}

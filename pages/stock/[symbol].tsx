@@ -10,18 +10,27 @@ import EventFeed from '../../src/components/EventFeed'
 import { getSymbolFeed } from '../../services/FeedService'
 import MentionTicker from '../../src/components/MentionTicker'
 import { getUserFromRequest } from '../../middleware/withUser'
+import CandleStickChart from '../../src/components/Charts/CandleStickChart'
+import { getHistoryForSymbol } from '../api/stock/historical'
+import ValueBadge from '../../src/components/ValueBadge'
+import { toPrecision } from '../../src/Utils'
+import { getSymbolQuotePrice } from '../../services/PortfolioService'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { query, req, res } = context
     const symbol = (query.symbol as string)?.toUpperCase()
     const feed = await getSymbolFeed(symbol)
     const user = await getUserFromRequest(req, res)
+    const historicalData = await getHistoryForSymbol(symbol)
+    const currentPrice = await getSymbolQuotePrice(symbol)
 
     return {
         props: {
             feed,
             symbol,
             user,
+            historicalData,
+            currentPrice,
         },
     }
 }
@@ -39,7 +48,13 @@ const H = ({ symbol }: any) => (
     </Head>
 )
 
-const StockPage = ({ symbol, feed, user }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const StockPage = ({
+    symbol,
+    feed,
+    user,
+    historicalData,
+    currentPrice,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     if (!symbol) {
         return (
             <span>
@@ -48,31 +63,48 @@ const StockPage = ({ symbol, feed, user }: InferGetServerSidePropsType<typeof ge
             </span>
         )
     }
+
     return (
         <Page user={user}>
             <H symbol={symbol} />
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>{symbol}</Card.Title>
-                            <ChartFetcher
-                                symbol={symbol}
-                                chartProps={{
-                                    height: 200,
-                                    xTicks: 2,
-                                }}
-                                Chart={LineChart}
-                            />
-                        </Card.Body>
-                    </Card>
-                </Grid.Col>
-                <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={8}>
+                    <Grid.Row>
+                        <Grid.Col>
+                            <Card>
+                                <Card.Body>
+                                    <Card.Title>
+                                        {symbol}{' '}
+                                        <ValueBadge
+                                            prefix={`${toPrecision(currentPrice?.regularMarketPrice, 2)} (`}
+                                            value={currentPrice?.regularMarketChangePercent * 100}
+                                            suffix="%)"
+                                            precision={2}
+                                        />
+                                    </Card.Title>
+
+                                    <LineChart data={historicalData} height={75} hideAxis />
+                                </Card.Body>
+                            </Card>
+                        </Grid.Col>
+                    </Grid.Row>
                     <Grid.Row>
                         <Grid.Col>
                             <MentionTicker symbol={symbol} />
                         </Grid.Col>
                     </Grid.Row>
+                </Grid.Col>
+                <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={8}>
+                    <Grid.Row>
+                        <Grid.Col>
+                            <Card>
+                                <Card.Body>
+                                    <CandleStickChart data={historicalData} />
+                                </Card.Body>
+                            </Card>
+                        </Grid.Col>
+                    </Grid.Row>
+
                     <Grid.Row>
                         <Grid.Col>
                             <EventFeed

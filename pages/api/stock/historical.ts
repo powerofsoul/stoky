@@ -19,12 +19,7 @@ export async function getHistoryForSymbol(symbol: string, startDate?: string, pe
         period: 'd',
     }
 
-    return (await yahooFinance.historical(searchQuery))
-        .sort((a: any, b: any) => a.date.getTime() - b.date.getTime())
-        .map((e: any) => ({
-            ...e,
-            date: e.date.toISOString(),
-        }))
+    return (await yahooFinance.historical(searchQuery)).sort((a: any, b: any) => a.date.getTime() - b.date.getTime())
 }
 
 export default withCache(
