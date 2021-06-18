@@ -5,6 +5,7 @@ import { AnyLengthString } from 'aws-sdk/clients/comprehend'
 import { auth0UserToUser } from '../models/User'
 import { getHistoryForSymbol } from '../pages/api/stock/historical'
 import SqlDAO from '../services/SqlDAO'
+import { getSymbolQuotePrice } from './PortfolioService'
 
 export const getUser = async (props: Partial<User>) => {
     const user = await SqlDAO.user.findFirst({
@@ -77,9 +78,26 @@ export const getUserTimeline = async (user: User) => {
         return []
     }
 
+    const now = new Date()
+
     const maxArrayLength = Math.max(...tickerHistory.map((t) => t.length))
     const timeArray = tickerHistory.find((t) => t.length === maxArrayLength).map((t: any) => t.date as string)
+    timeArray.push(now)
+
     const flattenArray = [].concat.apply([], tickerHistory) as any[]
+    const todayPrices = await Promise.all(tickers.map((t) => getSymbolQuotePrice(t)))
+    todayPrices.forEach((c) => {
+        flattenArray.push({
+            date: now,
+            symbol: c.symbol,
+            open: c.regularMarketPrice,
+            high: c.regularMarketDayHigh,
+            low: c.regularMarketDayLow,
+            close: c.regularMarketPrice,
+            volume: c.regularMarketVolume,
+            adjClose: c.regularMarketPrice,
+        })
+    })
 
     const results = {} as {
         [key: string]: {
@@ -90,7 +108,6 @@ export const getUserTimeline = async (user: User) => {
             close: number
             volume: number
             adjClose: number
-            symbol: string
         }
     }
 
@@ -105,7 +122,6 @@ export const getUserTimeline = async (user: User) => {
                     close: 0,
                     volume: 0,
                     adjClose: 0,
-                    symbol: t,
                 }
             }
 
@@ -115,7 +131,9 @@ export const getUserTimeline = async (user: User) => {
             const amount = eventsTillDate.reduce((p, c) => p + c.amount, 0)
 
             const { open, high, low, close, volume, adjClose } = results[ta]
-            const history = flattenArray.find((th: any) => th.symbol === t && th.date === ta) as any
+            const history = flattenArray.find(
+                (th: any) => th.symbol === t && moment(th.date).isSame(moment(ta), 'day')
+            ) as any
 
             if (history) {
                 results[ta] = {
