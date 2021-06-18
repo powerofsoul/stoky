@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { PortfolioEventEnum, User } from '@prisma/client'
 import { result, uniq, merge } from 'lodash'
 import moment from 'moment'
 import { AnyLengthString } from 'aws-sdk/clients/comprehend'
@@ -54,10 +54,16 @@ export const getUserPortfolioTickers = (user: User) => {
     })
 }
 
+// TO-DO refactor
 export const getUserTimeline = async (user: User) => {
     const events = await SqlDAO.portfolioEvent.findMany({
         where: {
             userId: user.id,
+            AND: {
+                action: {
+                    in: [PortfolioEventEnum.BUY, PortfolioEventEnum.SELL],
+                },
+            },
         },
         orderBy: {
             createdOn: 'asc',
@@ -149,5 +155,7 @@ export const getUserTimeline = async (user: User) => {
         })
     })
 
-    return Object.values(results)
+    // might happen that yahoo finance is not sending data for few days :(
+    // TO-DO find alternative
+    return Object.values(results).filter((e) => e.close !== 0)
 }
