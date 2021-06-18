@@ -13,30 +13,33 @@ import PortfolioList from '../../src/components/PortfolioList'
 import Consts from '../../src/Consts'
 import { redirectToLogin } from '../../src/pageMiddleware/ensureUseIsLogged'
 import LineChart from '../../src/components/Charts/LineChart'
+import { getUserFromRequest } from '../../middleware/withUser'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-    const { res } = context
+    const { req, res } = context
     const { username } = context.query as { [key: string]: string }
 
-    const user = await SqlDAO.user.findFirst({
+    const profileUser = await SqlDAO.user.findFirst({
         where: {
             username,
         },
     })
 
-    if (!user) {
+    if (!profileUser) {
         redirectToLogin(res)
         return { props: {} }
     }
 
-    const portfolioTickers = await getUserPortfolioTickers(user)
+    const portfolioTickers = await getUserPortfolioTickers(profileUser)
     const tickerPricesPromises = portfolioTickers
         .map((pt: PortfolioTicker) => pt.symbol)
         .map((s: string) => getSymbolQuotePrice(s))
     const tickerQuotes = await Promise.all(tickerPricesPromises)
 
-    const userFeed = await getUserFeed(user)
-    const userTimeline = await getUserTimeline(user)
+    const userFeed = await getUserFeed(profileUser)
+    const userTimeline = await getUserTimeline(profileUser)
+
+    const user = await getUserFromRequest(req, res)
 
     return {
         props: {
@@ -44,6 +47,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             tickerQuotes,
             userFeed,
             userTimeline,
+            profileUser,
             user,
         },
     }
@@ -67,15 +71,19 @@ const Component = ({
     tickerQuotes,
     userFeed,
     userTimeline,
+    profileUser,
     user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    return user ? (
+    return profileUser ? (
         <Page user={user}>
-            <H username={user?.username} />
+            <H username={profileUser?.username} />
             <Grid.Row>
                 <Grid.Col className="d-flex justify-content-center">
-                    <Profile name={`${user.firstName ?? ''} ${user.lastName ?? ''}`} avatarURL={user.picture || ''}>
-                        {user?.aboutMe}
+                    <Profile
+                        name={`${profileUser.firstName ?? ''} ${profileUser.lastName ?? ''}`}
+                        avatarURL={profileUser.picture || ''}
+                    >
+                        {profileUser?.aboutMe}
                     </Profile>
                 </Grid.Col>
             </Grid.Row>
@@ -84,7 +92,7 @@ const Component = ({
                     <Grid.Col>
                         <Card>
                             <Card.Body>
-                                <Card.Title>${user.username}</Card.Title>
+                                <Card.Title>${profileUser.username}</Card.Title>
                                 <LineChart data={userTimeline} />
                             </Card.Body>
                         </Card>
@@ -100,7 +108,11 @@ const Component = ({
                     />
                 </Grid.Col>
                 <Grid.Col>
-                    <EventFeed portfolioEvents={userFeed || []} feedName="Feed" fetchOptions={{ userId: user.id }} />
+                    <EventFeed
+                        portfolioEvents={userFeed || []}
+                        feedName="Feed"
+                        fetchOptions={{ userId: profileUser.id }}
+                    />
                 </Grid.Col>
             </Grid.Row>
         </Page>
