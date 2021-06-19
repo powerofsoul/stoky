@@ -5,6 +5,7 @@ import React from 'react'
 import { toast } from 'react-toastify'
 import { Button, Card, Form, Grid } from 'tabler-react'
 import { getUserFromRequest } from '../middleware/withUser'
+import SqlDAO from '../services/SqlDAO'
 import { post } from '../src/Api'
 import { FormInput, FormTextarea } from '../src/components/Form/Form'
 import Page from '../src/components/Page'
@@ -17,14 +18,31 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
     const user = await getUserFromRequest(context.req, context.res)
 
+    const followers = (
+        await SqlDAO.followers.findMany({
+            where: {
+                followerId: user?.id,
+            },
+            select: {
+                follower: {
+                    select: {
+                        picture: true,
+                        username: true,
+                    },
+                },
+            },
+        })
+    )?.map((f) => f.follower)
+
     return {
         props: {
             user,
+            followers,
         },
     }
 }
 
-const component = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const component = ({ user, followers }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const onSubmit = async (values: User) => {
         await post('auth/me', values)
             .then(() => {
@@ -48,7 +66,7 @@ const component = ({ user }: InferGetServerSidePropsType<typeof getServerSidePro
         <Page user={user}>
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
-                    <Profile user={user} />
+                    <Profile user={user} followers={followers} />
                 </Grid.Col>
                 <Grid.Col ignoreCol xl={8}>
                     <Formik

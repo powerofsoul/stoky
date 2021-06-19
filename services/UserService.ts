@@ -36,6 +36,7 @@ export const updateUser = async (user: Partial<User>) =>
 export const ensureAuth0Exists = async (auth0User: any) => {
     try {
         const dbUser = await getUser({ auth0Id: auth0User.sub })
+
         if (dbUser != null) {
             return dbUser
         }

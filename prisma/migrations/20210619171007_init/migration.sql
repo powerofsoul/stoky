@@ -16,6 +16,14 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Followers` (
+    `userId` INTEGER NOT NULL,
+    `followerId` INTEGER NOT NULL,
+
+    UNIQUE INDEX `Followers.userId_followerId_unique`(`userId`, `followerId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `PortfolioTicker` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `symbol` VARCHAR(191) NOT NULL,
@@ -51,6 +59,12 @@ CREATE TABLE `WatchList` (
     UNIQUE INDEX `WatchList.userId_symbol_unique`(`userId`, `symbol`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Followers` ADD FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Followers` ADD FOREIGN KEY (`followerId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `PortfolioTicker` ADD FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

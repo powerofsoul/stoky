@@ -39,8 +39,34 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
     const userFeed = await getUserFeed(profileUser)
     const userTimeline = await getUserTimeline(profileUser)
-
     const user = await getUserFromRequest(req, res)
+    const followers = (
+        await SqlDAO.followers.findMany({
+            where: {
+                followerId: profileUser.id,
+            },
+            select: {
+                follower: {
+                    select: {
+                        picture: true,
+                        username: true,
+                    },
+                },
+            },
+        })
+    )?.map((f) => f.follower)
+    let isFollowing = false
+    if (user) {
+        isFollowing =
+            (await SqlDAO.followers.findUnique({
+                where: {
+                    userId_followerId: {
+                        userId: user.id,
+                        followerId: profileUser.id,
+                    },
+                },
+            })) !== null
+    }
 
     return {
         props: {
@@ -50,6 +76,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             userTimeline,
             profileUser,
             user,
+            followers,
+            isFollowing,
         },
     }
 }
@@ -74,13 +102,20 @@ const Component = ({
     userTimeline,
     profileUser,
     user,
+    followers,
+    isFollowing,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return profileUser ? (
         <Page user={user}>
             <H username={profileUser?.username} />
             <Grid.Row>
                 <Grid.Col className="d-flex justify-content-center">
-                    <Profile user={profileUser} />
+                    <Profile
+                        user={profileUser}
+                        followers={followers}
+                        showFollowButton={user !== undefined && user.id !== profileUser.id}
+                        isFollowing={isFollowing}
+                    />
                 </Grid.Col>
             </Grid.Row>
             {userTimeline && userTimeline.length > 2 && (

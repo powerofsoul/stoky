@@ -11,9 +11,9 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   auth0Id   String?
-  email     String   @unique
+  email     String    @unique
   username  String?
   firstName String?
   lastName  String?
@@ -24,6 +24,19 @@ model User {
 
   tickers         PortfolioTicker[]
   portfolioEvents PortfolioEvent[]
+
+  following Followers[] @relation("user")
+  followers Followers[] @relation("follower")
+}
+
+model Followers {
+  user     User @relation("user", fields: [userId], references: [id])
+  follower User @relation("follower", fields: [followerId], references: [id])
+
+  userId     Int
+  followerId Int
+
+  @@unique([userId, followerId])
 }
 
 model PortfolioTicker {
@@ -33,7 +46,7 @@ model PortfolioTicker {
   averagePrice Float  @default(0)
   profit       Float  @default(0)
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   userId Int
 }
 
@@ -48,12 +61,12 @@ model PortfolioEvent {
   message   String
   giphyId   String?
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   userId Int
 }
 
 model WatchList {
-  id Int @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   symbol String
   userId Int
 
