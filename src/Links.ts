@@ -1,3 +1,3 @@
 export function symbolLink(symbol: string) {
-    return `//stock/${symbol}`
+    return `/stock/${symbol}`
 }
