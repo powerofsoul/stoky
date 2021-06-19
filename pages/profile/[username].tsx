@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import React from 'react'
-import { Grid, Profile, Loader, Card } from 'tabler-react'
+import { Grid, Loader, Card } from 'tabler-react'
 import { PortfolioTicker } from '.prisma/client'
 import { getUserFeed } from '../../services/FeedService'
 import { getSymbolQuotePrice } from '../../services/PortfolioService'
@@ -14,6 +14,7 @@ import Consts from '../../src/Consts'
 import { redirectToLogin } from '../../src/pageMiddleware/ensureUseIsLogged'
 import LineChart from '../../src/components/Charts/LineChart'
 import { getUserFromRequest } from '../../middleware/withUser'
+import Profile from '../../src/components/Profile'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context
@@ -79,12 +80,7 @@ const Component = ({
             <H username={profileUser?.username} />
             <Grid.Row>
                 <Grid.Col className="d-flex justify-content-center">
-                    <Profile
-                        name={`${profileUser.firstName ?? ''} ${profileUser.lastName ?? ''}`}
-                        avatarURL={profileUser.picture || ''}
-                    >
-                        {profileUser?.aboutMe}
-                    </Profile>
+                    <Profile user={profileUser} />
                 </Grid.Col>
             </Grid.Row>
             {userTimeline && userTimeline.length > 2 && (

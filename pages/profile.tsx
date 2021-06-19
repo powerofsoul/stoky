@@ -1,12 +1,14 @@
 import { User } from '@prisma/client'
 import { Field, Formik } from 'formik'
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import React from 'react'
 import { toast } from 'react-toastify'
-import { Button, Card, Form, Grid, Profile } from 'tabler-react'
+import { Button, Card, Form, Grid } from 'tabler-react'
 import { getUserFromRequest } from '../middleware/withUser'
 import { post } from '../src/Api'
 import { FormInput, FormTextarea } from '../src/components/Form/Form'
 import Page from '../src/components/Page'
+import Profile from '../src/components/Profile'
 import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
 import UserValidator from '../validators/UserValidator'
 
@@ -46,9 +48,7 @@ const component = ({ user }: InferGetServerSidePropsType<typeof getServerSidePro
         <Page user={user}>
             <Grid.Row>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={4}>
-                    <Profile name={user.firstName} avatarURL={user?.picture || ''}>
-                        {user.aboutMe}
-                    </Profile>
+                    <Profile user={user} />
                 </Grid.Col>
                 <Grid.Col ignoreCol xl={8}>
                     <Formik
