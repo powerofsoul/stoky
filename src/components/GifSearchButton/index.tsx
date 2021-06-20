@@ -1,7 +1,7 @@
 import ReactGiphySearchbox from 'react-giphy-searchbox'
 import dynamic from 'next/dynamic'
 import Tippy, { tippy } from '@tippyjs/react'
-import './GifSearchButton.module.scss'
+import styles from './GifSearchButton.module.scss'
 import { GIPHY_API_KEY } from '../../Consts'
 
 interface Props {
@@ -20,7 +20,7 @@ export const GifSearchButton = (props: Props) => {
 
     return (
         <Tippy content={search} interactive hideOnClick="toggle" placement="bottom">
-            <span className="GifSearchButton__search-button">GIF</span>
+            <span className={styles["GifSearchButton__search-button"]}>GIF</span>
         </Tippy>
     )
 }
