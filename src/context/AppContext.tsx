@@ -22,7 +22,7 @@ const Context = createContext(defaultContextValues)
 
 interface Props {
     children: JSX.Element[] | JSX.Element
-    user?: User
+    user?: User | null
 }
 
 export function AppWrapper({ children, user }: Props) {

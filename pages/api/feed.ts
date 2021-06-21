@@ -1,10 +1,8 @@
-import { handleCallback, getSession } from '@auth0/nextjs-auth0'
-import { CallbackOptions } from '@auth0/nextjs-auth0/dist/auth0-session'
 import moment from 'moment'
 import { NextApiRequest, NextApiResponse } from 'next'
 import SqlDAO from '../../services/SqlDAO'
 
-export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
+export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const { userId, symbol, index, size, since } = req.query as {
         [key: string]: string
     }
@@ -28,7 +26,13 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: 
         skip: currentIndex,
         take: currentSize,
         include: {
-            user: {},
+            user: {
+                select: {
+                    picture: true,
+                    id: true,
+                    username: true,
+                },
+            },
         },
     })
 

@@ -12,14 +12,14 @@ generator client {
 
 model User {
   id        Int       @id @default(autoincrement())
-  auth0Id   String?
   email     String    @unique
-  username  String?
-  firstName String?
-  lastName  String?
+  password  String
+  username  String
+  firstName String?   @default("")
+  lastName  String?   @default("")
   picture   String?
-  aboutMe   String?
-  location  String?
+  aboutMe   String?   @default("")
+  location  String?   @default("")
   createdAt DateTime? @default(now())
 
   tickers         PortfolioTicker[]

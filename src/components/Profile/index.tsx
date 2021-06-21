@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { BrandFacebook, BrandPatreon, BrandTwitter, BrandYoutube } from 'tabler-icons-react'
 import { post } from '../../Api'
+import Avatar from '../Avatar'
 
 interface Props {
     user: User
@@ -50,7 +51,7 @@ const Profile = ({ user, followers, showFollowButton, isFollowing }: Props) => {
         <div className="card card-profile">
             <div className="card-header" />
             <div className="card-body text-center">
-                {user.picture && <img className="card-profile-img" alt="Profile" src={user.picture} />}
+                <Avatar className="card-profile-img" imgHref={user.picture} size="xl" username={user.username} />
                 <h3 className="h3 mt-0 mb-4 mb-3">
                     {user.firstName} {user.lastName}
                 </h3>

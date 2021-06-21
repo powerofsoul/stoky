@@ -1,27 +1,24 @@
-import { CallbackOptions } from '@auth0/nextjs-auth0/dist/auth0-session'
 import { NextApiRequest, NextApiResponse } from 'next'
 import withUser from '../../middleware/withUser'
 import { getSymbolQuotePrice } from '../../services/PortfolioService'
 import SqlDAO from '../../services/SqlDAO'
 
-export default withUser(
-    async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
-        switch (req.method) {
-            case 'POST':
-                await POST(req, res)
-                break
-            case 'GET':
-                await getWatchlistApi(req, res)
-                break
-            case 'DELETE':
-                await DELETE(req, res)
-                break
-            default:
-                res.status(404).send({})
-                break
-        }
+export default withUser(async (req: NextApiRequest, res: NextApiResponse<any>) => {
+    switch (req.method) {
+        case 'POST':
+            await POST(req, res)
+            break
+        case 'GET':
+            await getWatchlistApi(req, res)
+            break
+        case 'DELETE':
+            await DELETE(req, res)
+            break
+        default:
+            res.status(404).send({})
+            break
     }
-)
+})
 
 export async function getWatchlistApi(req: NextApiRequest, res: NextApiResponse<any>) {
     const symbols = await SqlDAO.watchList.findMany({

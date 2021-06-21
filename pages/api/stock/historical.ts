@@ -1,4 +1,3 @@
-import { CallbackOptions } from '@auth0/nextjs-auth0'
 import moment from 'moment'
 import { NextApiRequest, NextApiResponse } from 'next'
 import withCache from '../../../middleware/withCache'
@@ -22,10 +21,8 @@ export async function getHistoryForSymbol(symbol: string, startDate?: string, pe
     return (await yahooFinance.historical(searchQuery)).sort((a: any, b: any) => a.date.getTime() - b.date.getTime())
 }
 
-export default withCache(
-    async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
-        const historical = await getHistoryForSymbol(req.query.symbol as string, req.query.startDate as string)
+export default withCache(async (req: NextApiRequest, res: NextApiResponse<any>) => {
+    const historical = await getHistoryForSymbol(req.query.symbol as string, req.query.startDate as string)
 
-        res.status(200).json(historical)
-    }
-)
+    res.status(200).json(historical)
+})

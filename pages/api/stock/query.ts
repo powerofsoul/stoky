@@ -1,4 +1,3 @@
-import { CallbackOptions } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import fetch from 'node-fetch'
 import withCache from '../../../middleware/withCache'
@@ -7,7 +6,7 @@ import { isValidSymbol } from '../../../src/Utils'
 const yahooQueryUrl = (symbol: string) => `http://query1.finance.yahoo.com/v1/finance/search?q=${symbol}&lang=en-U`
 
 export default withCache(
-    async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
+    async (req: NextApiRequest, res: NextApiResponse<any>) => {
         const query = req.query.query as string
         if (!isValidSymbol(query)) {
             res.status(200).json(null)

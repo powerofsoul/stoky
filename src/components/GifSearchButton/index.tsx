@@ -20,7 +20,7 @@ export const GifSearchButton = (props: Props) => {
 
     return (
         <Tippy content={search} interactive hideOnClick="toggle" placement="bottom">
-            <span className={styles["GifSearchButton__search-button"]}>GIF</span>
+            <span className={styles['GifSearchButton__search-button']}>GIF</span>
         </Tippy>
     )
 }

@@ -1,4 +1,3 @@
-import { CallbackOptions } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import moment from 'moment'
 import { ChartConfiguration } from 'chart.js'
@@ -7,7 +6,7 @@ import SqlDAO from '../../../../services/SqlDAO'
 import { randomColor } from '../../../../src/Utils'
 import DefaultChartJsNodeCanvas from '../../../../src/chartJs/DefaultChartJsNodeCanvas'
 
-export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
+export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const { username } = req.query as { [key: string]: string }
 
     const user = await SqlDAO.user.findFirst({

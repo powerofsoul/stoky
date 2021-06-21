@@ -18,7 +18,7 @@ const accountDropdownProps = (user: User) => ({
 
 interface Props {
     children: any
-    user: User | undefined
+    user: User | undefined | null
 }
 
 const SiteWrapper = ({ children, user }: Props) => {
@@ -48,7 +48,7 @@ const SiteWrapper = ({ children, user }: Props) => {
                     imageURL: '/logo/logo_transparent.png',
                     navItems: !user && (
                         <Nav.Item link={false} className="d-none d-md-flex">
-                            <Button href="/api/auth/login" outline size="sm" RootComponent="a" color="primary">
+                            <Button href="/login" outline size="sm" RootComponent="a" color="primary">
                                 Login
                             </Button>
                         </Nav.Item>

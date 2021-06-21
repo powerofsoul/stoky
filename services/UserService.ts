@@ -1,29 +1,91 @@
 import { PortfolioEventEnum, User } from '@prisma/client'
 import { result, uniq, merge } from 'lodash'
 import moment from 'moment'
-import { AnyLengthString } from 'aws-sdk/clients/comprehend'
-import { auth0UserToUser } from '../models/User'
+import bcrypt from 'bcrypt'
+import { NextApiRequest, NextApiResponse } from 'next'
+import cookie from 'cookie'
 import { getHistoryForSymbol } from '../pages/api/stock/historical'
 import SqlDAO from '../services/SqlDAO'
 import { getSymbolQuotePrice } from './PortfolioService'
+import { BCRYPT_SALT_ROUNDS, IS_DEVELOPMENT } from '../src/Consts'
+import { generateUserLoginToken, JWT_LOGIN_COOKIE_NAME } from './JWTService'
 
-export const getUser = async (props: Partial<User>) => {
+export const getUser = async (props: Partial<User>, excludePassword = true) => {
     const user = await SqlDAO.user.findFirst({
         where: {
             ...props,
         },
     })
 
+    if (user && excludePassword) {
+        // @ts-ignore
+        delete user?.password
+    }
+
     return user
 }
 
-export const createUser = async (user: User) =>
-    SqlDAO.user.create({
-        data: {
-            ...user,
-            id: undefined,
+export const createUser = async (email: string, password: string) => {
+    return new Promise<User>((resolve, reject) => {
+        bcrypt.genSalt(BCRYPT_SALT_ROUNDS, (err, salt) => {
+            if (err) {
+                reject('Something went wrong')
+                return
+            }
+
+            bcrypt.hash(password, salt, async (hashError, hash) => {
+                if (hashError) {
+                    reject('Something went wrong')
+                    return
+                }
+
+                try {
+                    const user = await SqlDAO.user.create({
+                        data: {
+                            email,
+                            password: hash,
+                            username: email.split('@')[0],
+                        },
+                    })
+                    resolve(user)
+                } catch (exception) {
+                    if (exception.meta?.target === 'email_unique') {
+                        reject('Email already exists')
+                    } else {
+                        reject('Something went wrong')
+                    }
+                }
+            })
+        })
+    })
+}
+
+export const loginUser = async (email: string, password: string, res: NextApiResponse) => {
+    const user = await SqlDAO.user.findUnique({
+        where: {
+            email,
         },
     })
+
+    if (user) {
+        const passwordIsValid = await bcrypt.compare(password, user.password)
+
+        if (!passwordIsValid) {
+            throw 'Invalid password'
+        } else {
+            const token = generateUserLoginToken(user.id)
+            res.setHeader(
+                'Set-Cookie',
+                cookie.serialize(JWT_LOGIN_COOKIE_NAME, token, {
+                    httpOnly: true,
+                    expires: IS_DEVELOPMENT ? moment().add(5, 'd').toDate() : moment().add(1, 'd').toDate(),
+                    secure: !IS_DEVELOPMENT,
+                    path: '/',
+                })
+            )
+        }
+    }
+}
 
 export const updateUser = async (user: Partial<User>) =>
     SqlDAO.user.update({
@@ -32,20 +94,6 @@ export const updateUser = async (user: Partial<User>) =>
         },
         data: user,
     })
-
-export const ensureAuth0Exists = async (auth0User: any) => {
-    try {
-        const dbUser = await getUser({ auth0Id: auth0User.sub })
-
-        if (dbUser != null) {
-            return dbUser
-        }
-    } catch (e) {
-        console.log('[UserService][GetUser] Something went wrong getting the user')
-    }
-
-    return createUser(auth0UserToUser(auth0User))
-}
 
 export const getUserPortfolioTickers = (user: User) => {
     return SqlDAO.portfolioTicker.findMany({

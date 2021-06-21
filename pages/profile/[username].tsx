@@ -113,7 +113,7 @@ const Component = ({
                     <Profile
                         user={profileUser}
                         followers={followers}
-                        showFollowButton={user !== undefined && user.id !== profileUser.id}
+                        showFollowButton={user !== null && user !== undefined && user.id !== profileUser.id}
                         isFollowing={isFollowing}
                     />
                 </Grid.Col>

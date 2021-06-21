@@ -1,4 +1,3 @@
-import { CallbackOptions } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import moment from 'moment'
 import { ChartConfiguration } from 'chart.js'
@@ -7,7 +6,7 @@ import DefaultChartJsNodeCanvas from '../../../../src/chartJs/DefaultChartJsNode
 
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas')
 
-export default async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
+export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const { symbol } = req.query
     if (symbol === undefined) {
         res.status(400).send({

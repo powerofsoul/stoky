@@ -1,14 +1,14 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `auth0Id` VARCHAR(191),
     `email` VARCHAR(191) NOT NULL,
-    `username` VARCHAR(191),
-    `firstName` VARCHAR(191),
-    `lastName` VARCHAR(191),
+    `password` VARCHAR(191) NOT NULL,
+    `username` VARCHAR(191) NOT NULL,
+    `firstName` VARCHAR(191) DEFAULT '',
+    `lastName` VARCHAR(191) DEFAULT '',
     `picture` VARCHAR(191),
-    `aboutMe` VARCHAR(191),
-    `location` VARCHAR(191),
+    `aboutMe` VARCHAR(191) DEFAULT '',
+    `location` VARCHAR(191) DEFAULT '',
     `createdAt` DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `User.email_unique`(`email`),

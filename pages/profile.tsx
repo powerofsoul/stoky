@@ -70,14 +70,7 @@ const component = ({ user, followers }: InferGetServerSidePropsType<typeof getSe
                 </Grid.Col>
                 <Grid.Col ignoreCol xl={8}>
                     <Formik
-                        initialValues={{
-                            username: '',
-                            aboutMe: '',
-                            firstName: '',
-                            lastName: '',
-                            location: '',
-                            ...user,
-                        }}
+                        initialValues={user}
                         validateOnChange={false}
                         validationSchema={UserValidator}
                         onSubmit={onSubmit}

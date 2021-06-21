@@ -1,12 +1,13 @@
 import { User } from '@prisma/client'
 import moment from 'moment'
-import { Card, Grid, Avatar } from 'tabler-react'
-import { useEffect, useState } from 'react'
+import { Card, Grid } from 'tabler-react'
+import React, { useEffect, useState } from 'react'
 import { PortfolioEvent, PortfolioEventEnum } from '.prisma/client'
 import AsyncScroll from '../AsyncScroll'
 import { get } from '../../Api'
 import { DEFAULT_FEED_SIZE } from '../../Consts'
 import GifBox from '../GifBox'
+import Avatar from '../Avatar'
 
 type PortfolioEventWithUser = PortfolioEvent & { user: User }
 
@@ -89,7 +90,7 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
                         {events.map((e, i) => (
                             <Grid.Row key={i}>
                                 <Grid.Col auto>
-                                    <Avatar imageURL={e.user.picture} size="md" />
+                                    <Avatar imgHref={e.user.picture} size="md" username={e.user.username} />
                                 </Grid.Col>
                                 <Grid.Col auto>
                                     <div className="text-truncate">

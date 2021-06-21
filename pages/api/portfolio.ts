@@ -1,4 +1,3 @@
-import { CallbackOptions } from '@auth0/nextjs-auth0'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PortfolioEventEnum } from '.prisma/client'
 import withUser from '../../middleware/withUser'
@@ -6,7 +5,7 @@ import { addPortfolioEvent } from '../../services/PortfolioService'
 import SqlDAO from '../../services/SqlDAO'
 import UpdatePortfolioValidator from '../../validators/UpdatePortfolioValidator'
 
-const GET = async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
+const GET = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const { user } = req
 
     const portfolioTickers = await SqlDAO.portfolioTicker.findMany({
@@ -18,7 +17,7 @@ const GET = async (req: NextApiRequest, res: NextApiResponse<any>, options?: Cal
     res.status(200).json(portfolioTickers)
 }
 
-const POST = async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined) => {
+const POST = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const updatePortfolioRequest = await UpdatePortfolioValidator.validate(req.body, {
         stripUnknown: true,
     })
@@ -50,18 +49,16 @@ const POST = async (req: NextApiRequest, res: NextApiResponse<any>, options?: Ca
     }
 }
 
-export default withUser(
-    async (req: NextApiRequest, res: NextApiResponse<any>, options?: CallbackOptions | undefined): Promise<void> => {
-        switch (req.method) {
-            case 'POST':
-                await POST(req, res)
-                break
-            case 'GET':
-                await GET(req, res)
-                break
-            default:
-                res.status(404).send({})
-                break
-        }
+export default withUser(async (req: NextApiRequest, res: NextApiResponse<any>): Promise<void> => {
+    switch (req.method) {
+        case 'POST':
+            await POST(req, res)
+            break
+        case 'GET':
+            await GET(req, res)
+            break
+        default:
+            res.status(404).send({})
+            break
     }
-)
+})
