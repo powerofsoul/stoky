@@ -88,6 +88,8 @@ export const loginUser = async (email: string, password: string, res: NextApiRes
                 })
             )
         }
+    } else {
+        throw 'Invalid password'
     }
 }
 
