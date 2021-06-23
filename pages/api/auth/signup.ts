@@ -30,7 +30,7 @@ export default withErrorHandling(async (req: NextApiRequest, res: NextApiRespons
 
         res.status(200).json({
             success: true,
-            message: 'User created',
+            message: 'An activation link has been send to your email.',
         })
     } catch (err) {
         res.status(200).json({

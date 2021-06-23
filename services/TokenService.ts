@@ -4,18 +4,22 @@ import SqlDAO from './SqlDAO'
 export async function executeToken(token: string) {
     if (!token) return ''
 
-    const tokenObj = await decodeJWTToken(token)
-    if (!tokenObj) {
-        return 'Invalid token'
-    }
+    try {
+        const tokenObj = await decodeJWTToken(token)
+        if (!tokenObj) {
+            return 'Invalid token'
+        }
 
-    const action = tokenObj.action as JWTActions
+        const action = tokenObj.action as JWTActions
 
-    switch (action) {
-        case 'SIGNUP':
-            return activateUser(tokenObj.email)
-        default:
-            return ''
+        switch (action) {
+            case 'SIGNUP':
+                return activateUser(tokenObj.email)
+            default:
+                return ''
+        }
+    } catch {
+        return ''
     }
 }
 
