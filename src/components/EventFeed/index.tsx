@@ -88,10 +88,10 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
                     >
                         {events.map((e, i) => (
                             <Grid.Row key={i}>
-                                <Grid.Col auto>
+                                <Grid.Col className="col-2">
                                     <Avatar imgHref={e.user.picture} size="md" username={e.user.username} />
                                 </Grid.Col>
-                                <Grid.Col auto>
+                                <Grid.Col className="col-10">
                                     <div className="text-truncate">
                                         <a href={`/profile/${e.user.username}`}>
                                             <strong>{e.user.username}</strong>
