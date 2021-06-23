@@ -68,6 +68,10 @@ export const loginUser = async (email: string, password: string, res: NextApiRes
     })
 
     if (user) {
+        if (!user.activated) {
+            throw 'You need to activate your account. Please check your email for the activation link'
+        }
+
         const passwordIsValid = await bcrypt.compare(password, user.password)
 
         if (!passwordIsValid) {
@@ -85,6 +89,18 @@ export const loginUser = async (email: string, password: string, res: NextApiRes
             )
         }
     }
+}
+
+export const logoutUser = (res: NextApiResponse) => {
+    res.setHeader(
+        'Set-Cookie',
+        cookie.serialize(JWT_LOGIN_COOKIE_NAME, '', {
+            httpOnly: true,
+            expires: moment().subtract(1, 'd').toDate(),
+            secure: !IS_DEVELOPMENT,
+            path: '/',
+        })
+    )
 }
 
 export const updateUser = async (user: Partial<User>) =>

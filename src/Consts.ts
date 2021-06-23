@@ -7,10 +7,11 @@ export const BCRYPT_SALT_ROUNDS = process.env.BCRYPT_SALT_ROUNDS
     : 2
 export const JWT_SECRET = process.env.JWT_SECRET || 'local-secret'
 export const IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
+export const DOMAIN = 'https://stoky.io'
 
 export default {
     siteName: 'Stocky',
-    url: IS_DEVELOPMENT ? 'http://localhost:3000' : 'https://stoky.io',
+    url: IS_DEVELOPMENT ? 'http://localhost:3000' : DOMAIN,
     QUERY_MAX_LENGTH: SYMBOL_MAX_LENGTH,
     CACHE_DURATION,
     DEFAULT_FEED_SIZE,

@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import withErrorHandling from '../../../middleware/withErrorHandeling'
+import EmailService from '../../../services/EmailService'
+import { generateJWTForObject } from '../../../services/JWTService'
 import SqlDAO from '../../../services/SqlDAO'
 import { createUser } from '../../../services/UserService'
+import { WelcomeTemplate } from '../../../src/email/Templates'
 import SignUpValidator from '../../../validators/SignUpValidator'
 
 export default withErrorHandling(async (req: NextApiRequest, res: NextApiResponse<any>) => {
@@ -16,6 +19,15 @@ export default withErrorHandling(async (req: NextApiRequest, res: NextApiRespons
     const body = await SignUpValidator.validate(req.body)
     try {
         await createUser(body.email, body.password)
+        const template = WelcomeTemplate({
+            name: 'User',
+            activationString: generateJWTForObject('SIGNUP', {
+                email: body.email,
+            }),
+        })
+
+        await EmailService.notify(body.email, 'Welcome!', template)
+
         res.status(200).json({
             success: true,
             message: 'User created',

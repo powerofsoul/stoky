@@ -10,6 +10,7 @@ CREATE TABLE `User` (
     `aboutMe` VARCHAR(191) DEFAULT '',
     `location` VARCHAR(191) DEFAULT '',
     `createdAt` DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),
+    `activated` BOOLEAN NOT NULL DEFAULT false,
 
     UNIQUE INDEX `User.email_unique`(`email`),
     PRIMARY KEY (`id`)

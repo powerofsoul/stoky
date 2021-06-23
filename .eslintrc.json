@@ -29,6 +29,8 @@
         "react/no-array-index-key": "off",
         "prefer-spread": "off",
         "prefer-promise-reject-errors": "off",
-        "no-throw-literal": "off"
+        "no-throw-literal": "off",
+        "no-redeclare": "off",
+        "react/destructuring-assignment": "off"
     }
 }

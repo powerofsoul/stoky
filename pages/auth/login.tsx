@@ -3,11 +3,12 @@ import React from 'react'
 import { Form, Card, Button, Grid } from 'tabler-react'
 import { Field, Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { getUserFromRequest } from '../middleware/withUser'
-import Page from '../src/components/Page'
-import { FormInput } from '../src/components/Form/Form'
-import SignUpValidator from '../validators/SignUpValidator'
-import { post } from '../src/Api'
+import { getUserFromRequest } from '../../middleware/withUser'
+import Page from '../../src/components/Page'
+import { FormInput } from '../../src/components/Form/Form'
+import LoginValidator from '../../validators/LoginValidator'
+import { post } from '../../src/Api'
+import ApiResponse from '../../models/ApiResponse'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context
@@ -20,24 +21,20 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }
 }
 
-const SignUp = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Login = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const initialValues = {
         email: '',
         password: '',
-        confirmPassword: '',
     }
 
-    const onSubmit = async (data: typeof initialValues) => {
-        try {
-            const response = await post<any, any>('auth/signup', data)
+    const onSubmit = async (body: typeof initialValues) => {
+        const response = await post<ApiResponse, typeof initialValues>('auth/login', body)
+        toast(response.message, {
+            type: response.success ? 'success' : 'error',
+        })
 
-            toast(response.message, {
-                type: response.success ? 'success' : 'error',
-            })
-        } catch (err) {
-            toast('Something went wrong', {
-                type: 'error',
-            })
+        if (response.success) {
+            window.location.href = '/'
         }
     }
 
@@ -46,14 +43,14 @@ const SignUp = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>
             <Formik
                 initialValues={initialValues}
                 validateOnChange={false}
-                validationSchema={SignUpValidator}
+                validationSchema={LoginValidator}
                 onSubmit={onSubmit}
                 enableReinitialize
             >
                 {({ errors, isSubmitting, handleSubmit }) => (
                     <Form className="card" onSubmit={handleSubmit}>
                         <Card.Body>
-                            <Card.Title>Sign up</Card.Title>
+                            <Card.Title>Login</Card.Title>
                             <Grid.Row>
                                 <Grid.Col ignoreCol sm={12}>
                                     <Form.Group>
@@ -82,34 +79,20 @@ const SignUp = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>
                                     </Form.Group>
                                 </Grid.Col>
                             </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Col ignoreCol sm={12}>
-                                    <Form.Group>
-                                        <Form.Label>Confirm Password</Form.Label>
-                                        <Field
-                                            component={FormInput}
-                                            type="password"
-                                            error={errors.confirmPassword}
-                                            name="confirmPassword"
-                                            placeholder="Confirm Password"
-                                        />
-                                    </Form.Group>
-                                </Grid.Col>
-                            </Grid.Row>
                         </Card.Body>
                         <Card.Footer className="text-right">
                             <Button type="submit" color="primary" disabled={isSubmitting}>
-                                Sign Up
+                                Login
                             </Button>
                         </Card.Footer>
                     </Form>
                 )}
             </Formik>
             <small>
-                You already have an account? Log in <a href="/login">here</a>
+                You don&apos;t have an account yet? Sign up <a href="/auth/signup">here</a>
             </small>
         </Page>
     )
 }
 
-export default SignUp
+export default Login

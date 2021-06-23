@@ -21,6 +21,7 @@ model User {
   aboutMe   String?   @default("")
   location  String?   @default("")
   createdAt DateTime? @default(now())
+  activated Boolean   @default(false)
 
   tickers         PortfolioTicker[]
   portfolioEvents PortfolioEvent[]
