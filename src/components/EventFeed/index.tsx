@@ -43,8 +43,9 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
             index,
         })
 
-        setEvents([...events, ...response])
-        setIndex(index + size)
+        const newEvents = [...events, ...response]
+        setEvents(newEvents)
+        setIndex(newEvents.length)
         setHasMore(response.length === size)
     }
 
@@ -53,12 +54,10 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
             ...fetchOptions,
             index: 0,
             size,
-            since: events?.[0]?.createdOn,
+            since: events?.[0]?.createdOn?.toISOString(),
         })
 
         setEvents([...response, ...events])
-        setIndex(0)
-        setHasMore(response.length === size)
     }
 
     useEffect(() => {
