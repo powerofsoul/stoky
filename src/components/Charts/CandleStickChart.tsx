@@ -33,7 +33,10 @@ const CandleStickChart = ({ data, xTicks, yTicks, height, width: w }: ChartProps
                 data={data}
                 xAccessor={xAccessor}
                 xScale={scaleTime()}
-                xExtents={[xAccessor(data?.[data.length - 1]), xAccessor(data?.[0])]}
+                xExtents={[
+                    xAccessor(data?.[data.length - 1]),
+                    xAccessor(data?.[data.length > 7 ? data.length - 7 : 0]),
+                ]}
             >
                 <Chart id={1} yExtents={(d: any) => [d.high, d.low]}>
                     <XAxis axisAt="bottom" orient="bottom" ticks={xTicks || 5} />
