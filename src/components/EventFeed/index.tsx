@@ -92,7 +92,7 @@ const EventFeed = ({ portfolioEvents, feedName, fetchOptions }: Props) => {
                                     <Avatar imgHref={e.user.picture} size="md" username={e.user.username} />
                                 </Grid.Col>
                                 <Grid.Col className="col-10">
-                                    <div className="text-truncate">
+                                    <div>
                                         <a href={`/profile/${e.user.username}`}>
                                             <strong>{e.user.username}</strong>
                                         </a>{' '}
