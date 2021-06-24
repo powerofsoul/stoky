@@ -17,13 +17,10 @@ services:
     mariadb:
         image: 'mariadb:10.6.1-focal'
         restart: 'always'
-        volumes:
-            - /var/lib/mysql/data
-            - /var/lib/mysql/logs
-            - /var/docker/mariadb/conf:/etc/mysql
+
         environment:
             MYSQL_ROOT_PASSWORD: local
-            SQL_DATABASE: local
+            MYSQL_DATABASE: local
             MYSQL_USER: local
             MYSQL_PASSWORD: local
         ports:

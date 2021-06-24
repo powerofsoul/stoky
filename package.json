@@ -6,6 +6,7 @@
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "dev-docker": "npm i && prisma migrate deploy && npm run dev",
     "docker": "docker-compose -f docker/docker-compose.dev.yml up",
+    "docker-db": "docker-compose -f docker/docker-compose.db.yml up --force-recreate",
     "init-tables": "ts-node ./scripts/initializeDynamo.ts",
     "build": "npm run lint && next build",
     "start": "prisma migrate deploy && next start -p $PORT",
