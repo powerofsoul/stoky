@@ -37,10 +37,10 @@ export default function Home({ feed, user, tokenMessage }: InferGetServerSidePro
     const loggedComponent = (
         <Page user={user}>
             <Grid.Row>
-                <Grid.Col>
+                <Grid.Col xs="12" md="6" ignoreCol>
                     <WatchList />
                 </Grid.Col>
-                <Grid.Col>
+                <Grid.Col xs="12" md="6" ignoreCol>
                     <Grid.Row>
                         <Grid.Col>
                             <MentionTicker />

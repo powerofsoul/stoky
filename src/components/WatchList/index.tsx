@@ -95,11 +95,11 @@ const WatchList = () => {
 
         return (
             <Grid.Row className="mb-3">
-                <Grid.Col>
+                <Grid.Col className="col-9" ignoreCol>
                     <TickerSearch onChange={setSymbol} />
                 </Grid.Col>
                 <Grid.Col>
-                    <Button type="primary" onClick={() => symbol && addToWatchList(symbol)}>
+                    <Button type="primary" className="float-right" onClick={() => symbol && addToWatchList(symbol)}>
                         Add
                     </Button>
                 </Grid.Col>
