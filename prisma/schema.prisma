@@ -17,7 +17,7 @@ model User {
   username  String
   firstName String?   @default("")
   lastName  String?   @default("")
-  picture   String?
+  picture   String    @default("https://stoky.io/default-profile-image.png")
   aboutMe   String?   @default("")
   location  String?   @default("")
   createdAt DateTime? @default(now())

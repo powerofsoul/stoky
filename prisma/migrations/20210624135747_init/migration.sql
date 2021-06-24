@@ -6,7 +6,7 @@ CREATE TABLE `User` (
     `username` VARCHAR(191) NOT NULL,
     `firstName` VARCHAR(191) DEFAULT '',
     `lastName` VARCHAR(191) DEFAULT '',
-    `picture` VARCHAR(191),
+    `picture` VARCHAR(191) NOT NULL DEFAULT 'https://stoky.io/default-profile-image.png',
     `aboutMe` VARCHAR(191) DEFAULT '',
     `location` VARCHAR(191) DEFAULT '',
     `createdAt` DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),

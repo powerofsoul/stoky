@@ -154,8 +154,13 @@ export const getUserTimeline = async (user: User) => {
     const now = new Date()
 
     const maxArrayLength = Math.max(...tickerHistory.map((t) => t.length))
-    const timeArray = tickerHistory.find((t) => t.length === maxArrayLength).map((t: any) => t.date as string)
+    let timeArray = tickerHistory.find((t) => t.length === maxArrayLength).map((t: any) => t.date as string)
     timeArray.push(now)
+
+    // TODO Find a way to leave saturday and sunday.
+    // Main problem is that stocks have a value on weekends and stocks don't.
+    // This results in invalid weekend values if portfolio contains crypto
+    timeArray = timeArray.filter((d: Date) => d.getDay() !== 6 && d.getDay() !== 0)
 
     const flattenArray = [].concat.apply([], tickerHistory) as any[]
     const todayPrices = await Promise.all(tickers.map((t) => getSymbolQuotePrice(t)))
