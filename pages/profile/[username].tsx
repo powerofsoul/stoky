@@ -123,7 +123,7 @@ const Component = ({
                     <Grid.Col>
                         <Card>
                             <Card.Body>
-                                <Card.Title>${profileUser.username}</Card.Title>
+                                <Card.Title>${profileUser.username?.toUpperCase()}</Card.Title>
                                 <LineChart data={userTimeline} />
                             </Card.Body>
                         </Card>

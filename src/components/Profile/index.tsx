@@ -55,7 +55,7 @@ const Profile = ({ user, followers, showFollowButton, isFollowing }: Props) => {
                 <h3 className="h3 mt-0 mb-4 mb-3">
                     {user.firstName} {user.lastName}
                 </h3>
-                <small>{user.username}</small>
+                <small>@{user.username}</small>
                 <p className="mb-4">{user.aboutMe}</p>
                 {followers && (
                     <div>
