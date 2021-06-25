@@ -9,6 +9,7 @@ import SqlDAO from '../services/SqlDAO'
 import { getSymbolQuotePrice } from './PortfolioService'
 import { BCRYPT_SALT_ROUNDS, IS_DEVELOPMENT } from '../src/Consts'
 import { generateUserLoginToken, JWT_LOGIN_COOKIE_NAME } from './JWTService'
+import { ReturnOfPromise } from '../src/TypingUtils'
 
 export const getUser = async (props: Partial<User>, excludePassword = true) => {
     const user = await SqlDAO.user.findFirst({
@@ -231,3 +232,5 @@ export const getUserTimeline = async (user: User) => {
     // TO-DO find alternative
     return Object.values(results).filter((e) => e.close !== 0)
 }
+
+export type UserTimelineType = ReturnOfPromise<typeof getUserTimeline>

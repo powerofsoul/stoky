@@ -13,6 +13,8 @@ import PortfolioList from '../src/components/PortfolioList'
 import { redirectToLogin } from '../src/pageMiddleware/ensureUseIsLogged'
 import PortfolioProgressBar from '../src/components/PortfolioProgressBar'
 import LineChart from '../src/components/Charts/LineChart'
+import PortfolioAllocation from '../src/components/PortfolioAllocation'
+import { randomColor } from '../src/Utils'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context
@@ -50,34 +52,54 @@ const Component = ({
     userFeed,
     user,
     userTimeline,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => (
-    <Page user={user}>
-        <Grid.Row>
-            <Grid.Col>
-                <AddToPortfolio />
-            </Grid.Col>
-        </Grid.Row>
-        {userTimeline && userTimeline.length > 2 && (
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const portfolioTickersColors = portfolioTickers?.map(() => randomColor())
+
+    return (
+        <Page user={user}>
             <Grid.Row>
                 <Grid.Col>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>$me</Card.Title>
-                            <LineChart data={userTimeline} />
-                        </Card.Body>
-                    </Card>
+                    <AddToPortfolio />
                 </Grid.Col>
             </Grid.Row>
-        )}
-        <Grid.Row>
-            <Grid.Col>
-                <PortfolioList portfolioTickers={portfolioTickers || []} tickerQuotes={tickerQuotes || []} />
-            </Grid.Col>
-            <Grid.Col>
-                <EventFeed portfolioEvents={userFeed || []} feedName="My Feed" fetchOptions={{ userId: user?.id }} />
-            </Grid.Col>
-        </Grid.Row>
-    </Page>
-)
+            {userTimeline && userTimeline.length > 2 && (
+                <Grid.Row>
+                    <Grid.Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title>$me</Card.Title>
+                                <LineChart data={userTimeline} />
+                            </Card.Body>
+                        </Card>
+                    </Grid.Col>
+                </Grid.Row>
+            )}
+            <Grid.Row>
+                <Grid.Col>
+                    <PortfolioList
+                        portfolioTickersColors={portfolioTickersColors}
+                        portfolioTickers={portfolioTickers || []}
+                        tickerQuotes={tickerQuotes || []}
+                    />
+                </Grid.Col>
+                <Grid.Col>
+                    <PortfolioAllocation
+                        portfolioTickersColors={portfolioTickersColors}
+                        portfolioTickers={portfolioTickers}
+                    />
+                </Grid.Col>
+            </Grid.Row>
+            <Grid.Row>
+                <Grid.Col>
+                    <EventFeed
+                        portfolioEvents={userFeed || []}
+                        feedName="My Feed"
+                        fetchOptions={{ userId: user?.id }}
+                    />
+                </Grid.Col>
+            </Grid.Row>
+        </Page>
+    )
+}
 
 export default Component
