@@ -40,6 +40,9 @@ const TickerSearch = ({ onChange, value, error, form, name }: Props) => {
                         border: error ? '1px #cd201f solid' : '',
                     }),
                 }}
+                noOptionsMessage={(e) =>
+                    e.inputValue.length === 0 ? 'Start typing to search for a ticker.' : 'No tickers found.'
+                }
                 name={name}
             />
 
