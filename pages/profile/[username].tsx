@@ -15,6 +15,7 @@ import { redirectToLogin } from '../../src/pageMiddleware/ensureUseIsLogged'
 import LineChart from '../../src/components/Charts/LineChart'
 import { getUserFromRequest } from '../../middleware/withUser'
 import Profile from '../../src/components/Profile'
+import PortfolioAllocation from '../../src/components/PortfolioAllocation'
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const { req, res } = context
@@ -138,6 +139,11 @@ const Component = ({
                         title="Portfolio"
                     />
                 </Grid.Col>
+                <Grid.Col>
+                    <PortfolioAllocation portfolioTickers={portfolioTickers} />
+                </Grid.Col>
+            </Grid.Row>
+            <Grid.Row>
                 <Grid.Col>
                     <EventFeed
                         portfolioEvents={userFeed || []}
