@@ -22,6 +22,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
 const SignUp = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const initialValues = {
+        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -54,6 +55,20 @@ const SignUp = ({ user }: InferGetServerSidePropsType<typeof getServerSideProps>
                     <Form className="card" onSubmit={handleSubmit}>
                         <Card.Body>
                             <Card.Title>Sign up</Card.Title>
+                            <Grid.Row>
+                                <Grid.Col ignoreCol sm={12}>
+                                    <Form.Group>
+                                        <Form.Label>Username</Form.Label>
+                                        <Field
+                                            component={FormInput}
+                                            type="username"
+                                            error={errors.username}
+                                            name="username"
+                                            placeholder="Username"
+                                        />
+                                    </Form.Group>
+                                </Grid.Col>
+                            </Grid.Row>
                             <Grid.Row>
                                 <Grid.Col ignoreCol sm={12}>
                                     <Form.Group>

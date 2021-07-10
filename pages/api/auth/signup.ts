@@ -18,9 +18,9 @@ export default withErrorHandling(async (req: NextApiRequest, res: NextApiRespons
 
     const body = await SignUpValidator.validate(req.body)
     try {
-        await createUser(body.email, body.password)
+        await createUser(body.username, body.email, body.password)
         const template = WelcomeTemplate({
-            name: 'User',
+            name: body.username,
             activationString: generateJWTForObject('SIGNUP', {
                 email: body.email,
             }),

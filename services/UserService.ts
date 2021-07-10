@@ -26,7 +26,7 @@ export const getUser = async (props: Partial<User>, excludePassword = true) => {
     return user
 }
 
-export const createUser = async (email: string, password: string) => {
+export const createUser = async (username: string, email: string, password: string) => {
     return new Promise<User>((resolve, reject) => {
         bcrypt.genSalt(BCRYPT_SALT_ROUNDS, (err, salt) => {
             if (err) {
@@ -43,17 +43,22 @@ export const createUser = async (email: string, password: string) => {
                 try {
                     const user = await SqlDAO.user.create({
                         data: {
+                            username,
                             email,
                             password: hash,
-                            username: email.split('@')[0],
                         },
                     })
                     resolve(user)
                 } catch (exception) {
-                    if (exception.meta?.target === 'email_unique') {
-                        reject('Email already exists')
-                    } else {
-                        reject('Something went wrong')
+                    switch (exception?.meta.target) {
+                        case 'email_unique':
+                            reject('Email already exists')
+                            break
+                        case 'username_unique':
+                            reject('Username already exists')
+                            break
+                        default:
+                            reject('Something went wrong')
                     }
                 }
             })

@@ -13,6 +13,7 @@ CREATE TABLE `User` (
     `activated` BOOLEAN NOT NULL DEFAULT false,
 
     UNIQUE INDEX `User.email_unique`(`email`),
+    UNIQUE INDEX `User.username_unique`(`username`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
