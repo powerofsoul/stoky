@@ -29,6 +29,11 @@ export const decodeJWTToken = async (token: string) => {
 
 export const getUserFromLoginToken = async (token: string) => {
     const decrypt = await jwt.verify(token, JWT_SECRET)
+
+    if(!decrypt.userId) {
+        return undefined;
+    }
+
     const user = await getUser({
         id: decrypt.userId,
     })
