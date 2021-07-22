@@ -89,9 +89,7 @@ const StockPage = ({
                         </Grid.Col>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Col>
-                            <MentionTicker symbol={symbol} />
-                        </Grid.Col>
+                        <Grid.Col>{user && <MentionTicker symbol={symbol} />}</Grid.Col>
                     </Grid.Row>
                 </Grid.Col>
                 <Grid.Col ignoreCol xs={12} sm={12} md={12} xl={8}>
