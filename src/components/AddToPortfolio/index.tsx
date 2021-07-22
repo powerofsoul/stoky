@@ -1,12 +1,14 @@
 import { PortfolioEventEnum, PortfolioTicker } from '@prisma/client'
 import { Field, FieldArray, Formik } from 'formik'
+import React from 'react'
 import { toast } from 'react-toastify'
 import { CircleMinus, CirclePlus } from 'tabler-icons-react'
 import { Grid, Form, Button, Card } from 'tabler-react'
 import UpdatePortfolioValidator from '../../../validators/UpdatePortfolioValidator'
 import { post } from '../../Api'
 import { useAppContext } from '../../context/AppContext'
-import { FormInput, FormTextarea, FormTickerSearch } from '../Form/Form'
+import BuySellToggle from '../BuySellToggle'
+import { FormBuySellToggle, FormInput, FormTextarea, FormTickerSearch } from '../Form/Form'
 
 const Portfolio = () => {
     const { setPortfolioTickers } = useAppContext()
@@ -17,6 +19,7 @@ const Portfolio = () => {
                 symbol: '',
                 price: undefined,
                 amount: undefined,
+                action: 'BUY',
             },
         ],
         message: '',
@@ -41,7 +44,13 @@ const Portfolio = () => {
     return (
         <Card>
             <Card.Body>
-                <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={UpdatePortfolioValidator}>
+                <Formik
+                    initialValues={initialValues}
+                    onSubmit={onSubmit}
+                    validationSchema={UpdatePortfolioValidator}
+                    validateOnChange={false}
+                    validateOnBlur={false}
+                >
                     {({ errors, isSubmitting, handleSubmit, values, setFieldValue }) => (
                         <Form onSubmit={handleSubmit}>
                             <FieldArray
@@ -95,7 +104,17 @@ const Portfolio = () => {
                                             </Grid.Col>
                                             <Grid.Col auto>
                                                 <Form.Group>
-                                                    <Form.Label>Actions</Form.Label>
+                                                    <Form.Label>Action</Form.Label>
+                                                    <Field
+                                                        type="action"
+                                                        name={`tickers.${i}.action`}
+                                                        component={FormBuySellToggle}
+                                                    />
+                                                </Form.Group>
+                                            </Grid.Col>
+                                            <Grid.Col auto>
+                                                <Form.Group>
+                                                    <Form.Label>&nbsp;</Form.Label>
                                                     {values.tickers.length > 1 && (
                                                         <CircleMinus
                                                             className="float-right pointer m-auto"
@@ -114,6 +133,7 @@ const Portfolio = () => {
                             <Grid.Row>
                                 <Grid.Col>
                                     <Button
+                                        type="button"
                                         onClick={() => {
                                             setFieldValue('tickers', [...values.tickers, {}], false)
                                         }}

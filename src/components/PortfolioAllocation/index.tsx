@@ -34,7 +34,7 @@ const PortfolioAllocation = ({ portfolioTickers, portfolioTickersColors }: Props
                 <Card>
                     <Card.Body>
                         <Card.Title>Allocation</Card.Title>
-                        <Doughnut height={50} width={50} data={data} type="doughnut" />
+                        <Doughnut height={150} width={150} data={data} type="doughnut" />
                     </Card.Body>
                 </Card>
             </Grid.Col>

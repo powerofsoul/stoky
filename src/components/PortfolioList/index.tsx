@@ -34,6 +34,7 @@ const PortfolioList = (props: Props) => {
                             <Table.ColHeader>Current Price</Table.ColHeader>
                             <Table.ColHeader>Change</Table.ColHeader>
                             <Table.ColHeader>Current Value</Table.ColHeader>
+                            <Table.ColHeader>Profit</Table.ColHeader>
                         </Table.Header>
                         <Table.Body>
                             {portfolioTickers?.map((t) => {
@@ -76,6 +77,9 @@ const PortfolioList = (props: Props) => {
                                                 prefix={currentPrice.currencySymbol}
                                                 suffix={` (${toPrecision(currentValuePercentage, 2)}%) `}
                                             />
+                                        </Table.Col>
+                                        <Table.Col>
+                                            <ValueBadge value={t.profit} prefix="$" precision={2} />
                                         </Table.Col>
                                     </Table.Row>
                                 )

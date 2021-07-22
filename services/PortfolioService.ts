@@ -6,8 +6,22 @@ import SqlDAO from './SqlDAO'
 
 const yahooFinance = require('yahoo-finance')
 
-const calculateAverage = (oldAmount: number, oldAverage: number, addingAmount: number, addingPrice: number) =>
-    (oldAmount * oldAverage + addingAmount * addingPrice) / (oldAmount + addingAmount)
+const calculateAverage = (oldAmount: number, oldAverage: number, addingAmount: number, addingPrice: number) => {
+    return (oldAmount * oldAverage + addingAmount * addingPrice) / (oldAmount + addingAmount)
+}
+
+const calculateProfit = (
+    amount: number,
+    average: number,
+    action: 'BUY' | 'SELL',
+    actionAmount: number,
+    actionPrice: number
+) => {
+    if (action === 'BUY') {
+        return amount < 0 ? Math.abs(amount) * average - actionAmount * actionPrice : 0
+    }
+    return amount > 0 ? actionAmount * actionPrice - Math.abs(amount) * average : 0
+}
 
 export async function addPortfolioEvent(event: PortfolioEvent) {
     let portfolioTicker = await SqlDAO.portfolioTicker.findFirst({
@@ -29,11 +43,55 @@ export async function addPortfolioEvent(event: PortfolioEvent) {
         })
     }
 
-    portfolioTicker = {
-        ...portfolioTicker,
-        amount: portfolioTicker.amount + event.amount,
-        profit: 0, // TO-DO it's fkin 2 am
-        averagePrice: calculateAverage(portfolioTicker.amount, portfolioTicker.averagePrice, event.amount, event.price),
+    if (event.action === 'MENTION') {
+        throw 'Invalid action'
+    }
+
+    let averagePrice = 0
+    let profit = 0
+    const amount = event.action === 'BUY' ? event.amount : -event.amount
+    if (
+        (portfolioTicker.amount < 0 && portfolioTicker.amount + amount > 0) ||
+        (portfolioTicker.amount > 0 && portfolioTicker.amount + amount < 0)
+    ) {
+        averagePrice = calculateAverage(0, 0, event.amount, event.price)
+        profit = calculateProfit(
+            portfolioTicker.amount,
+            portfolioTicker.averagePrice,
+            event.action,
+            Math.abs(portfolioTicker.amount),
+            event.price
+        )
+    } else {
+        averagePrice = calculateAverage(
+            Math.abs(portfolioTicker.amount),
+            portfolioTicker.averagePrice,
+            event.amount,
+            event.price
+        )
+        profit = calculateProfit(
+            portfolioTicker.amount,
+            portfolioTicker.averagePrice,
+            event.action,
+            event.amount,
+            event.price
+        )
+    }
+
+    if (portfolioTicker.amount + amount === 0) {
+        portfolioTicker = {
+            ...portfolioTicker,
+            amount: 0,
+            profit: portfolioTicker.profit + profit,
+            averagePrice: 0,
+        }
+    } else {
+        portfolioTicker = {
+            ...portfolioTicker,
+            amount: portfolioTicker.amount + amount,
+            profit: portfolioTicker.profit + profit,
+            averagePrice,
+        }
     }
 
     await SqlDAO.portfolioTicker.update({
@@ -46,7 +104,6 @@ export async function addPortfolioEvent(event: PortfolioEvent) {
     await SqlDAO.portfolioEvent.create({
         data: {
             ...event,
-            action: PortfolioEventEnum.BUY, // TO-DO get this from user
             id: undefined,
         },
     })

@@ -31,7 +31,7 @@ const POST = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     if (updatePortfolioRequest?.tickers) {
         const promises = updatePortfolioRequest.tickers.map(async (t) => {
             await addPortfolioEvent({
-                action: PortfolioEventEnum.BUY,
+                action: t.action as PortfolioEventEnum,
                 amount: t.amount,
                 price: t.price,
                 symbol: t.symbol,

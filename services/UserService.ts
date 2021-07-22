@@ -123,6 +123,11 @@ export const getUserPortfolioTickers = (user: User) => {
     return SqlDAO.portfolioTicker.findMany({
         where: {
             userId: user?.id,
+            AND: {
+                amount: {
+                    not: 0,
+                },
+            },
         },
     })
 }

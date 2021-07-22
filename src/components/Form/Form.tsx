@@ -1,8 +1,10 @@
 import { FieldProps } from 'formik'
 import { Form } from 'tabler-react'
 import Select from 'react-select'
+import React from 'react'
 import TickerSearch from '../TickerSearch'
 import GifSearchButton from '../GifSearchButton'
+import BuySellToggle from '../BuySellToggle'
 
 export const FormInput = ({ field, ...props }: any) => <Form.Input {...field} {...props} />
 
@@ -22,4 +24,8 @@ export const FormSelect = ({ options, field, form }: any) => (
 
 export const FormGifSearchButton = ({ options, field, form }: any) => (
     <GifSearchButton onChange={(url) => form.setFieldValue(field.name, url)} />
+)
+
+export const FormBuySellToggle = ({ options, field, form }: any) => (
+    <BuySellToggle onChange={(value) => form.setFieldValue(field.name, value)} />
 )
