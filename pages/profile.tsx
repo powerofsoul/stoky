@@ -10,6 +10,7 @@ import { post } from '../src/Api'
 import { FormInput, FormTextarea } from '../src/components/Form/Form'
 import Page from '../src/components/Page'
 import Profile from '../src/components/Profile'
+import { DOMAIN } from '../src/Consts'
 import ensureUseIsLogged from '../src/pageMiddleware/ensureUseIsLogged'
 import UserValidator from '../validators/UserValidator'
 
@@ -91,6 +92,12 @@ const component = ({ user, followers }: InferGetServerSidePropsType<typeof getSe
                                                     name="username"
                                                     placeholder="Username"
                                                 />
+                                                <small>
+                                                    Your profile link is{' '}
+                                                    <a
+                                                        href={`${DOMAIN}/profile/${user.username}`}
+                                                    >{`${DOMAIN}/profile/${user.username}`}</a>
+                                                </small>
                                             </Form.Group>
                                         </Grid.Col>
                                         <Grid.Col ignoreCol sm={12} lg={6}>
