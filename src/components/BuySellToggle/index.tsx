@@ -12,7 +12,7 @@ interface Props {
 }
 
 const BuySellToggle = ({ defaultValue, onBlur, onChange }: Props) => {
-    const [value, setValue] = useState<Value>(defaultValue || 'BUY')
+    const [value, setValue] = useState<Value>('BUY')
 
     return (
         <div className={styles.BuySellToggle}>
@@ -27,7 +27,7 @@ const BuySellToggle = ({ defaultValue, onBlur, onChange }: Props) => {
             >
                 BUY
             </Button>
-            <Button
+            {/* <Button
                 type="button"
                 color={value === 'SELL' ? 'danger' : 'outline-danger'}
                 onClick={() => {
@@ -37,7 +37,7 @@ const BuySellToggle = ({ defaultValue, onBlur, onChange }: Props) => {
                 }}
             >
                 SELL
-            </Button>
+            </Button> */}
             <span className="invalid-feedback">TEST</span>
         </div>
     )
